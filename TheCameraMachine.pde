@@ -7,3 +7,4 @@ void setup(void)
 void loop(void)
 {
 }
+// vim:cin:ai:sts=2 sw=2 ft=cpp
