@@ -1,0 +1,11 @@
+SubDir TOP ;
+
+SubInclude TOP test ;
+
+LOCATE_SOURCE = out ;
+LOCATE_TARGET = out ;
+
+SKETCH_MODULES	= [ GLOB $(SKETCH_DIR) : *.ino *.pde ] ;
+Main Shell : $(EXTRAS_DIR)/shellmain.cpp $(INTERNAL_MODULES) $(CORE_MODULES) $(SKETCH_CLASS_MODULES) $(SKETCH_MODULES) ;
+LINKFLAGS on Shell = $(LINKFLAGS) -lreadline -lpthread ;
+
