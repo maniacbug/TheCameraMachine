@@ -12,7 +12,7 @@ DEFINES		+= NATIVE=1 ;
 
 CORE_MODULES	= [ GLOB $(CORE_DIR) : *.cpp ] ; 
 INTERNAL_MODULES = [ GLOB $(INTERNAL_DIR) : *.cpp ] ;
-TEST_MODULES	= [ GLOB $(TEST_DIR) : *Test.test ] ;
+TEST_MODULES	= [ GLOB $(TEST_DIR) : *Test.test *.cpp ] ;
 MOCK_MODULES	= $(EXTRAS_DIR)/readline.cpp $(EXTRAS_DIR)/mock_time.cpp ;
 SKETCH_CLASS_MODULES = [ GLOB $(SKETCH_DIR) : *.cpp ] ; 
 

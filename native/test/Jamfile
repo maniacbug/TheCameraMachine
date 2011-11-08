@@ -2,6 +2,7 @@ SubDir TOP test ;
 
 HDRS += $(CXXTEST_DIR) ;
 
+SOURCE_GRIST = ;
 LOCATE_SOURCE = out ;
 LOCATE_TARGET = out ;
 
