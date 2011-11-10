@@ -1,5 +1,9 @@
 #include <hardware.h>
 #include <objects.h>
+#include <rtc.h>
+#include <signals.h>
+
+RtcEvent re1(conn,DateTime(2011,11,10,5,59,0).unixtime(),signal_power_on);
 
 void setup(void)
 {
@@ -29,6 +33,7 @@ void setup(void)
   // Begin objects
   //
 
+  Rtc.begin();
   test_switch.begin();
   record_button.begin();
   power_led.begin();
@@ -36,14 +41,20 @@ void setup(void)
   power_relay.begin();
   alt_relay.begin();
 
+  re1.begin();
+
   //
   // Connect objects
   //
  
-  power_led.listen(&test_switch);
+  power_led.listen(NULL);
   record_led.listen(&record_button);
   power_relay.listen(&test_switch);
   alt_relay.listen(NULL);
+
+  //
+  // Timeline
+  //
 
   //
   // Register updating objects
@@ -51,6 +62,7 @@ void setup(void)
 
   up.add(&test_switch);
   up.add(&record_button);
+  up.add(&re1);
 }
 
 void loop(void)

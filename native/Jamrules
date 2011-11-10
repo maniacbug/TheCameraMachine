@@ -19,6 +19,7 @@ MOCK_MODULES	= $(EXTRAS_DIR)/readline.cpp $(EXTRAS_DIR)/mock_time.cpp ;
 SKETCH_CLASS_MODULES = [ GLOB $(SKETCH_DIR) : *.cpp ] ; 
 LIBRARY_MODULES	= [ GLOB $(LIB_DIRS)/$(PROJECT_LIBS) : *.cpp ] ;
 SKETCH_MODULES	= [ GLOB $(SKETCH_DIR) : *.ino *.pde ] ;
+NATIVE_MODULES	= [ GLOB $(PWD) : *.cpp ] ;
 
 CXXTEST_GEN	= $(CXXTEST_DIR)/cxxtestgen.py ;
 LINK		= c++ ;
