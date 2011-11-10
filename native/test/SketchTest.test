@@ -8,12 +8,13 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Globals.h>
 #include <hardware.h>
 #include <objects.h>
 
 using namespace std;
 
-class TemplateTestSuite: public CxxTest::TestSuite
+class SketchTestSuite: public CxxTest::TestSuite
 {
 public:
   void setUp()
@@ -22,6 +23,19 @@ public:
 
   void testEmpty( void )
   {
+    setup();
+    TS_ASSERT(!thePins.hwGetDigital(power_led_pin));
+  }
+
+  void testTestSwitch( void )
+  {
+    setup();
+    thePins.hwSetDigital(test_switch_pin,LOW);
+    loop();
+    delay(50);
+    loop();
+
+    TS_ASSERT(thePins.hwGetDigital(power_led_pin));
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
