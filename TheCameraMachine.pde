@@ -2,8 +2,7 @@
 #include <objects.h>
 #include <rtc.h>
 #include <signals.h>
-
-RtcEvent re1(conn,DateTime(2011,11,10,5,59,0).unixtime(),signal_power_on);
+#include <events.h>
 
 void setup(void)
 {
@@ -41,7 +40,11 @@ void setup(void)
   power_relay.begin();
   alt_relay.begin();
 
-  re1.begin();
+  //
+  // Begin events
+  //
+
+  events_begin();
 
   //
   // Connect objects
@@ -62,7 +65,6 @@ void setup(void)
 
   up.add(&test_switch);
   up.add(&record_button);
-  up.add(&re1);
 }
 
 void loop(void)
