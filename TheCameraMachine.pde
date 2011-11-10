@@ -16,6 +16,7 @@ void setup(void)
 
 #if NATIVE
   pinSymbol(test_switch_pin,"test_switch");
+  pinSymbol(record_button_pin,"record_button");
   pinSymbol(test_led_pin,"test_led");
   pinSymbol(power_led_pin,"power_led");
   pinSymbol(record_led_pin,"record_led");
@@ -29,20 +30,25 @@ void setup(void)
   //
 
   test_switch.begin();
+  record_button.begin();
   power_led.begin();
   record_led.begin();
+  power_relay.begin();
 
   //
   // Connect objects
   //
  
   power_led.listen(&test_switch);
+  record_led.listen(&record_button);
+  power_relay.listen(&test_switch);
 
   //
   // Register objects with updater
   //
 
   up.add(&test_switch);
+  up.add(&record_button);
 }
 
 void loop(void)

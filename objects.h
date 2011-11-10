@@ -9,6 +9,8 @@
 extern Updater up;
 extern Connector conn;
 extern EmitButton test_switch;
+extern EmitButton record_button;
+extern PinControl power_relay;
 extern PinControl power_led;
 extern PinControl record_led;
 

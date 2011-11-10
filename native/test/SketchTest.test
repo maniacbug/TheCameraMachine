@@ -25,6 +25,8 @@ public:
   {
     setup();
     TS_ASSERT(!thePins.hwGetDigital(power_led_pin));
+    TS_ASSERT(!thePins.hwGetDigital(power_relay_pin));
+    TS_ASSERT(!thePins.hwGetDigital(record_led_pin));
   }
 
   void testTestSwitch( void )
@@ -36,6 +38,17 @@ public:
     loop();
 
     TS_ASSERT(thePins.hwGetDigital(power_led_pin));
+    TS_ASSERT(thePins.hwGetDigital(power_relay_pin));
+  }
+  void testRecordButton( void )
+  {
+    setup();
+    thePins.hwSetDigital(record_button_pin,LOW);
+    loop();
+    delay(50);
+    loop();
+
+    TS_ASSERT(thePins.hwGetDigital(record_led_pin));
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
