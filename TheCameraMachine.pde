@@ -35,7 +35,7 @@ void setup(void)
   //
   // Connect objects
   //
-  
+ 
   power_led.listen(&test_switch);
 
   //
