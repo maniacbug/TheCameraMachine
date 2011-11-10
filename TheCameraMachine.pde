@@ -46,7 +46,7 @@ void setup(void)
   alt_relay.listen(NULL);
 
   //
-  // Register objects with updater
+  // Register updating objects
   //
 
   up.add(&test_switch);

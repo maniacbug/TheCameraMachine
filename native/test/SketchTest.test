@@ -50,5 +50,10 @@ public:
 
     TS_ASSERT(thePins.hwGetDigital(record_led_pin));
   }
+  void testAltRelay(void)
+  {
+    // Create my own emitter here to emit signal_alt_relay_on,
+    // and then test the pin
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
