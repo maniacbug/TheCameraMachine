@@ -34,6 +34,7 @@ void setup(void)
   power_led.begin();
   record_led.begin();
   power_relay.begin();
+  alt_relay.begin();
 
   //
   // Connect objects
@@ -42,6 +43,7 @@ void setup(void)
   power_led.listen(&test_switch);
   record_led.listen(&record_button);
   power_relay.listen(&test_switch);
+  alt_relay.listen(NULL);
 
   //
   // Register objects with updater
