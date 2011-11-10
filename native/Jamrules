@@ -2,12 +2,14 @@ CXXTEST_DIR	= $(HOME)/Source/cxxtest ;
 CORE_DIR	= $(HOME)/Source/Arduino/hardware/native ;
 INTERNAL_DIR	= $(CORE_DIR)/internal ;
 EXTRAS_DIR	= $(CORE_DIR)/extras ;
+LIB_DIRS	= $(HOME)/Source/Arduino/libraries ;
 
 SKETCH_DIR	= $(PWD:D) ;
 NATIVE_DIR	= $(PWD) ;
 TEST_DIR	= $(PWD)/test ;
+PROJECT_LIBS 	= Tictocs ; 
 
-HDRS		+= $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) ;
+HDRS		+= $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) $(LIB_DIRS)/$(PROJECT_LIBS) ;
 DEFINES		+= NATIVE=1 ;
 
 CORE_MODULES	= [ GLOB $(CORE_DIR) : *.cpp ] ; 
@@ -15,6 +17,7 @@ INTERNAL_MODULES = [ GLOB $(INTERNAL_DIR) : *.cpp ] ;
 TEST_MODULES	= [ GLOB $(TEST_DIR) : *Test.test *.cpp ] ;
 MOCK_MODULES	= $(EXTRAS_DIR)/readline.cpp $(EXTRAS_DIR)/mock_time.cpp ;
 SKETCH_CLASS_MODULES = [ GLOB $(SKETCH_DIR) : *.cpp ] ; 
+LIBRARY_MODULES	= [ GLOB $(LIB_DIRS)/$(PROJECT_LIBS) : *.cpp ] ;
 
 CXXTEST_GEN	= $(CXXTEST_DIR)/cxxtestgen.py ;
 LINK		= c++ ;

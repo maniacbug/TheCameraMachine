@@ -10,3 +10,4 @@ const int alt_relay_pin = 4;
 const int lanc_pin = 3;
 
 #endif // __HARDWARE_H__
+// vim:cin:ai:sts=2 sw=2 ft=cpp
