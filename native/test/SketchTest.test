@@ -24,9 +24,12 @@ public:
   void testEmpty( void )
   {
     setup();
+    TS_ASSERT(thePins.hwGetDigital(test_switch_pin));
+    TS_ASSERT(thePins.hwGetDigital(record_button_pin));
     TS_ASSERT(!thePins.hwGetDigital(power_led_pin));
     TS_ASSERT(!thePins.hwGetDigital(power_relay_pin));
     TS_ASSERT(!thePins.hwGetDigital(record_led_pin));
+    TS_ASSERT(!thePins.hwGetDigital(alt_relay_pin));
   }
 
   void testTestSwitch( void )
