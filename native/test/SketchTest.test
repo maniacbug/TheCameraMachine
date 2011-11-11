@@ -11,6 +11,13 @@
 #include <Globals.h>
 #include <hardware.h>
 #include <objects.h>
+#include <rtc.h>
+#include <events.h>
+
+#include <Arduino.h>
+#include <RTC_native.h>
+
+extern RTC_native rtc_native;
 
 using namespace std;
 
@@ -19,6 +26,7 @@ class SketchTestSuite: public CxxTest::TestSuite
 public:
   void setUp()
   {
+    thePins.clear();
   }
 
   void testEmpty( void )
@@ -53,10 +61,21 @@ public:
 
     TS_ASSERT(thePins.hwGetDigital(record_led_pin));
   }
-  void testAltRelay(void)
+  void todo_testAltRelay(void)
   {
     // Create my own emitter here to emit signal_alt_relay_on,
     // and then test the pin
+  }
+
+  void testRtcEvent0(void)
+  {
+    uint32_t now = re[0].getWhen() - 1;
+    rtc_native.adjust(now);
+    setup();
+    now += 2;
+    rtc_native.adjust(now);
+    loop();
+    TS_ASSERT(thePins.hwGetDigital(power_led_pin));
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
