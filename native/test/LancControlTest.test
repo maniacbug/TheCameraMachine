@@ -25,13 +25,17 @@ class LancControlTestSuite: public CxxTest::TestSuite
     Sender(Connector& _conn): Connectable(_conn) {}
   };
 
+  static const int command_pin = 1;
+  static const int data_pin = 2;
+
   Connector* pconn;
   LancControl *plc;
 public:
   void setUp()
   {
     pconn = new Connector;
-    plc = new LancControl(*pconn);
+    plc = new LancControl(*pconn,command_pin,data_pin);
+    plc->begin();
     plc->listen(NULL);
   }
   void tearDown()

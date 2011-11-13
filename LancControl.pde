@@ -7,8 +7,18 @@
 
 /****************************************************************************/
 
-LancControl::LancControl(Connector& _conn): Connectable(_conn), is_recording(false) 
+LancControl::LancControl(Connector& _conn, int _command_pin, int _data_pin): 
+  Connectable(_conn), is_recording(false), command_pin(_command_pin),
+  data_pin(_data_pin)
 {
+}
+
+/****************************************************************************/
+
+void LancControl::begin(void)
+{
+  pinMode(command_pin,INPUT);
+  pinMode(data_pin,OUTPUT);
 }
 
 /****************************************************************************/

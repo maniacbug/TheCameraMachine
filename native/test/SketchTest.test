@@ -9,12 +9,12 @@
 
 // Project includes
 #include <Globals.h>
+#include <Arduino.h>
 #include <hardware.h>
 #include <objects.h>
 #include <rtc.h>
 #include <events.h>
 
-#include <Arduino.h>
 #include <RTC_native.h>
 
 extern RTC_native rtc_native;
