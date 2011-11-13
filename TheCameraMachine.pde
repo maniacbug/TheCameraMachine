@@ -56,6 +56,7 @@ void setup(void)
   record_led.listen(NULL);
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
+  camera.listen(NULL);
 
   //
   // Timeline
