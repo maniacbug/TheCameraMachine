@@ -53,14 +53,14 @@ public:
   void testDirectSet( void )
   {
     thePins.hwSetDigital(setter_pin,LOW);
-    theSerialBuffer.setInput("Nov 12 2011 22:15:57\n");
+    theSerialBuffer.setInput("Nov 01 2011 22:15:57\n");
     psetter->update();
-    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 12 2011","22:15:57").unixtime() );
+    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 01 2011","22:15:57").unixtime() );
   }
   void testDirectSetNoPin( void )
   {
     thePins.hwSetDigital(setter_pin,HIGH);
-    theSerialBuffer.setInput("Nov 12 2011 22:15:57\n");
+    theSerialBuffer.setInput("Nov 01 2011 22:15:57\n");
     psetter->update();
     TS_ASSERT_EQUALS( prtc->now, 0U );
   }
