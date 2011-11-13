@@ -34,11 +34,11 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
   {
   case signal_start_record:
     is_recording = true;
-    printf_P(PSTR("LANC: Recording\n\r"));
+    printf_P(PSTR("LANC Recording\n\r"));
     break;
   case signal_stop_record:
     is_recording = false;
-    printf_P(PSTR("LANC: Stopping\n\r"));
+    printf_P(PSTR("LANC Stopping\n\r"));
     break;
   }
 }

@@ -16,7 +16,7 @@ void Rtc_c::begin(void)
   DateTime now = rtc_native.now();
   char buf[32];
   now.toString(buf,sizeof(buf));
-  printf_P(PSTR("RTC: The time is now %s\n\r"),buf);
+  printf_P(PSTR("RTC  The time is now %s\n\r"),buf);
 
   RtcEvent::setRtc(this);
 }
@@ -34,7 +34,7 @@ void Rtc_c::adjust(uint32_t new_now)
   DateTime now = rtc_native.now();
   char buf[32];
   now.toString(buf,sizeof(buf));
-  printf_P(PSTR("RTC: The time is now %s\n\r"),buf);
+  printf_P(PSTR("RTC  The time is now %s\n\r"),buf);
 }
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
