@@ -10,7 +10,7 @@
 
 void RtcSetter::update(void) 
 {
-  if ( Serial.available() )
+  if ( !digitalRead(pin) && Serial.available() )
   {
     char buf[21];
     char* current = buf;

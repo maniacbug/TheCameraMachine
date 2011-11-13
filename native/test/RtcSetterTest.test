@@ -19,7 +19,6 @@ using namespace std;
 
 class RtcSetterTestSuite: public CxxTest::TestSuite
 {
-
   struct TestRtc: public IRtc
   {
     uint32_t now;
@@ -28,6 +27,8 @@ class RtcSetterTestSuite: public CxxTest::TestSuite
     virtual void adjust(uint32_t _time) { now = _time; }
   };
 
+  static const int setter_pin = 10;
+
   TestRtc* prtc;
   RtcSetter* psetter;
 
@@ -35,7 +36,7 @@ public:
   void setUp()
   {
     prtc = new TestRtc;
-    psetter = new RtcSetter(prtc);
+    psetter = new RtcSetter(prtc,setter_pin);
   }
 
   void tearDown()
@@ -51,9 +52,17 @@ public:
   
   void testDirectSet( void )
   {
+    thePins.hwSetDigital(setter_pin,LOW);
     theSerialBuffer.setInput("Nov 12 2011 22:15:57\n");
     psetter->update();
     TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 12 2011","22:15:57").unixtime() );
+  }
+  void testDirectSetNoPin( void )
+  {
+    thePins.hwSetDigital(setter_pin,HIGH);
+    theSerialBuffer.setInput("Nov 12 2011 22:15:57\n");
+    psetter->update();
+    TS_ASSERT_EQUALS( prtc->now, 0U );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

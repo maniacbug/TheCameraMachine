@@ -15,9 +15,10 @@ class RtcSetter
 {
 private:
   IRtc* rtc;
+  int pin;
 protected:
 public:
-  RtcSetter(IRtc* _rtc): rtc(_rtc) {}
+  RtcSetter(IRtc* _rtc, int _pin): rtc(_rtc), pin(_pin) {}
   void update(void);
 };
 
