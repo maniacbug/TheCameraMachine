@@ -10,6 +10,7 @@ class Rtc_c: public IRtc
 public:
   void begin(void);
   bool is_after(uint32_t when) const; // { return now > when; }
+  void adjust(uint32_t new_now);
 };
 
 extern Rtc_c Rtc;

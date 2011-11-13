@@ -20,6 +20,7 @@ private:
 protected:
 public:
   RtcSetter(IRtc* _rtc, int _pin): rtc(_rtc), pin(_pin) {}
+  void begin(void);
   void update(void);
 };
 

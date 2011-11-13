@@ -8,6 +8,14 @@
 
 /****************************************************************************/
 
+void RtcSetter::begin(void) 
+{
+  pinMode(pin,INPUT);
+  digitalWrite(pin,HIGH);
+}
+
+/****************************************************************************/
+
 void RtcSetter::update(void) 
 {
   if ( !digitalRead(pin) && Serial.available() )

@@ -27,5 +27,15 @@ bool Rtc_c::is_after(uint32_t when) const
   return now > when;
 }
 
+void Rtc_c::adjust(uint32_t new_now)
+{
+  rtc_native.adjust(new_now);
+  
+  DateTime now = rtc_native.now();
+  char buf[32];
+  now.toString(buf,sizeof(buf));
+  printf_P(PSTR("RTC: The time is now %s\n\r"),buf);
+}
+
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 

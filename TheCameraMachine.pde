@@ -26,6 +26,7 @@ void setup(void)
   pinSymbol(power_relay_pin,"power_relay");
   pinSymbol(alt_relay_pin,"alt_relay");
   pinSymbol(lanc_pin,"lanc");
+  pinSymbol(clock_set_pin,"clock_set");
 #endif
 
   //
@@ -39,6 +40,7 @@ void setup(void)
   record_led.begin();
   power_relay.begin();
   alt_relay.begin();
+  clock_setter.begin();
 
   //
   // Begin events
@@ -51,8 +53,8 @@ void setup(void)
   //
  
   power_led.listen(NULL);
-  record_led.listen(&record_button);
-  power_relay.listen(&test_switch);
+  record_led.listen(NULL);
+  power_relay.listen(NULL);
   alt_relay.listen(NULL);
 
   //
@@ -65,6 +67,7 @@ void setup(void)
 
   up.add(&test_switch);
   up.add(&record_button);
+  up.add(&clock_setter);
 }
 
 void loop(void)

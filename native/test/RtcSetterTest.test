@@ -41,6 +41,7 @@ public:
     prtc = new TestRtc;
     psetter = new RtcSetter(prtc,setter_pin);
 
+    psetter->begin();
     pup->add(psetter);
   }
 
@@ -65,7 +66,6 @@ public:
   }
   void testDirectSetNoPin( void )
   {
-    thePins.hwSetDigital(setter_pin,HIGH);
     theSerialBuffer.setInput("Nov 01 2011 22:15:57\n");
     psetter->update();
     TS_ASSERT_EQUALS( prtc->now, 0U );

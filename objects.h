@@ -5,6 +5,7 @@
 #include <Connector.h>
 #include <EmitButton.h>
 #include <PinControl.h>
+#include <RtcSetter.h>
 
 extern Updater up;
 extern Connector conn;
@@ -14,6 +15,7 @@ extern PinControl power_relay;
 extern PinControl alt_relay;
 extern PinControl power_led;
 extern PinControl record_led;
+extern RtcSetter clock_setter;
 
 #endif // __OBJECTS_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

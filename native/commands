@@ -1,0 +1,8 @@
+log rate 0
+at 100 pin clock_set low
+at 1000 send Nov 20 2011 06:00:00 cr
+at 4000 send Nov 20 2011 06:01:00 cr
+at 7000 send Nov 20 2011 06:02:00 cr
+at 10000 send Nov 20 2011 06:03:00 cr
+at 13000 list
+at 13001 quit
