@@ -6,28 +6,54 @@
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <Connector.h>
 
 // Project includes
+#include <signals.h>
 #include <LancControl.h>
 
 using namespace std;
 
 class LancControlTestSuite: public CxxTest::TestSuite
 {
+  struct Sender: public Connectable
+  {
+    void send(uint8_t _signal)
+    {
+      emit(_signal);
+    }
+    Sender(Connector& _conn): Connectable(_conn) {}
+  };
+
+  Connector* pconn;
   LancControl *plc;
 public:
   void setUp()
   {
-    plc = new LancControl;
+    pconn = new Connector;
+    plc = new LancControl(*pconn);
+    plc->listen(NULL);
   }
   void tearDown()
   {
     delete plc;
+    delete pconn;
   }
 
   void testEmpty( void )
   {
     TS_ASSERT(plc);
+  }
+  void testStableStart( void )
+  {
+    TS_ASSERT_EQUALS(plc->isRecording(),false);
+  }
+
+  void testStartRecord( void )
+  {
+    Sender(*pconn).send(signal_start_record);
+
+    TS_ASSERT(plc->isRecording());
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
