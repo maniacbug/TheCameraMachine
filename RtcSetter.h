@@ -5,13 +5,14 @@
 // C includes
 // Library includes
 #include <RtcEvent.h> // for IRtc
+#include <IUpdate.h>
 // Project includes
 
 /**
  * Monitors serial input, and sets the time 
  */
 
-class RtcSetter
+class RtcSetter: public IUpdate
 {
 private:
   IRtc* rtc;
