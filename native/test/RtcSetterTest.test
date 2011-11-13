@@ -1,0 +1,27 @@
+// STL includes
+#include <vector>
+#include <string>
+
+// C includes
+
+// Library includes
+#include <cxxtest/TestSuite.h>
+
+// Project includes
+#include <RtcSetter.h>
+
+using namespace std;
+
+class RtcSetterTestSuite: public CxxTest::TestSuite
+{
+  RtcSetter rs;
+public:
+  void setUp()
+  {
+  }
+
+  void testEmpty( void )
+  {
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
