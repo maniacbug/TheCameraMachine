@@ -10,16 +10,18 @@
 
 /**
  * Monitors serial input, and sets the time 
+ * 
+ * Send something like "TNov 01 2011 01:02:03\n" and be sure to pad
+ * with zeroes
  */
 
 class RtcSetter: public IUpdate
 {
 private:
   IRtc* rtc;
-  int pin;
 protected:
 public:
-  RtcSetter(IRtc* _rtc, int _pin): rtc(_rtc), pin(_pin) {}
+  RtcSetter(IRtc* _rtc): rtc(_rtc) {}
   void begin(void);
   void update(void);
 };

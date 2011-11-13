@@ -28,8 +28,6 @@ class RtcSetterTestSuite: public CxxTest::TestSuite
     virtual void adjust(uint32_t _time) { now = _time; }
   };
 
-  static const int setter_pin = 10;
-
   Updater* pup;
   TestRtc* prtc;
   RtcSetter* psetter;
@@ -39,7 +37,7 @@ public:
   {
     pup = new Updater;
     prtc = new TestRtc;
-    psetter = new RtcSetter(prtc,setter_pin);
+    psetter = new RtcSetter(prtc);
 
     psetter->begin();
     pup->add(psetter);
@@ -59,23 +57,15 @@ public:
   
   void testDirectSet( void )
   {
-    thePins.hwSetDigital(setter_pin,LOW);
-    theSerialBuffer.setInput("Nov 01 2011 22:15:57\n");
+    theSerialBuffer.setInput("TNov 01 2011 01:02:03\n");
     psetter->update();
-    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 01 2011","22:15:57").unixtime() );
-  }
-  void testDirectSetNoPin( void )
-  {
-    theSerialBuffer.setInput("Nov 01 2011 22:15:57\n");
-    psetter->update();
-    TS_ASSERT_EQUALS( prtc->now, 0U );
+    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 01 2011","01:02:03").unixtime() );
   }
   void testSetViaUpdater( void )
   {
-    thePins.hwSetDigital(setter_pin,LOW);
-    theSerialBuffer.setInput("Nov 01 2011 22:15:57\n");
+    theSerialBuffer.setInput("TNov 01 2011 01:02:03\n");
     pup->update();
-    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 01 2011","22:15:57").unixtime() );
+    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 01 2011","01:02:03").unixtime() );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

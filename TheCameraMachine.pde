@@ -27,7 +27,6 @@ void setup(void)
   pinSymbol(alt_relay_pin,"alt_relay");
   pinSymbol(lanc_command_pin,"lanc_command");
   pinSymbol(lanc_data_pin,"lanc_data");
-  pinSymbol(clock_set_pin,"clock_set");
 #endif
 
   //

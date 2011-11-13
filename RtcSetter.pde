@@ -10,17 +10,18 @@
 
 void RtcSetter::begin(void) 
 {
-  pinMode(pin,INPUT);
-  digitalWrite(pin,HIGH);
 }
 
 /****************************************************************************/
 
 void RtcSetter::update(void) 
 {
-  if ( !digitalRead(pin) && Serial.available() )
+  static char buf[21];
+  
+  if ( Serial.available() && Serial.peek() == 'T'  )
   {
-    char buf[21];
+    Serial.read(); // Skip past the starting 'T'
+
     char* current = buf;
     char* end = buf + sizeof(buf) - 1;
     char c = Serial.read();
