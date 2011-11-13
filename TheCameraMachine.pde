@@ -20,7 +20,7 @@ void setup(void)
 #if NATIVE
   pinSymbol(test_switch_pin,"test_switch");
   pinSymbol(record_button_pin,"record_button");
-  pinSymbol(test_led_pin,"test_led");
+  pinSymbol(other_led_pin,"other_led");
   pinSymbol(power_led_pin,"power_led");
   pinSymbol(record_led_pin,"record_led");
   pinSymbol(power_relay_pin,"power_relay");
@@ -38,6 +38,7 @@ void setup(void)
   record_button.begin();
   power_led.begin();
   record_led.begin();
+  other_led.begin();
   power_relay.begin();
   alt_relay.begin();
   clock_setter.begin();
@@ -55,6 +56,7 @@ void setup(void)
  
   power_led.listen(NULL);
   record_led.listen(NULL);
+  other_led.listen(NULL);
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
   camera.listen(NULL);

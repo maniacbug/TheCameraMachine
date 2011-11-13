@@ -16,6 +16,7 @@ extern PinControl power_relay;
 extern PinControl alt_relay;
 extern PinControl power_led;
 extern PinControl record_led;
+extern PinControl other_led;
 extern RtcSetter clock_setter;
 extern LancControl camera;
 

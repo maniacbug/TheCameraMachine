@@ -3,7 +3,7 @@
 
 const int test_switch_pin = 5;
 const int record_button_pin = 2;
-const int test_led_pin = 6;
+const int other_led_pin = 6;
 const int power_led_pin = 7;
 const int record_led_pin = 8;
 const int power_relay_pin = 9;
