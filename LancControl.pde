@@ -16,6 +16,7 @@ LancControl::LancControl(Connector& _conn): Connectable(_conn), is_recording(fal
 void LancControl::listen(Connectable* _who) 
 {
   Connectable::listen(_who,signal_start_record);
+  Connectable::listen(_who,signal_stop_record);
 }
 
 /****************************************************************************/
@@ -33,6 +34,9 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
   {
   case signal_start_record:
     is_recording = true;
+    break;
+  case signal_stop_record:
+    is_recording = false;
     break;
   }
 }

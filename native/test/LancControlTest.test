@@ -55,5 +55,15 @@ public:
 
     TS_ASSERT(plc->isRecording());
   }
+  void testStopRecord( void )
+  {
+    Sender(*pconn).send(signal_start_record);
+
+    TS_ASSERT(plc->isRecording());
+    
+    Sender(*pconn).send(signal_stop_record);
+    
+    TS_ASSERT(!plc->isRecording());
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
