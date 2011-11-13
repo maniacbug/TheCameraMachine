@@ -1,8 +1,31 @@
 // STL includes
 // C includes
 // Library includes
+#include <RTClib.h>
+
 // Project includes
 #include <RtcSetter.h>
+
+/****************************************************************************/
+
+void RtcSetter::update(void) 
+{
+  if ( Serial.available() )
+  {
+    char buf[21];
+    char* current = buf;
+    char* end = buf + sizeof(buf) - 1;
+    char c = Serial.read();
+    while ( current < end && c != '\n' )
+    {
+      *current++ = c;
+      c = Serial.read();
+    }
+    *current++ = 0;
+    buf[11] = 0;
+    rtc->adjust(DateTime(buf,buf+12).unixtime());
+  }
+}
 
 /****************************************************************************/
 

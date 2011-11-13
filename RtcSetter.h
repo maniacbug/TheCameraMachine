@@ -4,17 +4,21 @@
 // STL includes
 // C includes
 // Library includes
+#include <RtcEvent.h> // for IRtc
 // Project includes
 
 /**
- * Example for how classes should be declared
+ * Monitors serial input, and sets the time 
  */
 
 class RtcSetter
 {
 private:
+  IRtc* rtc;
 protected:
 public:
+  RtcSetter(IRtc* _rtc): rtc(_rtc) {}
+  void update(void);
 };
 
 #endif // __RTCSETTER_H__

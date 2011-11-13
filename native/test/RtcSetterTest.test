@@ -6,22 +6,54 @@
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <RtcEvent.h> // for IRtc
 
 // Project includes
 #include <RtcSetter.h>
+#include <Globals.h>
+
+#include <Arduino.h>
+#include <RTClib.h>
 
 using namespace std;
 
 class RtcSetterTestSuite: public CxxTest::TestSuite
 {
-  RtcSetter rs;
+
+  struct TestRtc: public IRtc
+  {
+    uint32_t now;
+    TestRtc(void): now(0) {}
+    virtual bool is_after(uint32_t _time) const { return now > _time; }
+    virtual void adjust(uint32_t _time) { now = _time; }
+  };
+
+  TestRtc* prtc;
+  RtcSetter* psetter;
+
 public:
   void setUp()
   {
+    prtc = new TestRtc;
+    psetter = new RtcSetter(prtc);
+  }
+
+  void tearDown()
+  {
+    delete psetter;
+    delete prtc;
   }
 
   void testEmpty( void )
   {
+    TS_ASSERT(psetter);
+  }
+  
+  void testDirectSet( void )
+  {
+    theSerialBuffer.setInput("Nov 12 2011 22:15:57\n");
+    psetter->update();
+    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 12 2011","22:15:57").unixtime() );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
