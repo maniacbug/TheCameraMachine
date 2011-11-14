@@ -18,7 +18,7 @@ private:
   int command_pin;
   int data_pin;
 protected:
- virtual void onNotify(const Connectable* ,uint8_t signal );
+  virtual void onNotify(const Connectable* ,uint8_t signal );
 public:
   LancControl(Connector& _conn, int _command_pin, int _data_pin);
   void begin(void);

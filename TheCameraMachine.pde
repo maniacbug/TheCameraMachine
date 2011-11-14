@@ -53,7 +53,7 @@ void setup(void)
   //
   // Connect objects
   //
- 
+
   power_led.listen(NULL);
   record_led.listen(NULL);
   other_led.listen(NULL);

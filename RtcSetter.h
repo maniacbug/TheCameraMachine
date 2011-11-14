@@ -9,8 +9,8 @@
 // Project includes
 
 /**
- * Monitors serial input, and sets the time 
- * 
+ * Monitors serial input, and sets the time
+ *
  * Send something like "TNov 01 2011 01:02:03\n" and be sure to pad
  * with zeroes
  */

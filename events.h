@@ -8,7 +8,10 @@ class MyRtcEvent: public RtcEvent
   uint32_t w;
 public:
   MyRtcEvent(int y, int m, int d, int hh, int mm, int ss, uint8_t signal);
-  uint32_t getWhen(void) const { return w; }
+  uint32_t getWhen(void) const
+  {
+    return w;
+  }
 };
 
 extern void events_begin(void);

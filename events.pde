@@ -10,7 +10,8 @@ MyRtcEvent::MyRtcEvent(int y, int m, int d, int hh, int mm, int ss, uint8_t sign
 {
 }
 
-MyRtcEvent re[] = {
+MyRtcEvent re[] =
+{
   MyRtcEvent(2011,11,20,6,0,2,signal_power_on),
   MyRtcEvent(2011,11,20,6,0,2,signal_other_led_on),
   MyRtcEvent(2011,11,20,6,1,2,signal_start_record),
@@ -22,7 +23,7 @@ int num_re = sizeof(re)/sizeof(re[0]);
 
 void events_begin(void)
 {
-  MyRtcEvent *curr = re, *end = re + num_re; 
+  MyRtcEvent *curr = re, *end = re + num_re;
   while ( curr < end )
   {
     curr->begin();

@@ -7,7 +7,7 @@
 
 /****************************************************************************/
 
-LancControl::LancControl(Connector& _conn, int _command_pin, int _data_pin): 
+LancControl::LancControl(Connector& _conn, int _command_pin, int _data_pin):
   Connectable(_conn), is_recording(false), command_pin(_command_pin),
   data_pin(_data_pin)
 {
@@ -24,7 +24,7 @@ void LancControl::begin(void)
 
 /****************************************************************************/
 
-void LancControl::listen(Connectable* _who) 
+void LancControl::listen(Connectable* _who)
 {
   Connectable::listen(_who,signal_start_record);
   Connectable::listen(_who,signal_stop_record);
@@ -32,9 +32,9 @@ void LancControl::listen(Connectable* _who)
 
 /****************************************************************************/
 
-bool LancControl::isRecording(void) const 
-{ 
-  return is_recording; 
+bool LancControl::isRecording(void) const
+{
+  return is_recording;
 }
 
 /****************************************************************************/

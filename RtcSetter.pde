@@ -8,16 +8,16 @@
 
 /****************************************************************************/
 
-void RtcSetter::begin(void) 
+void RtcSetter::begin(void)
 {
 }
 
 /****************************************************************************/
 
-void RtcSetter::update(void) 
+void RtcSetter::update(void)
 {
   static char buf[21];
-  
+
   if ( Serial.available() && Serial.peek() == 'T'  )
   {
     Serial.read(); // Skip past the starting 'T'
