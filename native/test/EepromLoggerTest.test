@@ -1,0 +1,42 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL includes
+#include <vector>
+#include <string>
+
+// C includes
+
+// Library includes
+#include <cxxtest/TestSuite.h>
+
+// Project includes
+#include <EepromLogger.h>
+
+using namespace std;
+
+class EepromLoggerTestSuite: public CxxTest::TestSuite
+{
+  EepromLogger* pEepromLogger ;
+public:
+  void setUp()
+  {
+    pEepromLogger = new EepromLogger();
+  }
+  
+  void tearDown()
+  {
+    delete pEepromLogger;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pEepromLogger);
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
