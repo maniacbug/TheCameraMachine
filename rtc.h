@@ -4,7 +4,7 @@
 #include <RtcEvent.h>
 #include <RTClib.h>
 
-class Rtc_c: public IRtc
+class BoardRtc: public IRtc
 {
   uint32_t now;
 public:
@@ -12,8 +12,6 @@ public:
   bool is_after(uint32_t when) const; // { return now > when; }
   void adjust(uint32_t new_now);
 };
-
-extern Rtc_c Rtc;
 
 #endif // __RTC_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

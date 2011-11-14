@@ -5,11 +5,9 @@
 
 #include <rtc.h>
 
-Rtc_c Rtc;
-
 RTC_native rtc_native;
 
-void Rtc_c::begin(void)
+void BoardRtc::begin(void)
 {
   rtc_native.begin();
 
@@ -21,13 +19,13 @@ void Rtc_c::begin(void)
   RtcEvent::setRtc(this);
 }
 
-bool Rtc_c::is_after(uint32_t when) const
+bool BoardRtc::is_after(uint32_t when) const
 {
   uint32_t now = rtc_native.now().unixtime();
   return now > when;
 }
 
-void Rtc_c::adjust(uint32_t new_now)
+void BoardRtc::adjust(uint32_t new_now)
 {
   rtc_native.adjust(new_now);
   

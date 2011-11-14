@@ -60,6 +60,29 @@ void setup(void)
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
   camera.listen(NULL);
+  conn.setLogger(&logger);
+
+  //
+  // Logger symbols
+  //
+
+  logger.setSymbol(signal_power_on, "power_on");
+  logger.setSymbol(signal_power_off, "power_off");
+  logger.setSymbol(signal_start_record, "start_record");
+  logger.setSymbol(signal_stop_record, "stop_record");
+  logger.setSymbol(signal_alt_relay_on, "alt_relay_on");
+  logger.setSymbol(signal_alt_relay_off, "alt_relay_off");
+  logger.setSymbol(signal_other_led_on, "other_led_on");
+  logger.setSymbol(signal_other_led_off, "other_led_off");
+
+  logger.setSymbol(&test_switch, "test_switch");
+  logger.setSymbol(&record_button, "record_button");
+  logger.setSymbol(&power_relay, "power_relay");
+  logger.setSymbol(&alt_relay, "alt_relay");
+  logger.setSymbol(&power_led, "power_led");
+  logger.setSymbol(&record_led, "record_led");
+  logger.setSymbol(&other_led, "other_led");
+  logger.setSymbol(&camera, "camera");
 
   //
   // Timeline

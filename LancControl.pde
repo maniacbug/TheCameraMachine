@@ -18,6 +18,7 @@ LancControl::LancControl(Connector& _conn, int _command_pin, int _data_pin):
 void LancControl::begin(void)
 {
   pinMode(command_pin,INPUT);
+  digitalWrite(command_pin,HIGH);
   pinMode(data_pin,OUTPUT);
 }
 

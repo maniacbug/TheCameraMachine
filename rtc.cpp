@@ -1,17 +1,15 @@
 #include <rtc.h>
 
-Rtc_c Rtc;
-
-void Rtc_c::begin(void)
+void BoardRtc::begin(void)
 {
 }
 
-bool Rtc_c::is_after(uint32_t when) const
+bool BoardRtc::is_after(uint32_t when) const
 {
   return now > when;
 }
 
-void Rtc_c::adjust(uint32_t new_now)
+void BoardRtc::adjust(uint32_t new_now)
 {
   now = new_now;
 }

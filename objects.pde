@@ -7,6 +7,7 @@
 
 Updater up;
 Connector conn;
+BoardRtc Rtc;
 EmitButton test_switch(conn,test_switch_pin,signal_power_on,signal_power_off);
 EmitButton record_button(conn,record_button_pin,signal_start_record,signal_stop_record);
 PinControl power_relay(conn,power_relay_pin,signal_power_off,signal_power_on);
@@ -16,5 +17,6 @@ PinControl record_led(conn,record_led_pin,signal_stop_record,signal_start_record
 PinControl other_led(conn,other_led_pin,signal_other_led_off,signal_other_led_on);
 RtcSetter clock_setter(&Rtc);
 LancControl camera(conn,lanc_command_pin,lanc_data_pin);
+SimpleLogger logger(30,10);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
