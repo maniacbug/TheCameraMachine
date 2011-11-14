@@ -1,0 +1,136 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL includes
+#include <vector>
+#include <string>
+
+// C includes
+
+// Library includes
+#include <cxxtest/TestSuite.h>
+#include <EepromInternal.h>
+
+// Project includes
+#include <Globals.h>
+#include <EepromStream.h>
+
+using namespace std;
+
+class EepromStreamTestSuite: public CxxTest::TestSuite
+{
+  struct example
+  {
+    uint8_t a;
+    uint16_t b;
+    uint32_t c;
+  };
+  EepromStream* pEepromStream ;
+public:
+  void setUp()
+  {
+    theEeprom.clear();
+    pEepromStream = new EepromStream();
+  }
+  
+  void tearDown()
+  {
+    delete pEepromStream;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pEepromStream);
+  }
+  
+  void testWriteByte( void )
+  {
+    uint8_t test_value = 0xDE;
+    pEepromStream->write(test_value);
+
+    TS_ASSERT_EQUALS(theEeprom.readByte(0), test_value);
+  }
+
+  void testReadByte( void )
+  {
+    uint8_t test_value = 0xDE;
+    theEeprom.writeByte(0,test_value);
+
+    uint8_t result_value = 0;
+    pEepromStream->read(result_value);
+
+    TS_ASSERT_EQUALS(test_value,result_value);
+  }
+
+  void testSeek( void )
+  {
+    uint8_t value = 1;
+    pEepromStream->write(value++);
+    pEepromStream->write(value++);
+    pEepromStream->write(value++);
+    
+    pEepromStream->seek(1);
+
+    pEepromStream->read(value);
+
+    TS_ASSERT_EQUALS( value, 2 );
+  }
+  
+  void testPeek( void )
+  {
+    const uint8_t test_value = 0xDE;
+    uint8_t value = test_value;
+    theEeprom.writeByte(0,value++);
+    theEeprom.writeByte(1,value++);
+
+    uint8_t result_value = 0;
+    pEepromStream->peek(result_value);
+
+    TS_ASSERT_EQUALS(test_value,result_value);
+    
+    pEepromStream->read(result_value);
+    TS_ASSERT_EQUALS(test_value,result_value);
+    
+    pEepromStream->read(result_value);
+    TS_ASSERT_EQUALS(test_value+1,result_value);
+  }
+  void testReadWriteLongLong( void )
+  {
+    uint64_t test_value = 0x0102030405060708;
+    pEepromStream->write(test_value);
+    pEepromStream->seek(0);
+
+    uint64_t result_value = 0;
+    pEepromStream->read(result_value);
+
+    TS_ASSERT_EQUALS(test_value,result_value);
+  }
+  void testReadWriteStruct( void )
+  {
+    example test_value = { 0xAA, 0xBBCC, 0xDDEEFF11 };
+    example result_value = { 0,0,0 };
+
+    pEepromStream->write(test_value);
+    pEepromStream->seek(0);
+    pEepromStream->read(result_value);
+
+    TS_ASSERT_EQUALS(test_value.a,result_value.a);
+    TS_ASSERT_EQUALS(test_value.b,result_value.b);
+    TS_ASSERT_EQUALS(test_value.c,result_value.c);
+  }
+  void testTell( void )
+  {
+    example test_value = { 0xAA, 0xBBCC, 0xDDEEFF11 };
+
+    pEepromStream->write(test_value);
+
+    TS_ASSERT_EQUALS(pEepromStream->tell(),sizeof(test_value));
+  }
+  
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
