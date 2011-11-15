@@ -35,5 +35,10 @@ void BoardRtc::adjust(uint32_t new_now)
   printf_P(PSTR("RTC  The time is now %s\n\r"),buf);
 }
 
+uint32_t BoardRtc::now_unixtime(void) const
+{
+  return rtc_native.now().unixtime();
+}
+
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 

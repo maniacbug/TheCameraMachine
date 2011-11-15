@@ -13,6 +13,7 @@
 // C includes
 // Library includes
 #include <SimpleLogger.h>
+#include <RtcEvent.h>
 
 // Project includes
 #include <EepromStream.h>
@@ -28,6 +29,7 @@ public:
 private:
   EepromStream eep;
   bool overflow;
+  const IRtc* rtc;
 protected:
   virtual void log_emit(const Connectable* object, uint8_t signal);
   virtual void log_notify(const Connectable* object);
@@ -43,9 +45,13 @@ protected:
   }
 
 public:
-  EepromLogger(void): SimpleLogger(32,32), overflow(false) {}
+  EepromLogger(void): SimpleLogger(32,32), overflow(false), rtc(NULL) {}
   void begin();
   void play() const;
+  void setRtc(const IRtc* _rtc) 
+  {
+    rtc = _rtc;
+  }
 };
 
 #endif // __EEPROMLOGGER_H__

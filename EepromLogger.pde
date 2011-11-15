@@ -9,6 +9,7 @@
 // STL includes
 // C includes
 // Library includes
+#include <RTClib.h>
 // Project includes
 #include <EepromLogger.h>
 
@@ -49,6 +50,11 @@ static inline uint8_t make_emit_2(int index)
 static inline val1_t make_notify(int index)
 {
   return (type_notify << type_shift ) | ( index & value_mask );
+}
+
+static inline val1_t make_time(void)
+{
+  return (type_time << type_shift );
 }
 
 /****************************************************************************/
@@ -159,6 +165,11 @@ void EepromLogger::begin(void)
 
   // Then write the begin/end for the current run
   write(make_command(command_begin));
+  if ( rtc )
+  {
+    write(make_time());
+    write(rtc->now_unixtime());
+  }
   write_end();
 }
 
@@ -168,6 +179,7 @@ void EepromLogger::fast_forward(void)
 {
   val1_t val1;
   uint8_t byte2;
+  uint32_t now;
 
   bool done = false;
   while (!done)
@@ -181,6 +193,7 @@ void EepromLogger::fast_forward(void)
     case type_notify:
       break;
     case type_time:
+      eep.read(now);
       break;
     case type_command:
       done = fast_forward_command(val1 & value_mask);
@@ -202,6 +215,8 @@ void EepromLogger::play(void) const
   EepromStream player;
   val1_t val1;
   uint8_t byte2;
+  uint32_t now;
+  char buf[32];
 
   bool done = false;
   while (!done)
@@ -218,7 +233,8 @@ void EepromLogger::play(void) const
       printf_P(PSTR("LOG  %04u NOTF %S"),at,decode_object(val1));
       break;
     case type_time:
-      printf_P(PSTR("LOG  %04u Unknown value %u"),at,val1);
+      player.read(now);
+      printf_P(PSTR("LOG  %04u TIME %s"),at,DateTime(now).toString(buf,sizeof(buf)));
       break;
     case type_command:
       done = play_command(at,val1 & value_mask);

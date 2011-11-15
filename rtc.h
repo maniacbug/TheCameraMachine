@@ -11,6 +11,7 @@ public:
   void begin(void);
   bool is_after(uint32_t when) const; // { return now > when; }
   void adjust(uint32_t new_now);
+  uint32_t now_unixtime(void) const;
 };
 
 #endif // __RTC_H__

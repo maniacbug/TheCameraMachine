@@ -20,6 +20,7 @@
 
 // Project includes
 #include <Globals.h>
+#include <rtc.h>
 #include <EepromLogger.h>
 
 using namespace std;
@@ -57,7 +58,8 @@ class EepromLoggerTestSuite: public CxxTest::TestSuite
   
   Connector* pconn;
   Sender* pSender;
-  EepromLogger_test* pEepromLogger ;
+  EepromLogger_test* pEepromLogger;
+  BoardRtc* pBoardRtc;
 public:
   void setUp()
   {
@@ -67,12 +69,16 @@ public:
     pconn = new Connector;
     pSender = new Sender(*pconn);
     pEepromLogger = new EepromLogger_test();
+    pBoardRtc = new BoardRtc;
 
     pEepromLogger->begin();
+    pEepromLogger->setSymbol( test_signal, "test_signal" );
+    pEepromLogger->setSymbol( pSender, "test_sender" );
   }
   
   void tearDown()
   {
+    delete pBoardRtc;
     delete pEepromLogger;
     delete pSender;
     delete pconn;
@@ -94,8 +100,6 @@ public:
   }
   void testEmit( void )
   {
-    pEepromLogger->setSymbol( test_signal, "test_signal" );
-    pEepromLogger->setSymbol( pSender, "test_sender" );
     pEepromLogger->test_log_emit( pSender, test_signal );
     
     pEepromLogger->play();
@@ -105,7 +109,6 @@ public:
   }
   void testNotify( void )
   {
-    pEepromLogger->setSymbol( pSender, "test_sender" );
     pEepromLogger->test_log_notify( pSender );
     
     pEepromLogger->play();
@@ -115,8 +118,6 @@ public:
   }
   void testMultipleRuns( void )
   {
-    pEepromLogger->setSymbol( test_signal, "test_signal" );
-    pEepromLogger->setSymbol( pSender, "test_sender" );
     pEepromLogger->test_log_emit( pSender, test_signal );
     pEepromLogger->test_log_emit( pSender, test_signal );
     pEepromLogger->test_log_emit( pSender, test_signal );
@@ -135,8 +136,6 @@ public:
   }
   void testOverflow( void )
   {
-    pEepromLogger->setSymbol( test_signal, "test_signal" );
-    pEepromLogger->setSymbol( pSender, "test_sender" );
     int i = 1024/2 + 1;
     while ( i-- )
       pEepromLogger->test_log_emit( pSender, test_signal );
@@ -147,6 +146,16 @@ public:
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("RESTARTED"), 1 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("EEPR "), 7 );
+  }
+  void testTime( void )
+  {
+    pEepromLogger->setRtc(pBoardRtc);
+    pEepromLogger->begin();
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    theLogger.clear();
+    pEepromLogger->play();
+    cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("TIME"), 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
