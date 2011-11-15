@@ -29,6 +29,7 @@ private:
   EepromStream eep;
 protected:
   virtual void log_emit(const Connectable* object, uint8_t signal);
+  virtual void log_notify(const Connectable* object);
   void write_end(void);
   prog_char* decode_object(val1_t) const;
   prog_char* decode_signal(uint8_t) const;

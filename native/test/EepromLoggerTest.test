@@ -38,6 +38,10 @@ class EepromLoggerTestSuite: public CxxTest::TestSuite
     {
       EepromLogger::log_emit(object,signal);
     }
+    void test_log_notify(const Connectable* object)
+    {
+      EepromLogger::log_notify(object);
+    }
   };
 
   struct Sender: public Connectable
@@ -56,6 +60,7 @@ public:
   void setUp()
   {
     theLogger.clear();
+    theEeprom.clear();
 
     pconn = new Connector;
     pSender = new Sender(*pconn);
@@ -79,8 +84,8 @@ public:
   void testReplay( void )
   {
     pEepromLogger->play();
-    cerr << theLogger;
-
+    
+    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("LOG  BEGIN"), 1 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("LOG  END"), 1 );
   }
@@ -93,7 +98,18 @@ public:
     
     pEepromLogger->play();
 
-    cerr << theLogger;
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("EMIT test_sender test_signal"), 2 );
+  }
+  void testNotify( void )
+  {
+    pEepromLogger->setSymbol( pSender, "test_sender" );
+    pEepromLogger->test_log_notify( pSender );
+    
+    pEepromLogger->play();
+
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("NOTF test_sender"), 2 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

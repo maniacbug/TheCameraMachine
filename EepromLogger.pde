@@ -14,16 +14,18 @@
 
 /****************************************************************************/
 
+// Protocol Layer
+
 typedef EepromLogger::val1_t val1_t;
 static const int num_type_bits = 2;
 static const int type_shift = 8 - num_type_bits;
 static const val1_t type_mask = (val1_t)((val1_t)(-1) << type_shift); 
 static const val1_t value_mask = (val1_t)(~type_mask);
 
-static const int type_emit = 0;
+static const int type_command = 0;
 static const int type_notify = 1;
 static const int type_time = 2;
-static const int type_command = 3;
+static const int type_emit = 3;
 
 static const int command_begin = 1;
 static const int command_end = 2;
@@ -43,6 +45,13 @@ static inline uint8_t make_emit_2(int index)
   return index & (0xFF >> 2);
 }
 
+static inline val1_t make_notify(int index)
+{
+  return (type_notify << type_shift ) | ( index & value_mask );
+}
+
+/****************************************************************************/
+
 prog_char* EepromLogger::decode_object(val1_t val) const
 {
   prog_char* result = PSTR("Unknown");
@@ -56,6 +65,8 @@ prog_char* EepromLogger::decode_object(val1_t val) const
   return result;
 }
 
+/****************************************************************************/
+
 prog_char* EepromLogger::decode_signal(uint8_t val) const
 {
   prog_char* result = PSTR("Unknown");
@@ -68,6 +79,8 @@ prog_char* EepromLogger::decode_signal(uint8_t val) const
 
   return result;
 }
+
+/****************************************************************************/
 
 static bool play_command(int command)
 {
@@ -127,7 +140,7 @@ void EepromLogger::play(void) const
       printf_P(PSTR("LOG  EMIT %S %S"),decode_object(val1),decode_signal(byte2));
       break;
     case type_notify:
-      printf_P(PSTR("LOG  Unknown value %u"),val1);
+      printf_P(PSTR("LOG  NOTF %S"),decode_object(val1));
       break;
     case type_time:
       printf_P(PSTR("LOG  Unknown value %u"),val1);
@@ -151,6 +164,16 @@ void EepromLogger::log_emit(const Connectable* object, uint8_t signal)
 
   eep.write(make_emit_1(find_index(object)));
   eep.write(make_emit_2(find_index(signal)));
+  write_end();
+}
+
+/****************************************************************************/
+
+void EepromLogger::log_notify(const Connectable* object)
+{
+  SimpleLogger::log_notify(object);
+
+  eep.write(make_notify(find_index(object)));
   write_end();
 }
 
