@@ -27,6 +27,7 @@ public:
   typedef uint8_t val1_t;
 private:
   EepromStream eep;
+  bool overflow;
 protected:
   virtual void log_emit(const Connectable* object, uint8_t signal);
   virtual void log_notify(const Connectable* object);
@@ -34,8 +35,15 @@ protected:
   prog_char* decode_object(val1_t) const;
   prog_char* decode_signal(uint8_t) const;
   void fast_forward(void);
+  template <class T> void write(const T& t)
+  {
+    // cache our own overflow over multiple writes
+    eep.write(t);
+    overflow = overflow || eep.didOverflow();
+  }
+
 public:
-  EepromLogger(void): SimpleLogger(32,32) {}
+  EepromLogger(void): SimpleLogger(32,32), overflow(false) {}
   void begin();
   void play() const;
 };

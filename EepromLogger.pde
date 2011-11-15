@@ -29,6 +29,7 @@ static const int type_emit = 3;
 
 static const int command_begin = 1;
 static const int command_end = 2;
+static const int command_overflow = 3;
 
 static inline val1_t make_command(int command)
 {
@@ -89,6 +90,7 @@ static bool fast_forward_command(int command)
   switch (command)
   {
   case command_begin:
+  case command_overflow:
     break;
   case command_end:
     done = true;
@@ -115,6 +117,9 @@ static bool play_command(int command)
     printf_P(PSTR("LOG  END\n\r"));
     done = true;
     break;
+  case command_overflow:
+    printf_P(PSTR("LOG  RESTARTED due to EEPROM overflow\n\r"));
+    break;
   default:
     printf_P(PSTR("Unknown command %u"),command);
     done = true;
@@ -128,8 +133,22 @@ static bool play_command(int command)
 
 void EepromLogger::write_end(void) 
 {
-  eep.write(make_command(command_end));
+  write(make_command(command_end));
   eep.seek(eep.tell() - sizeof(val1_t));
+
+  // Manage overflow.  If the previous set of writes wrapped us around,
+  // clear everything and start over.
+
+  if (overflow)
+  {
+    overflow = false;
+
+    eep.seek(0);
+    write(make_command(command_begin));
+    write(make_command(command_overflow));
+    write(make_command(command_end));
+    eep.seek(eep.tell() - sizeof(val1_t));
+  }
 }
 /****************************************************************************/
 
@@ -139,7 +158,7 @@ void EepromLogger::begin(void)
   fast_forward();
 
   // Then write the begin/end for the current run
-  eep.write(make_command(command_begin));
+  write(make_command(command_begin));
   write_end();
 }
 
@@ -217,8 +236,8 @@ void EepromLogger::log_emit(const Connectable* object, uint8_t signal)
 {
   SimpleLogger::log_emit(object,signal);
 
-  eep.write(make_emit_1(find_index(object)));
-  eep.write(make_emit_2(find_index(signal)));
+  write(make_emit_1(find_index(object)));
+  write(make_emit_2(find_index(signal)));
   write_end();
 }
 
@@ -228,7 +247,7 @@ void EepromLogger::log_notify(const Connectable* object)
 {
   SimpleLogger::log_notify(object);
 
-  eep.write(make_notify(find_index(object)));
+  write(make_notify(find_index(object)));
   write_end();
 }
 

@@ -132,5 +132,19 @@ public:
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("LOG  BEGIN"), 2 );
   }
+  void testOverflow( void )
+  {
+    pEepromLogger->setSymbol( test_signal, "test_signal" );
+    pEepromLogger->setSymbol( pSender, "test_sender" );
+    int i = 1024/2 + 1;
+    while ( i-- )
+      pEepromLogger->test_log_emit( pSender, test_signal );
+
+    theLogger.clear();
+    pEepromLogger->play();
+    
+    TS_ASSERT_EQUALS( theLogger.lines_contain("LOG  RESTARTED"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("EEPR "), 7 );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
