@@ -9,6 +9,8 @@
 // STL includes
 #include <vector>
 #include <string>
+#include <iterator>
+#include <iostream>
 
 // C includes
 
@@ -21,6 +23,8 @@
 #include <EepromStream.h>
 
 using namespace std;
+
+extern ostream& operator<<(ostream& os, const Logger& log);
 
 class EepromStreamTestSuite: public CxxTest::TestSuite
 {
@@ -36,6 +40,7 @@ public:
   {
     theEeprom.clear();
     pEepromStream = new EepromStream();
+    theLogger.clear();
   }
   
   void tearDown()
@@ -130,6 +135,28 @@ public:
     pEepromStream->write(test_value);
 
     TS_ASSERT_EQUALS(pEepromStream->tell(),sizeof(test_value));
+  }
+  void testWrapAround(void)
+  {
+    pEepromStream->seek(1020);
+    example test_value = { 0xAA, 0xBBCC, 0xDDEEFF11 };
+    example result_value = { 0,0,0 };
+
+    pEepromStream->write(test_value);
+    pEepromStream->seek(1020);
+    pEepromStream->read(result_value);
+
+    TS_ASSERT_EQUALS(test_value.a,result_value.a);
+    TS_ASSERT_EQUALS(test_value.b,result_value.b);
+    TS_ASSERT_EQUALS(test_value.c,result_value.c);
+  }
+  void testOverflow(void)
+  {
+    pEepromStream->seek(1020);
+    example test_value = { 0xAA, 0xBBCC, 0xDDEEFF11 };
+    pEepromStream->write(test_value);
+    
+    TS_ASSERT(pEepromStream->didOverflow());
   }
   
 };
