@@ -9,34 +9,91 @@
 // STL includes
 #include <vector>
 #include <string>
+#include <iterator>
+#include <iostream>
 
 // C includes
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <Logger.h>
 
 // Project includes
+#include <Globals.h>
 #include <EepromLogger.h>
 
 using namespace std;
 
+ostream& operator<<(ostream& os, const Logger& log)
+{
+  copy(log.begin(),log.end(),ostream_iterator<string>(os," "));
+  return os;
+}
+
 class EepromLoggerTestSuite: public CxxTest::TestSuite
 {
-  EepromLogger* pEepromLogger ;
+  struct EepromLogger_test: public EepromLogger
+  {
+    void test_log_emit(const Connectable* object, uint8_t signal)
+    {
+      EepromLogger::log_emit(object,signal);
+    }
+  };
+
+  struct Sender: public Connectable
+  {
+    void send(uint8_t signal)
+    {
+      emit(signal);
+    }
+    Sender(Connector& _conn): Connectable(_conn) {}
+  };
+  
+  Connector* pconn;
+  Sender* pSender;
+  EepromLogger_test* pEepromLogger ;
 public:
   void setUp()
   {
-    pEepromLogger = new EepromLogger();
+    theLogger.clear();
+
+    pconn = new Connector;
+    pSender = new Sender(*pconn);
+    pEepromLogger = new EepromLogger_test();
+
+    pEepromLogger->begin();
   }
   
   void tearDown()
   {
     delete pEepromLogger;
+    delete pSender;
+    delete pconn;
   }
 
   void testEmpty( void )
   {
     TS_ASSERT(pEepromLogger);
+  }
+
+  void testReplay( void )
+  {
+    pEepromLogger->play();
+    cerr << theLogger;
+
+    TS_ASSERT_EQUALS( theLogger.lines_contain("LOG  BEGIN"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("LOG  END"), 1 );
+  }
+  void testEmit( void )
+  {
+    const int test_signal = 1;
+    pEepromLogger->setSymbol( test_signal, "test_signal" );
+    pEepromLogger->setSymbol( pSender, "test_sender" );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    
+    pEepromLogger->play();
+
+    cerr << theLogger;
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

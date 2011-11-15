@@ -12,17 +12,30 @@
 // STL includes
 // C includes
 // Library includes
+#include <SimpleLogger.h>
+
 // Project includes
+#include <EepromStream.h>
 
 /**
  * Example for how classes should be declared
  */
 
-class EepromLogger
+class EepromLogger: public SimpleLogger
 {
-private:
-protected:
 public:
+  typedef uint8_t val1_t;
+private:
+  EepromStream eep;
+protected:
+  virtual void log_emit(const Connectable* object, uint8_t signal);
+  void write_end(void);
+  prog_char* decode_object(val1_t) const;
+  prog_char* decode_signal(uint8_t) const;
+public:
+  EepromLogger(void): SimpleLogger(32,32) {}
+  void begin();
+  void play() const;
 };
 
 #endif // __EEPROMLOGGER_H__
