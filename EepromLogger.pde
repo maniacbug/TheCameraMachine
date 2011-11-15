@@ -104,24 +104,24 @@ static bool fast_forward_command(int command)
 }
 /****************************************************************************/
 
-static bool play_command(int command)
+static bool play_command(unsigned at,int command)
 {
   bool done = false;
 
   switch (command)
   {
   case command_begin:
-    printf_P(PSTR("LOG  BEGIN\n\r"));
+    printf_P(PSTR("LOG  %04u BEGIN\n\r"),at);
     break;
   case command_end:
-    printf_P(PSTR("LOG  END\n\r"));
+    printf_P(PSTR("LOG  %04u END\n\r"),at);
     done = true;
     break;
   case command_overflow:
-    printf_P(PSTR("LOG  RESTARTED due to EEPROM overflow\n\r"));
+    printf_P(PSTR("LOG  %04u RESTARTED due to EEPROM overflow\n\r"),at);
     break;
   default:
-    printf_P(PSTR("Unknown command %u"),command);
+    printf_P(PSTR("LOG  %04u Unknown command %u"),at,command);
     done = true;
     break;
   };
@@ -197,7 +197,7 @@ void EepromLogger::fast_forward(void)
 
 void EepromLogger::play(void) const 
 {
-  printf_P(PSTR("LOG  *** Begin Log Playback\n\r"));
+  printf_P(PSTR("LOG  **** Begin Log Playback\n\r"));
 
   EepromStream player;
   val1_t val1;
@@ -206,24 +206,25 @@ void EepromLogger::play(void) const
   bool done = false;
   while (!done)
   {
+    unsigned at = player.tell();
     player.read(val1);
     switch ( val1 >> type_shift )
     {
     case type_emit:
       player.read(byte2);
-      printf_P(PSTR("LOG  EMIT %S %S"),decode_object(val1),decode_signal(byte2));
+      printf_P(PSTR("LOG  %04u EMIT %S %S"),at,decode_object(val1),decode_signal(byte2));
       break;
     case type_notify:
-      printf_P(PSTR("LOG  NOTF %S"),decode_object(val1));
+      printf_P(PSTR("LOG  %04u NOTF %S"),at,decode_object(val1));
       break;
     case type_time:
-      printf_P(PSTR("LOG  Unknown value %u"),val1);
+      printf_P(PSTR("LOG  %04u Unknown value %u"),at,val1);
       break;
     case type_command:
-      done = play_command(val1 & value_mask);
+      done = play_command(at,val1 & value_mask);
       break;
     default:
-      printf_P(PSTR("LOG  Unknown value %u"),val1);
+      printf_P(PSTR("LOG  %04u Unknown value %u"),at,val1);
       done = true;
       break;
     }
