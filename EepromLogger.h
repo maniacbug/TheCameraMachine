@@ -33,6 +33,7 @@ protected:
   void write_end(void);
   prog_char* decode_object(val1_t) const;
   prog_char* decode_signal(uint8_t) const;
+  void fast_forward(void);
 public:
   EepromLogger(void): SimpleLogger(32,32) {}
   void begin();

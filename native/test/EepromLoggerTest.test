@@ -52,6 +52,8 @@ class EepromLoggerTestSuite: public CxxTest::TestSuite
     }
     Sender(Connector& _conn): Connectable(_conn) {}
   };
+    
+  static const int test_signal = 1;
   
   Connector* pconn;
   Sender* pSender;
@@ -91,7 +93,6 @@ public:
   }
   void testEmit( void )
   {
-    const int test_signal = 1;
     pEepromLogger->setSymbol( test_signal, "test_signal" );
     pEepromLogger->setSymbol( pSender, "test_sender" );
     pEepromLogger->test_log_emit( pSender, test_signal );
@@ -110,6 +111,26 @@ public:
 
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("NOTF test_sender"), 2 );
+  }
+  void testMultipleRuns( void )
+  {
+    pEepromLogger->setSymbol( test_signal, "test_signal" );
+    pEepromLogger->setSymbol( pSender, "test_sender" );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+
+    delete pEepromLogger;
+    pEepromLogger = new EepromLogger_test();
+    pEepromLogger->begin();
+    pEepromLogger->setSymbol( test_signal, "test_signal" );
+    pEepromLogger->setSymbol( pSender, "test_sender" );
+   
+    theLogger.clear();
+    pEepromLogger->play();
+ 
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("LOG  BEGIN"), 2 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

@@ -82,6 +82,26 @@ prog_char* EepromLogger::decode_signal(uint8_t val) const
 
 /****************************************************************************/
 
+static bool fast_forward_command(int command)
+{
+  bool done = false;
+
+  switch (command)
+  {
+  case command_begin:
+    break;
+  case command_end:
+    done = true;
+    break;
+  default:
+    done = true;
+    break;
+  };
+
+  return done;
+}
+/****************************************************************************/
+
 static bool play_command(int command)
 {
   bool done = false;
@@ -115,8 +135,43 @@ void EepromLogger::write_end(void)
 
 void EepromLogger::begin(void) 
 {
+  // First, seek to find the end of the existing logs
+  fast_forward();
+
+  // Then write the begin/end for the current run
   eep.write(make_command(command_begin));
   write_end();
+}
+
+/****************************************************************************/
+
+void EepromLogger::fast_forward(void)
+{
+  val1_t val1;
+  uint8_t byte2;
+
+  bool done = false;
+  while (!done)
+  {
+    eep.read(val1);
+    switch ( val1 >> type_shift )
+    {
+    case type_emit:
+      eep.read(byte2);
+      break;
+    case type_notify:
+      break;
+    case type_time:
+      break;
+    case type_command:
+      done = fast_forward_command(val1 & value_mask);
+      break;
+    default:
+      done = true;
+      break;
+    }
+  }
+  eep.seek(eep.tell()-1);
 }
 
 /****************************************************************************/
