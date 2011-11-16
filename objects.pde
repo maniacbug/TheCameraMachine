@@ -17,6 +17,6 @@ PinControl record_led(conn,record_led_pin,signal_stop_record,signal_start_record
 PinControl other_led(conn,other_led_pin,signal_other_led_off,signal_other_led_on);
 RtcSetter clock_setter(&Rtc);
 LancControl camera(conn,lanc_command_pin,lanc_data_pin);
-SimpleLogger logger(30,10);
+EepromLogger logger;
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

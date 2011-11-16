@@ -43,6 +43,7 @@ void setup(void)
   alt_relay.begin();
   clock_setter.begin();
   camera.begin();
+  logger.begin();
 
   //
   // Begin events
@@ -61,6 +62,7 @@ void setup(void)
   alt_relay.listen(NULL);
   camera.listen(NULL);
   conn.setLogger(&logger);
+  logger.setRtc(&Rtc);
 
   //
   // Logger symbols

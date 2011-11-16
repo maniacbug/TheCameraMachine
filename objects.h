@@ -5,7 +5,7 @@
 #include <Connector.h>
 #include <EmitButton.h>
 #include <PinControl.h>
-#include <SimpleLogger.h>
+#include <EepromLogger.h>
 #include <RtcSetter.h>
 #include <LancControl.h>
 #include <rtc.h>
@@ -22,7 +22,7 @@ extern PinControl record_led;
 extern PinControl other_led;
 extern RtcSetter clock_setter;
 extern LancControl camera;
-extern SimpleLogger logger;
+extern EepromLogger logger;
 
 #endif // __OBJECTS_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

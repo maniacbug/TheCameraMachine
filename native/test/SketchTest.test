@@ -1,6 +1,8 @@
 // STL includes
 #include <vector>
 #include <string>
+#include <iostream>
+#include <iterator>
 
 // C includes
 
@@ -21,12 +23,16 @@ extern RTC_native rtc_native;
 
 using namespace std;
 
+extern ostream& operator<<(ostream& os, const Logger& log);
+
 class SketchTestSuite: public CxxTest::TestSuite
 {
 public:
   void setUp()
   {
     thePins.clear();
+    theLogger.clear();
+    theEeprom.clear();
   }
 
   void testEmpty( void )
@@ -70,11 +76,13 @@ public:
   void testRtcEvent0(void)
   {
     uint32_t now = re[0].getWhen() - 1;
-    rtc_native.adjust(now);
+    Rtc.adjust(now);
     setup();
+    printf_P("************************* Setup done");
     now += 2;
-    rtc_native.adjust(now);
+    Rtc.adjust(now);
     loop();
+    cerr << theLogger;
     TS_ASSERT(thePins.hwGetDigital(power_led_pin));
   }
 };

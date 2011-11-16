@@ -218,6 +218,9 @@ void EepromLogger::write_marktime(void)
 
 void EepromLogger::begin(void) 
 {
+  // Reset the eeprom stream
+  eep.seek(0);
+
   // First, seek to find the end of the existing logs
   fast_forward();
 
