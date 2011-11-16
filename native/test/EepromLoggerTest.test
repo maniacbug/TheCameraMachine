@@ -147,15 +147,45 @@ public:
     TS_ASSERT_EQUALS( theLogger.lines_contain("RESTARTED"), 1 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("EEPR "), 7 );
   }
-  void testTime( void )
+  void testMarkTime( void )
   {
     pEepromLogger->setRtc(pBoardRtc);
     pEepromLogger->begin();
     pEepromLogger->test_log_emit( pSender, test_signal );
     theLogger.clear();
     pEepromLogger->play();
-    cerr << theLogger;
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("MARK TIME"), 1 );
+  }
+  void testSameTime( void )
+  {
+    pEepromLogger->setRtc(pBoardRtc);
+    pEepromLogger->begin();
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    theLogger.clear();
+    pEepromLogger->play();
+    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("TIME"), 1 );
+  }
+  void testDifferentTime( void )
+  {
+    pEepromLogger->setRtc(pBoardRtc);
+    pEepromLogger->begin();
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pBoardRtc->adjust(pBoardRtc->now_unixtime() + 20);
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pBoardRtc->adjust(pBoardRtc->now_unixtime() + 20);
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    pEepromLogger->test_log_emit( pSender, test_signal );
+    theLogger.clear();
+    pEepromLogger->play();
+    
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("TIME"), 3 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

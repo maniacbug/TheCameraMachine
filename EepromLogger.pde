@@ -31,6 +31,7 @@ static const int type_emit = 3;
 static const int command_begin = 1;
 static const int command_end = 2;
 static const int command_overflow = 3;
+static const int command_marktime = 4;
 
 static inline val1_t make_command(int command)
 {
@@ -52,9 +53,16 @@ static inline val1_t make_notify(int index)
   return (type_notify << type_shift ) | ( index & value_mask );
 }
 
-static inline val1_t make_time(void)
+static inline val1_t make_time(unsigned time_value)
 {
-  return (type_time << type_shift );
+  return (type_time << type_shift ) | ( time_value & value_mask );
+}
+
+/****************************************************************************/
+
+uint32_t EepromLogger::decode_time_value(val1_t val) const
+{
+  return ( val & value_mask ) + marked_time;
 }
 
 /****************************************************************************/
@@ -89,14 +97,19 @@ prog_char* EepromLogger::decode_signal(uint8_t val) const
 
 /****************************************************************************/
 
-static bool fast_forward_command(int command)
+// This is really kind of a mess :(
+bool EepromLogger::fast_forward_command(int command)
 {
   bool done = false;
+  uint32_t now;
 
   switch (command)
   {
   case command_begin:
   case command_overflow:
+    break;
+  case command_marktime:
+    eep.read(now);
     break;
   case command_end:
     done = true;
@@ -110,9 +123,11 @@ static bool fast_forward_command(int command)
 }
 /****************************************************************************/
 
-static bool play_command(unsigned at,int command)
+bool EepromLogger::play_command(EepromStream& stream,unsigned at,int command) const
 {
   bool done = false;
+  uint32_t now;
+  char buf[32];
 
   switch (command)
   {
@@ -125,6 +140,10 @@ static bool play_command(unsigned at,int command)
     break;
   case command_overflow:
     printf_P(PSTR("LOG  %04u RESTARTED due to EEPROM overflow\n\r"),at);
+    break;
+  case command_marktime:
+    stream.read(now);
+    printf_P(PSTR("LOG  %04u MARK TIME %s"),at,DateTime(now).toString(buf,sizeof(buf)));
     break;
   default:
     printf_P(PSTR("LOG  %04u Unknown command %u"),at,command);
@@ -156,6 +175,45 @@ void EepromLogger::write_end(void)
     eep.seek(eep.tell() - sizeof(val1_t));
   }
 }
+
+/****************************************************************************/
+
+void EepromLogger::write_time(void) 
+{
+  if ( rtc )
+  {
+    const uint32_t min_diff = 10;
+    uint32_t now = rtc->now_unixtime();
+    uint32_t marked_diff = now - marked_time;
+    
+    // If we have a mark time and the time SINCE that mark time can be
+    // represented in a val1...
+    if ( marked_time && ( marked_diff < value_mask ) )
+    {
+      // If enough time has elapsed since the last time we wrote a time,
+      // go ahead and write another -- otherwise don't bother
+      if ( ! last_time || ( now - last_time > min_diff ) )
+      {
+	last_time = now;
+	write(make_time(now - marked_time));
+      }
+    }
+    // Otherwise, write a mark time
+    else
+      write_marktime();
+  }
+}
+
+/****************************************************************************/
+
+void EepromLogger::write_marktime(void) 
+{
+  marked_time = rtc->now_unixtime();
+  last_time = marked_time;
+  write(make_command(command_marktime));
+  write(marked_time);
+}
+
 /****************************************************************************/
 
 void EepromLogger::begin(void) 
@@ -165,11 +223,7 @@ void EepromLogger::begin(void)
 
   // Then write the begin/end for the current run
   write(make_command(command_begin));
-  if ( rtc )
-  {
-    write(make_time());
-    write(rtc->now_unixtime());
-  }
+  write_time();
   write_end();
 }
 
@@ -215,7 +269,6 @@ void EepromLogger::play(void) const
   EepromStream player;
   val1_t val1;
   uint8_t byte2;
-  uint32_t now;
   char buf[32];
 
   bool done = false;
@@ -233,11 +286,10 @@ void EepromLogger::play(void) const
       printf_P(PSTR("LOG  %04u NOTF %S"),at,decode_object(val1));
       break;
     case type_time:
-      player.read(now);
-      printf_P(PSTR("LOG  %04u TIME %s"),at,DateTime(now).toString(buf,sizeof(buf)));
+      printf_P(PSTR("LOG  %04u TIME %s"),at,DateTime(decode_time_value(val1)).toString(buf,sizeof(buf)));
       break;
     case type_command:
-      done = play_command(at,val1 & value_mask);
+      done = play_command(player,at,val1 & value_mask);
       break;
     default:
       printf_P(PSTR("LOG  %04u Unknown value %u"),at,val1);
@@ -253,6 +305,7 @@ void EepromLogger::log_emit(const Connectable* object, uint8_t signal)
 {
   SimpleLogger::log_emit(object,signal);
 
+  write_time();
   write(make_emit_1(find_index(object)));
   write(make_emit_2(find_index(signal)));
   write_end();
@@ -264,6 +317,7 @@ void EepromLogger::log_notify(const Connectable* object)
 {
   SimpleLogger::log_notify(object);
 
+  write_time();
   write(make_notify(find_index(object)));
   write_end();
 }
