@@ -3,6 +3,8 @@
 #include <rtc.h>
 #include <signals.h>
 #include <events.h>
+#include <MemoryFree.h>
+#include <printf.h>
 
 void setup(void)
 {
@@ -12,7 +14,8 @@ void setup(void)
 
   Serial.begin(57600);
   Serial.println("TheCameraMachine - maniacbug@ymail.com");
-
+  Serial.println(freeMemory());
+  printf_begin();
   //
   // Pin Symbols
   //
@@ -43,7 +46,6 @@ void setup(void)
   alt_relay.begin();
   clock_setter.begin();
   camera.begin();
-  logger.begin();
 
   //
   // Begin events
@@ -68,23 +70,26 @@ void setup(void)
   // Logger symbols
   //
 
-  logger.setSymbol(signal_power_on, "power_on");
-  logger.setSymbol(signal_power_off, "power_off");
-  logger.setSymbol(signal_start_record, "start_record");
-  logger.setSymbol(signal_stop_record, "stop_record");
-  logger.setSymbol(signal_alt_relay_on, "alt_relay_on");
-  logger.setSymbol(signal_alt_relay_off, "alt_relay_off");
-  logger.setSymbol(signal_other_led_on, "other_led_on");
-  logger.setSymbol(signal_other_led_off, "other_led_off");
+  logger.setSymbol(signal_power_on, PSTR("power_on"));
+  logger.setSymbol(signal_power_off, PSTR("power_off"));
+  logger.setSymbol(signal_start_record, PSTR("start_record"));
+  logger.setSymbol(signal_stop_record, PSTR("stop_record"));
+  logger.setSymbol(signal_alt_relay_on, PSTR("alt_relay_on"));
+  logger.setSymbol(signal_alt_relay_off, PSTR("alt_relay_off"));
+  logger.setSymbol(signal_other_led_on, PSTR("other_led_on"));
+  logger.setSymbol(signal_other_led_off, PSTR("other_led_off"));
 
-  logger.setSymbol(&test_switch, "test_switch");
-  logger.setSymbol(&record_button, "record_button");
-  logger.setSymbol(&power_relay, "power_relay");
-  logger.setSymbol(&alt_relay, "alt_relay");
-  logger.setSymbol(&power_led, "power_led");
-  logger.setSymbol(&record_led, "record_led");
-  logger.setSymbol(&other_led, "other_led");
-  logger.setSymbol(&camera, "camera");
+  logger.setSymbol(&test_switch, PSTR("test_switch"));
+  logger.setSymbol(&record_button, PSTR("record_button"));
+  logger.setSymbol(&power_relay, PSTR("power_relay"));
+  logger.setSymbol(&alt_relay, PSTR("alt_relay"));
+  logger.setSymbol(&power_led, PSTR("power_led"));
+  logger.setSymbol(&record_led, PSTR("record_led"));
+  logger.setSymbol(&other_led, PSTR("other_led"));
+  logger.setSymbol(&camera, PSTR("camera"));
+  
+  // Begin the logger after all the symbols are set.
+  logger.begin();
 
   //
   // Timeline

@@ -1,6 +1,6 @@
 # (1) Project Information
 
-PROJECT_LIBS 	= Tictocs ; 
+PROJECT_LIBS 	= Tictocs RTClib Wire SPI EEPROM MemoryFree ; 
 
 # (2) Board Information
 
@@ -69,7 +69,7 @@ AVRDUDEFLAGS	= -V -F -D -C $(AVRDUDECONF_PATH)/avrdude.conf -p $(MCU) -c $(UPLOA
 
 # Search everywhere for headers
 
-HDRS  	 	= $(PWD) $(AVR_HDRS) $(ARDUINO_CORE) [ GLOB $(ARDUINO_LIB) $(SKETCH_LIB) : [^.]* ] ;
+HDRS  	 	= $(PWD) $(AVR_HDRS) $(ARDUINO_CORE) $(ARDUINO_LIB)/$(PROJECT_LIBS)/utility $(ARDUINO_LIB)/$(PROJECT_LIBS) $(SKETCH_LIB)/$(PROJECT_LIBS) ; 
 
 # Output locations
 
@@ -190,7 +190,7 @@ CORE_MODULES  	= [ GLOB $(ARDUINO_CORE) : *.c *.cpp ] ;
 
 # Grab everything from libraries.  To avoid this "grab everything" behaviour, you
 # can specify specific modules to pick up in PROJECT_MODULES
-LIB_MODULES  	= [ GLOB $(ARDUINO_LIB)/$(PROJECT_LIBS) $(SKETCH_LIB)/$(PROJECT_LIBS) : *.cpp ] ;
+LIB_MODULES  	= [ GLOB $(ARDUINO_LIB)/$(PROJECT_LIBS)/utility $(ARDUINO_LIB)/$(PROJECT_LIBS) $(SKETCH_LIB)/$(PROJECT_LIBS) : *.c *.cpp ] ;
 
 # Grab everything from the current dir
 PROJECT_MODULES += [ GLOB $(PWD) : *.c *.cpp *.pde *.ino ] ;

@@ -143,7 +143,7 @@ bool EepromLogger::play_command(EepromStream& stream,unsigned at,int command) co
     break;
   case command_marktime:
     stream.read(now);
-    printf_P(PSTR("LOG  %04u MARK TIME %s"),at,DateTime(now).toString(buf,sizeof(buf)));
+    printf_P(PSTR("LOG  %04u MARK TIME %s\n\r"),at,DateTime(now).toString(buf,sizeof(buf)));
     break;
   default:
     printf_P(PSTR("LOG  %04u Unknown command %u"),at,command);
@@ -221,8 +221,15 @@ void EepromLogger::begin(void)
   // Reset the eeprom stream
   eep.seek(0);
 
-  // First, seek to find the end of the existing logs
-  fast_forward();
+  // First, seek to find the end of the existing logs, only applicable if
+  // the first byte is a 'begin'
+  val1_t at0;
+  eep.peek(at0);
+  if ( at0 == command_begin )
+  {
+    play();
+    fast_forward();
+  }
 
   // Then write the begin/end for the current run
   write(make_command(command_begin));
@@ -242,6 +249,12 @@ void EepromLogger::fast_forward(void)
   while (!done)
   {
     eep.read(val1);
+    if ( eep.didOverflow() )
+    {
+      eep.seek(1);
+      break;
+    }
+    
     switch ( val1 >> type_shift )
     {
     case type_emit:
@@ -279,23 +292,26 @@ void EepromLogger::play(void) const
   {
     unsigned at = player.tell();
     player.read(val1);
+    if ( player.didOverflow() )
+      break; 
+
     switch ( val1 >> type_shift )
     {
     case type_emit:
       player.read(byte2);
-      printf_P(PSTR("LOG  %04u EMIT %S %S"),at,decode_object(val1),decode_signal(byte2));
+      printf_P(PSTR("LOG  %04u EMIT %S %u %S %u\n\r"),at,decode_object(val1),val1&value_mask,decode_signal(byte2),byte2);
       break;
     case type_notify:
-      printf_P(PSTR("LOG  %04u NOTF %S"),at,decode_object(val1));
+      printf_P(PSTR("LOG  %04u NOTF %S %u\n\r"),at,decode_object(val1),val1&value_mask);
       break;
     case type_time:
-      printf_P(PSTR("LOG  %04u TIME %s"),at,DateTime(decode_time_value(val1)).toString(buf,sizeof(buf)));
+      printf_P(PSTR("LOG  %04u TIME %s\n\r"),at,DateTime(decode_time_value(val1)).toString(buf,sizeof(buf)));
       break;
     case type_command:
       done = play_command(player,at,val1 & value_mask);
       break;
     default:
-      printf_P(PSTR("LOG  %04u Unknown value %u"),at,val1);
+      printf_P(PSTR("LOG  %04u Unknown value %u\n\r"),at,val1);
       done = true;
       break;
     }

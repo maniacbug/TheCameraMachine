@@ -24,11 +24,16 @@ void RtcSetter::update(void)
 
     char* current = buf;
     char* end = buf + sizeof(buf) - 1;
-    char c = Serial.read();
+    int c = -1;
+    while ( c == -1 )
+      c = Serial.read();
     while ( current < end && c != '\n' )
     {
       *current++ = c;
-      c = Serial.read();
+
+      c = -1;
+      while ( c == -1 )
+	c = Serial.read();
     }
     *current++ = 0;
     buf[11] = 0;

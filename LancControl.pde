@@ -17,9 +17,9 @@ LancControl::LancControl(Connector& _conn, int _command_pin, int _data_pin):
 
 void LancControl::begin(void)
 {
-  pinMode(command_pin,INPUT);
-  digitalWrite(command_pin,HIGH);
-  pinMode(data_pin,OUTPUT);
+  pinMode(data_pin,INPUT);
+  digitalWrite(data_pin,HIGH);
+  pinMode(command_pin,OUTPUT);
 }
 
 /****************************************************************************/
@@ -46,6 +46,12 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
   case signal_start_record:
     is_recording = true;
     printf_P(PSTR("LANC Recording\n\r"));
+
+    // Just for test, pulse the command_pin
+    digitalWrite(command_pin,HIGH);
+    delay(250);
+    digitalWrite(command_pin,LOW);
+
     break;
   case signal_stop_record:
     is_recording = false;
