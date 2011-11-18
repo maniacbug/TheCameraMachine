@@ -20,7 +20,7 @@ void RtcSetter::update(void)
 
   if ( Serial.available() && Serial.peek() == 'T'  )
   {
-    Serial.read(); // Skip past the starting 'T'
+    Serial.print((char)Serial.read()); // Skip past the starting 'T'
 
     char* current = buf;
     char* end = buf + sizeof(buf) - 1;
@@ -29,6 +29,7 @@ void RtcSetter::update(void)
       c = Serial.read();
     while ( current < end && c != '\n' )
     {
+      Serial.print((char)c);
       *current++ = c;
 
       c = -1;
