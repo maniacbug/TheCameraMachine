@@ -12,18 +12,26 @@
 // STL includes
 // C includes
 // Library includes
+#include <IUpdate.h>
 // Project includes
 
 /**
- * Example for how classes should be declared
+ * Monitors serial input, compiles a line buffer, takes actions when the line
+ * is full.
  */
 
-class SerialLineIn
+class SerialLineIn: public IUpdate
 {
 private:
+  char buf[32];
+  char* current;
 protected:
+  void dispatch(void);
 public:
+  SerialLineIn(void);
+  void update(void);
 };
+/****************************************************************************/
 
 #endif // __SERIALLINEIN_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp
