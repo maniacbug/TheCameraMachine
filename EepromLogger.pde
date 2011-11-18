@@ -225,9 +225,9 @@ void EepromLogger::begin(void)
   // the first byte is a 'begin'
   val1_t at0;
   eep.peek(at0);
-  if ( at0 == command_begin )
+  if ( at0 == make_command(command_begin) )
   {
-    play();
+    //play();
     fast_forward();
   }
 
