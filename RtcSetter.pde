@@ -27,7 +27,7 @@ void RtcSetter::update(void)
     int c = -1;
     while ( c == -1 )
       c = Serial.read();
-    while ( current < end && c != '\n' )
+    while ( current < end && c != '\n' && c != '\r' )
     {
       Serial.print((char)c);
       *current++ = c;
@@ -37,8 +37,27 @@ void RtcSetter::update(void)
 	c = Serial.read();
     }
     *current++ = 0;
-    buf[11] = 0;
-    rtc->adjust(DateTime(buf,buf+12).unixtime());
+    Serial.println();
+
+    // Special hard-code hacks
+    uint32_t new_time = 0; 
+    if ( !strcmp(buf,"1") )
+    {
+      new_time = DateTime(2011,12,1,0,0,0).unixtime();
+    }
+    else if ( !strcmp(buf,"0") )
+    {
+      new_time = DateTime(2011,11,1,0,0,0).unixtime();
+    }
+    else
+    {
+      buf[11] = 0;
+      new_time = DateTime(buf,buf+12).unixtime();
+    }
+
+
+    rtc->adjust(new_time);
+    printf_P(PSTR("RtcSetter is now %lu\n\r"),new_time);
   }
 }
 

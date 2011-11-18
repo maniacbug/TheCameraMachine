@@ -33,6 +33,7 @@ int num_re = sizeof(re)/sizeof(re[0]);
 
 void events_begin(void)
 {
+  RtcEvent::setRtc(&Rtc);
   MyRtcEvent *curr = re, *end = re + num_re;
   while ( curr < end )
   {

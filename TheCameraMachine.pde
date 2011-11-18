@@ -16,6 +16,7 @@ void setup(void)
   Serial.println("TheCameraMachine - maniacbug@ymail.com");
   Serial.println(freeMemory());
   printf_begin();
+  
   //
   // Pin Symbols
   //
