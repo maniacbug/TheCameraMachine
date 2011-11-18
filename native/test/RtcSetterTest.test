@@ -55,12 +55,6 @@ public:
     TS_ASSERT(psetter);
   }
   
-  void testDirectSet( void )
-  {
-    theSerialBuffer.setInput("TNov 01 2011 01:02:03\n");
-    psetter->update();
-    TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 01 2011","01:02:03").unixtime() );
-  }
   void testSetViaUpdater( void )
   {
     theSerialBuffer.setInput("TNov 01 2011 01:02:03\n");

@@ -14,29 +14,42 @@
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <Updater.h>
 
 // Project includes
+#include <Globals.h>
 #include <SerialLineIn.h>
+
 
 using namespace std;
 
 class SerialLineInTestSuite: public CxxTest::TestSuite
 {
+  Updater* pUpdater;
   SerialLineIn* pSerialLineIn ;
 public:
   void setUp()
   {
-    pSerialLineIn = new SerialLineIn();
+    pUpdater = new Updater;
+    pSerialLineIn = new SerialLineIn;
+    pUpdater->add(pSerialLineIn);
   }
   
   void tearDown()
   {
     delete pSerialLineIn;
+    delete pUpdater;
   }
 
   void testEmpty( void )
   {
     TS_ASSERT(pSerialLineIn);
+  }
+  void testSetTime( void )
+  {
+    theSerialBuffer.setInput("TNov 01 2011 01:02:03\n");
+    pSerialLineIn->update();
+    //TS_ASSERT_EQUALS( prtc->now, DateTime("Nov 01 2011","01:02:03").unixtime() );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
