@@ -10,6 +10,12 @@ MyRtcEvent::MyRtcEvent(int y, int m, int d, int hh, int mm, int ss, uint8_t sign
 {
 }
 
+void MyRtcEvent::begin()
+{
+  printf_P(PSTR("MyRtcEvent %p at %lu %u\n\r"),this,get_when(),get_active());
+  RtcEvent::begin();
+}
+
 MyRtcEvent re[] =
 {
   MyRtcEvent(2011,11,20,6,0,2,signal_power_on),
