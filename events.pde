@@ -18,12 +18,16 @@ void MyRtcEvent::begin()
 
 MyRtcEvent re[] =
 {
-  MyRtcEvent(2011,11,20,6,0,2,signal_power_on),
-  MyRtcEvent(2011,11,20,6,0,2,signal_other_led_on),
-  MyRtcEvent(2011,11,20,6,1,2,signal_start_record),
-  MyRtcEvent(2011,11,20,6,2,2,signal_stop_record),
-  MyRtcEvent(2011,11,20,6,3,2,signal_power_off),
-  MyRtcEvent(2011,11,20,6,3,2,signal_other_led_off),
+  MyRtcEvent(2011,12,1,0,0,0,signal_other_led_on),
+  MyRtcEvent(2011,12,1,0,0,2,signal_power_on),
+  MyRtcEvent(2011,12,1,0,0,6,signal_start_record),
+  MyRtcEvent(2011,12,1,0,0,7,signal_stop_record),
+  MyRtcEvent(2011,12,1,0,0,8,signal_start_record),
+  MyRtcEvent(2011,12,1,0,0,9,signal_stop_record),
+  MyRtcEvent(2011,12,1,0,0,10,signal_start_record),
+  MyRtcEvent(2011,12,1,0,0,11,signal_stop_record),
+  MyRtcEvent(2011,12,1,0,0,12,signal_power_off),
+  MyRtcEvent(2011,12,1,0,0,13,signal_other_led_off),
 };
 int num_re = sizeof(re)/sizeof(re[0]);
 
