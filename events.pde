@@ -10,11 +10,11 @@
 prog_uint8_t events_table[][7] PROGMEM = {
   //YY,MM,DD HH MM SS, signal
   { 11,12, 1, 0, 0, 0, signal_power_on },
-  { 11,12, 1, 0, 0, 2, signal_start_record },
+  { 11,12, 1, 0, 0, 5, signal_start_record },
   { 11,12, 1, 0, 0, 6, signal_stop_record },
-  { 11,12, 1, 0, 0, 7, signal_power_off  },
+  { 11,12, 1, 0, 0,10, signal_power_off  },
 };
-int num_events = sizeof(events)/7;
+int num_events = sizeof(events_table)/7;
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 

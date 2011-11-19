@@ -38,10 +38,28 @@ RtcEvTable::RtcEvTable(Connector& _conn,evline* _table,uint8_t _num_lines):
 
 void RtcEvTable::begin(void)
 {
+  char buf[32];
+
+  // First, print all out for debugging
+  if ( rtc )
+  {
+    printf_P(PSTR("REVT %u events\n\r"),num_lines);
+    while ( current < table + num_lines )
+    {
+      printf_P(PSTR("REVT %s %u\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&((*current)[6])));
+      current++;
+    }
+  }
+  else
+    printf_P(PSTR("REVT No RTC set!\n\r"));
+
+  // Reset to the top
+  current = table;
+
   // seek the current pointer to the right place
   if ( rtc )
   {
-    while ( current <= table + num_lines && rtc->is_after(whenNext()) )
+    while ( current < table + num_lines && rtc->is_after(whenNext()) )
       current++;
   }
 }
