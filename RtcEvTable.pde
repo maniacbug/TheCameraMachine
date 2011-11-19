@@ -21,7 +21,7 @@ void RtcEvTable::update(void)
 {
   // We actually want to fire if now is AT or after 'when', so check whether
   // it's AFTER a second BEFORE we're supposed to fire.
-  if ( rtc && current < table + num_lines && rtc->is_after(whenNext()-1) )
+  if ( rtc && is_valid() && rtc->is_after(whenNext()-1) )
   {
     emit(pgm_read_byte(&((*current)[6])));
     current++;
@@ -44,7 +44,7 @@ void RtcEvTable::begin(void)
   if ( rtc )
   {
     printf_P(PSTR("REVT %u events\n\r"),num_lines);
-    while ( current < table + num_lines )
+    while ( is_valid() )
     {
       printf_P(PSTR("REVT %s %u\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&((*current)[6])));
       current++;
@@ -59,7 +59,7 @@ void RtcEvTable::begin(void)
   // seek the current pointer to the right place
   if ( rtc )
   {
-    while ( current < table + num_lines && rtc->is_after(whenNext()) )
+    while ( is_valid() && rtc->is_after(whenNext()) )
       current++;
   }
 }
@@ -75,7 +75,17 @@ void RtcEvTable::setRtc(const IRtc* _rtc)
 
 uint32_t RtcEvTable::whenNext(void) const
 {
-  return eventtime(*current); 
+  if ( is_valid() )
+    return eventtime(*current); 
+  else
+    return eventtime(*(table + num_lines - 1)) + 1;
+}
+
+/****************************************************************************/
+
+bool RtcEvTable::is_valid(void) const
+{
+  return (current < table + num_lines);
 }
 
 /****************************************************************************/
