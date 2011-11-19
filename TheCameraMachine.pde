@@ -69,7 +69,6 @@ void setup(void)
   conn.setLogger(&logger);
   logger.setRtc(&Rtc);
 
-
   //
   // Logger symbols
   //
@@ -95,10 +94,6 @@ void setup(void)
   
   // Begin the logger after all the symbols are set.
   logger.begin();
-
-  //
-  // Timeline
-  //
 
   //
   // Register updating objects
