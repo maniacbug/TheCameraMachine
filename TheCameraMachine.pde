@@ -13,9 +13,9 @@ void setup(void)
   //
 
   Serial.begin(57600);
-  Serial.println("TheCameraMachine - maniacbug@ymail.com");
-  Serial.println(freeMemory());
   printf_begin();
+  printf_P(PSTR("TheCameraMachine - maniacbug@ymail.com\n\r"));
+  printf_P(PSTR("FREE %u\n\r"),freeMemory());
   
   //
   // Pin Symbols

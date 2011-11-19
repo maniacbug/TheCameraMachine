@@ -9,8 +9,10 @@ const IRtc* RtcEvTable::rtc = NULL;
 
 /****************************************************************************/
 
-uint32_t eventtime(RtcEvTable::evline& event)
+uint32_t eventtime(RtcEvTable::evline& prog_event)
 {
+  RtcEvTable::evline event;
+  memcpy_P(&event,&prog_event,sizeof(event));
   return DateTime(event[0],event[1],event[2],event[3],event[4],event[5]).unixtime();
 }
 /****************************************************************************/
@@ -21,7 +23,7 @@ void RtcEvTable::update(void)
   // it's AFTER a second BEFORE we're supposed to fire.
   if ( rtc && current < table + num_lines && rtc->is_after(whenNext()-1) )
   {
-    emit((*current)[6]);
+    emit(pgm_read_byte(&((*current)[6])));
     current++;
   }
 }

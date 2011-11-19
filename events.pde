@@ -5,7 +5,9 @@
 #include <objects.h>
 #include <signals.h>
 
-uint8_t events_table[][7] = {
+// Warning, this table must be in clock order, earliest events first
+
+prog_uint8_t events_table[][7] PROGMEM = {
   //YY,MM,DD HH MM SS, signal
   { 11,12, 1, 0, 0, 0, signal_power_on },
   { 11,12, 1, 0, 0, 2, signal_start_record },

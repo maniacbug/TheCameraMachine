@@ -28,7 +28,7 @@ public:
   typedef uint8_t val1_t;
 private:
   EepromStream eep;
-  bool overflow;
+  uint8_t overflow;
   const IRtc* rtc;
   uint32_t marked_time;
   uint32_t last_time;

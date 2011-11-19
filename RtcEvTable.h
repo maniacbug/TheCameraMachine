@@ -16,7 +16,7 @@
 class RtcEvTable: public Connectable, public IUpdate
 {
 public:
-  typedef uint8_t evline[7];
+  typedef prog_uint8_t evline[7];
 private:
   uint32_t when;
   uint8_t signal_what;
