@@ -104,7 +104,7 @@ public:
     
     pEepromLogger->play();
 
-    cerr << theLogger;
+    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("EMIT test_sender"), 2 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("test_signal"), 2 );
   }

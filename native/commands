@@ -1,8 +1,5 @@
 log rate 0
-at 1000 send TNov 20 2011 06:00:00 cr
-at 3000 send TNov 20 2011 06:01:00 cr
-at 5000 send TNov 20 2011 06:02:00 cr
-at 7000 send TNov 20 2011 06:03:00 cr
-at 9000 list
-at 9001 list /EMIT|NOTF/
-at 9002 quit
+at 1000 send TDec 01 2011 00:00:01 cr
+at 7000 list
+at 7001 list /EMIT|NOTF/
+at 7002 quit

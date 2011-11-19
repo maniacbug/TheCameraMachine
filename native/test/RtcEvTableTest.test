@@ -8,6 +8,7 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <RtcEvent.h> // for IRtc
 #include <RtcEvTable.h>
 #include <Updater.h>
 #include <Connector.h>
@@ -17,7 +18,7 @@ using namespace std;
 
 extern "C" void mock_time_reset(void);
 
-uint8_t events[][7] = {
+static uint8_t events[][7] = {
   //YY,MM,DD HH MM SS, signal
   { 11,12, 1, 0, 0, 0, 1 },
   { 11,12, 1, 0, 0, 2, 2 },

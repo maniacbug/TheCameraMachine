@@ -38,6 +38,7 @@ void setup(void)
   //
 
   Rtc.begin();
+  RtcEvTable::setRtc(&Rtc);
   test_switch.begin();
   record_button.begin();
   power_led.begin();
@@ -47,12 +48,7 @@ void setup(void)
   alt_relay.begin();
   clock_setter.begin();
   camera.begin();
-
-  //
-  // Begin events
-  //
-
-  events_begin();
+  events.begin();
 
   //
   // Connect objects
@@ -66,6 +62,7 @@ void setup(void)
   camera.listen(NULL);
   conn.setLogger(&logger);
   logger.setRtc(&Rtc);
+
 
   //
   // Logger symbols
@@ -88,6 +85,7 @@ void setup(void)
   logger.setSymbol(&record_led, PSTR("record_led"));
   logger.setSymbol(&other_led, PSTR("other_led"));
   logger.setSymbol(&camera, PSTR("camera"));
+  logger.setSymbol(&events, PSTR("events"));
   
   // Begin the logger after all the symbols are set.
   logger.begin();
@@ -103,6 +101,7 @@ void setup(void)
   up.add(&test_switch);
   up.add(&record_button);
   up.add(&clock_setter);
+  up.add(&events);
 }
 
 void loop(void)

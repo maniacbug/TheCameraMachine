@@ -4,6 +4,7 @@
 #include <hardware.h>
 #include <signals.h>
 #include <rtc.h>
+#include <events.h>
 
 Updater up;
 Connector conn;
@@ -18,5 +19,5 @@ PinControl other_led(conn,other_led_pin,signal_other_led_off,signal_other_led_on
 RtcSetter clock_setter(&Rtc);
 LancControl camera(conn,lanc_command_pin,lanc_data_pin);
 EepromLogger logger;
-
+RtcEvTable events(conn,events_table,num_events);
 // vim:cin:ai:sts=2 sw=2 ft=cpp

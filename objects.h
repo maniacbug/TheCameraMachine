@@ -8,6 +8,7 @@
 #include <EepromLogger.h>
 #include <RtcSetter.h>
 #include <LancControl.h>
+#include <RtcEvTable.h>
 #include <rtc.h>
 
 extern Updater up;
@@ -23,6 +24,7 @@ extern PinControl other_led;
 extern RtcSetter clock_setter;
 extern LancControl camera;
 extern EepromLogger logger;
+extern RtcEvTable events;
 
 #endif // __OBJECTS_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp
