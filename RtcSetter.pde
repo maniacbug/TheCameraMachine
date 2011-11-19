@@ -4,6 +4,7 @@
 #include <RTClib.h>
 
 // Project includes
+#include <objects.h>
 #include <RtcSetter.h>
 
 /****************************************************************************/
@@ -43,11 +44,12 @@ void RtcSetter::update(void)
     uint32_t new_time = 0; 
     if ( !strcmp(buf,"1") )
     {
-      new_time = DateTime(2011,12,1,0,0,0).unixtime();
+      //new_time = DateTime(2011,12,1,0,0,0).unixtime();
+      new_time = events.whenNext();
     }
     else if ( !strcmp(buf,"0") )
     {
-      new_time = DateTime(2011,11,1,0,0,0).unixtime();
+      new_time = DateTime(2011,1,1,0,0,0).unixtime();
     }
     else
     {
@@ -57,7 +59,7 @@ void RtcSetter::update(void)
 
 
     rtc->adjust(new_time);
-    printf_P(PSTR("RtcSetter is now %lu\n\r"),new_time);
+    printf_P(PSTR("RTST RtcSetter is now %lu\n\r"),new_time);
   }
 }
 
