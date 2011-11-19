@@ -1,0 +1,127 @@
+// STL includes
+#include <vector>
+#include <string>
+
+// C includes
+
+// Library includes
+#include <cxxtest/TestSuite.h>
+
+// Project includes
+#include <RtcEvTable.h>
+#include <Updater.h>
+#include <Connector.h>
+#include <Globals.h>
+
+using namespace std;
+
+extern "C" void mock_time_reset(void);
+
+uint8_t events[][7] = {
+  //YY,MM,DD HH MM SS, signal
+  { 11,12, 1, 0, 0, 0, 1 },
+  { 11,12, 1, 0, 0, 2, 2 },
+  { 11,12, 1, 0, 0, 6, 3 },
+  { 11,12, 1, 0, 0, 7, 4 },
+};
+
+class RtcEvTableTestSuite: public CxxTest::TestSuite
+{
+  static const uint8_t signal_go = 1;
+  
+  struct listener: public Connectable
+  {
+    int fired;
+    listener(Connector& _conn): Connectable(_conn), fired(0) {}
+    void onNotify(const Connectable*, uint8_t /*signal*/)
+    {
+      ++fired;
+    }
+  };
+  struct Rtc: public IRtc
+  {
+    uint32_t now;
+    virtual bool is_after(uint32_t when) const { return now > when; }
+  };
+  
+  RtcEvTable* pRtcEvTable;  
+  Updater* pUpdater;
+  Connector* pConnector;
+  listener* plisten;
+  Rtc rtc;
+public:
+  void setUp()
+  {
+    mock_time_reset();
+
+    pUpdater = new Updater();
+    pConnector = new Connector();
+    pRtcEvTable = NULL;
+    plisten = new listener(*pConnector);
+
+    rtc.now = 0;
+    RtcEvTable::setRtc(&rtc);
+  }
+
+  void tearDown( void )
+  {
+    delete plisten;
+    if ( pRtcEvTable )
+      delete pRtcEvTable;
+    delete pConnector;
+    delete pUpdater;
+    theLogger.setVerbose(false);
+  }
+
+  void testEmpty( void )
+  {
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
+    TS_ASSERT(pRtcEvTable);
+  }
+
+  void testUpdate( void )
+  {
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
+    pUpdater->add(pRtcEvTable);
+  }
+  
+  void testFires( void )
+  {
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
+    rtc.now = pRtcEvTable->whenNext() - 1;
+    pRtcEvTable->begin();
+    pUpdater->add(pRtcEvTable);
+    plisten->listen(pRtcEvTable,1);
+   
+    rtc.now += 2;
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+  }
+  void testDoesntFireOld( void )
+  {
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
+    rtc.now = pRtcEvTable->whenNext() + 1;
+    pRtcEvTable->begin();
+    pUpdater->add(pRtcEvTable);
+    plisten->listen(pRtcEvTable,1);
+   
+    rtc.now += 2;
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,0);
+  }
+  void testFiresSecond( void )
+  {
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
+    rtc.now = pRtcEvTable->whenNext() + 1;
+    pRtcEvTable->begin();
+    pUpdater->add(pRtcEvTable);
+    plisten->listen(pRtcEvTable,2);
+   
+    rtc.now = pRtcEvTable->whenNext() - 1;
+    pUpdater->update();
+    rtc.now += 2;
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
