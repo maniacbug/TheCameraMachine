@@ -29,6 +29,7 @@ protected:
   void update(void);
   uint32_t get_when(void) const { return when; }
   bool get_active(void) const { return active; }
+  bool is_valid(void) const;
 public:
   RtcEvTable(Connector& _conn,evline*,uint8_t);
   void begin(void);
