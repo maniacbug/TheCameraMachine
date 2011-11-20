@@ -10,6 +10,7 @@
 // C includes
 // Library includes
 #include <RTClib.h>
+#include <MemoryFree.h>
 // Project includes
 #include <SerialLineIn.h>
 #include <objects.h>
@@ -34,8 +35,9 @@ SerialLineIn::SerialLineIn(void): current(buf)
 
 /****************************************************************************/
 
-void SerialLineIn::dispatch(void) 
+bool SerialLineIn::dispatch(void) 
 {
+  bool handled = false;
   DateTime now;
   if ( rtc )
   {
@@ -45,6 +47,7 @@ void SerialLineIn::dispatch(void)
   {
     case 'D':
       // Dyymmdd: Set date
+      handled = true;
       if ( ! rtc )
       {
 	printf_P(PSTR("SERL Error: No RTC set\n\r"));
@@ -52,7 +55,7 @@ void SerialLineIn::dispatch(void)
       }
       if ( strlen(buf) != 7 )
       {
-	printf_P(PSTR("Format: Dyymmdd\n\r"));
+	printf_P(PSTR("SERL Format: Dyymmdd\n\r"));
 	break;
       }
       now = DateTime(2000+conv2d(buf+1),conv2d(buf+3),conv2d(buf+5),now.hour(),now.minute(),now.second());
@@ -60,6 +63,7 @@ void SerialLineIn::dispatch(void)
       break;
     case 'T':
       // Thhmmss: Set time
+      handled = true;
       if ( ! rtc )
       {
 	printf_P(PSTR("SERL Error: No RTC set\n\r"));
@@ -67,13 +71,14 @@ void SerialLineIn::dispatch(void)
       }
       if ( strlen(buf) != 7 )
       {
-	printf_P(PSTR("Format: Dyymmdd\n\r"));
+	printf_P(PSTR("SERL Format: Dyymmdd\n\r"));
 	break;
       }
       now = DateTime(now.year(),now.month(),now.day(),conv2d(buf+1),conv2d(buf+3),conv2d(buf+5));
       rtc->adjust(now.unixtime());
       break;
     case '@':
+      handled = true;
       // Special time values
 
       if ( !strcmp(buf+1,"N") )
@@ -90,14 +95,22 @@ void SerialLineIn::dispatch(void)
 	rtc->adjust(DateTime(2011,1,1,0,0,0).unixtime());
       }
       else
-	printf_P(PSTR("Error: Unknown @ value: %s"),buf+1);
+	printf_P(PSTR("SERL Error: Unknown @ value: %s"),buf+1);
       break;
     case 'E':
       // E: Print EEPROM
+      handled = true;
       logger.play();
 
       break;
+    case 'F':
+      // F: Free memory 
+      handled = true;
+      printf_P(PSTR("FREE %u\n\r"),freeMemory());
+
+      break;
   }
+  return handled;
 }
 
 /****************************************************************************/
@@ -114,8 +127,11 @@ void SerialLineIn::update(void)
     if ( current >= buf + sizeof(buf) - 1 || c == '\n' || c == '\r' )
     {
       *current = 0;
-      dispatch();
+      bool handled = dispatch();
       current = buf;
+
+      if ( ! handled )
+	printf_P(PSTR("SERL Error: Command not found."));
     }
   }
 }

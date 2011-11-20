@@ -31,7 +31,7 @@ private:
   char* current;
   static IRtc* rtc;
 protected:
-  void dispatch(void);
+  bool dispatch(void);
 public:
   SerialLineIn(void);
   void update(void);

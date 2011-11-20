@@ -72,5 +72,19 @@ public:
     TS_ASSERT_EQUALS( theLogger.lines_contain("BEGIN"), 1 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("END"), 1 );
   }
+  void testFreeMemory( void )
+  {
+    theSerialBuffer.setInput("F\n");
+    pSerialLineIn->update();
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("FREE"), 1 );
+  }
+  void testNotFound( void )
+  {
+    theSerialBuffer.setInput("\001\n");
+    pSerialLineIn->update();
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("not found"), 1 );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
