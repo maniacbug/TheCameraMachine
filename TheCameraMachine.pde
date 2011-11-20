@@ -52,7 +52,6 @@ void setup(void)
   other_led.begin();
   power_relay.begin();
   alt_relay.begin();
-  clock_setter.begin();
   camera.begin();
   events.begin();
 
@@ -68,6 +67,7 @@ void setup(void)
   camera.listen(NULL);
   conn.setLogger(&logger);
   logger.setRtc(&Rtc);
+  tty.setRtc(&Rtc);
 
   //
   // Logger symbols
@@ -101,8 +101,8 @@ void setup(void)
 
   up.add(&test_switch);
   up.add(&record_button);
-  up.add(&clock_setter);
   up.add(&events);
+  up.add(&tty);
 }
 
 void loop(void)

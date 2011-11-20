@@ -16,8 +16,8 @@ PinControl alt_relay(conn,alt_relay_pin,signal_alt_relay_off,signal_alt_relay_on
 PinControl power_led(conn,power_led_pin,signal_power_off,signal_power_on);
 PinControl record_led(conn,record_led_pin,signal_stop_record,signal_start_record);
 PinControl other_led(conn,other_led_pin,signal_other_led_off,signal_other_led_on);
-RtcSetter clock_setter(&Rtc);
 LancControl camera(conn,lanc_command_pin,lanc_data_pin);
 EepromLogger logger;
 RtcEvTable events(conn,events_table,num_events);
+SerialLineIn tty;
 // vim:cin:ai:sts=2 sw=2 ft=cpp

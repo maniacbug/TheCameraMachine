@@ -62,6 +62,7 @@ void SerialLineIn::dispatch(void)
       }
       else
 	printf_P(PSTR("SERL Error: No RTC set\n\r"));
+      break;
     case 'E':
       // E: Print EEPROM
       logger.play();
