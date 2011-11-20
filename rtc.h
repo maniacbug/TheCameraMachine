@@ -1,8 +1,25 @@
+
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
 #ifndef __RTC_H__
 #define __RTC_H__
 
-#include <RtcEvent.h>
+// STL includes
+// C includes
+// Library includes
 #include <RTClib.h>
+#include <RtcEvent.h> // for IRtc
+// Project includes
+
+/**
+ * Board-specific RTC.  Re-implemented for each different board.
+ */
 
 class BoardRtc: public IRtc
 {

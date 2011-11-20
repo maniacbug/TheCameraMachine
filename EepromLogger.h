@@ -19,7 +19,10 @@
 #include <EepromStream.h>
 
 /**
- * Example for how classes should be declared
+ * Logs Tictocs events to EEPROM.
+ *
+ * @todo Abstract out to Tictocs library
+ * @todo Better separate protocol details from logic
  */
 
 class EepromLogger: public SimpleLogger

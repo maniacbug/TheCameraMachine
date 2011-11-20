@@ -11,13 +11,16 @@
 
 // STL includes
 // C includes
-// Library includes
+// Framework includes
 #include <EEPROM.h>
-
+// Library includes
 // Project includes
 
 /**
- * Example for how classes should be declared
+ * Turns the EEPROM into one big read/writeable stream.  Makes it simple to
+ * read or write any object.
+ *
+ * @todo Could implement the Print class
  */
 
 class EepromStream

@@ -1,3 +1,11 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
 #ifndef __OBJECTS_H__
 #define __OBJECTS_H__
 
@@ -10,6 +18,13 @@
 #include <RtcEvTable.h>
 #include <SerialLineIn.h> 
 #include <rtc.h>
+
+/**
+ * @file objects.h
+ *
+ * All application-specific objects.  Any file which includes this header is by
+ * definition an applciation-specific component.
+ */
 
 extern Updater up;
 extern Connector conn;

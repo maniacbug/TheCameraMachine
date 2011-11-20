@@ -6,15 +6,15 @@
  version 2 as published by the Free Software Foundation.
  */
  
+#ifndef __PRINTF_H__
+#define __PRINTF_H__
+
 /**
  * @file printf.h
  *
  * Setup necessary to direct stdout to the Arduino Serial library, which
  * enables 'printf'
  */
-
-#ifndef __PRINTF_H__
-#define __PRINTF_H__
 
 int serial_putc( char c, FILE * ) 
 {
@@ -29,3 +29,4 @@ void printf_begin(void)
 }
 
 #endif // __PRINTF_H__
+// vim:cin:ai:sts=2 sw=2 ft=cpp

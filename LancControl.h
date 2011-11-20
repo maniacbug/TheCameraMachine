@@ -1,3 +1,11 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
 #ifndef __LANCCONTROL_H__
 #define __LANCCONTROL_H__
 
@@ -8,7 +16,10 @@
 // Project includes
 
 /**
- * Example for how classes should be declared
+ * Control a LANC-based camera.
+ *
+ * @warning Not fully implemented.  Currently just controls the camera by
+ * toggling the command pin.
  */
 
 class LancControl: public Connectable

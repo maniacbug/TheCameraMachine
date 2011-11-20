@@ -1,3 +1,12 @@
+
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
 #ifndef __RTCEVTABLE_H__
 #define __RTCEVTABLE_H__
 
@@ -5,9 +14,9 @@
 // C includes
 // Library includes
 #include <RtcEvent.h> // for IRtc
-// Project includes
 #include <Connector.h>
 #include <IUpdate.h>
+// Project includes
 
 /**
  * Maintains a list of time values and a signal to emit.  Monitors RTC time
