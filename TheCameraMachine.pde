@@ -53,7 +53,6 @@ void setup(void)
   power_relay.begin();
   alt_relay.begin();
   camera.begin();
-  events.begin();
 
   //
   // Connect objects
@@ -94,6 +93,7 @@ void setup(void)
   
   // Begin the logger after all the symbols are set.
   logger.begin();
+  events.begin();
 
   //
   // Register updating objects

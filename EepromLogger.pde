@@ -85,7 +85,7 @@ prog_char* EepromLogger::decode_object(val1_t val) const
 
 /****************************************************************************/
 
-prog_char* EepromLogger::decode_signal(uint8_t val) const
+prog_char* EepromLogger::decode_signal(val1_t val) const
 {
   prog_char* result = PSTR("Unknown");
   

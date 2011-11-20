@@ -4,6 +4,7 @@
 #include <RTClib.h>
 // Project includes
 #include <RtcEvTable.h>
+#include <objects.h>
 
 const IRtc* RtcEvTable::rtc = NULL;
 
@@ -46,7 +47,8 @@ void RtcEvTable::begin(void)
     printf_P(PSTR("REVT %u events\n\r"),num_lines);
     while ( is_valid() )
     {
-      printf_P(PSTR("REVT %s %u\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&((*current)[6])));
+      int signal = pgm_read_byte(&((*current)[6]));
+      printf_P(PSTR("REVT %s %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),logger.find_symbol(signal));
       current++;
     }
   }
