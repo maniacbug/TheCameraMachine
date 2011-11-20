@@ -4,7 +4,7 @@
 #include <RTClib.h>
 // Project includes
 #include <RtcEvTable.h>
-#include <objects.h>
+#include <objects.h> // for logger
 
 const IRtc* RtcEvTable::rtc = NULL;
 
