@@ -31,7 +31,6 @@ private:
   uint8_t overflow;
   const IRtc* rtc;
   uint32_t marked_time;
-  uint32_t last_time;
 protected:
   virtual void log_emit(const Connectable* object, uint8_t signal);
   virtual void log_notify(const Connectable* object);

@@ -113,6 +113,7 @@ bool EepromLogger::fast_forward_command(int command)
     break;
   case command_marktime:
     eep.read(now);
+    marked_time = now;
     break;
   case command_end:
     done = true;
@@ -171,16 +172,18 @@ void EepromLogger::write_end(void)
   if (overflow)
   {
     overflow = false;
+    
+    // We've lost our time reference now, so the next write should write a
+    // full time.
+    marked_time = 0;
 
     eep.seek(0);
     write(make_command(command_begin));
     write(make_command(command_overflow));
+    write_time();
     write(make_command(command_end));
     eep.seek(eep.tell() - sizeof(val1_t));
 
-    // We've lost our time reference now, so the next write should write a
-    // full time.
-    marked_time = 0;
   }
 }
 
@@ -216,7 +219,6 @@ void EepromLogger::write_time(void)
 void EepromLogger::write_marktime(void) 
 {
   marked_time = rtc->now_unixtime();
-  last_time = marked_time;
   write(make_command(command_marktime));
   write(marked_time);
 }
@@ -240,7 +242,6 @@ void EepromLogger::begin(void)
 
   // Then write the begin/end for the current run
   write(make_command(command_begin));
-  write_time();
   write_end();
 }
 
@@ -256,7 +257,6 @@ void EepromLogger::clear(void)
 
   // Write the begin/end for the current run
   write(make_command(command_begin));
-  write_time();
   write_end();
 }
 
@@ -266,7 +266,6 @@ void EepromLogger::fast_forward(void)
 {
   val1_t val1;
   uint8_t byte2;
-  uint32_t now;
 
   bool done = false;
   while (!done)
@@ -286,7 +285,7 @@ void EepromLogger::fast_forward(void)
     case type_notify:
       break;
     case type_time:
-      eep.read(now);
+      marked_time = decode_time_value(val1);
       break;
     case type_command:
       done = fast_forward_command(val1 & value_mask);
