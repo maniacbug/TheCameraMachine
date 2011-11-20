@@ -21,6 +21,9 @@
 /**
  * Maintains a list of time values and a signal to emit.  Monitors RTC time
  * and emits the signal when the time for each passes.
+ *
+ * This is currently application-specific only because it relies on the
+ * logger by name.  This is not needed.  It could rely on a SimpleLibrary*.
  */
 
 class RtcEvTable: public Connectable, public IUpdate
@@ -28,17 +31,12 @@ class RtcEvTable: public Connectable, public IUpdate
 public:
   typedef prog_uint8_t evline[7];
 private:
-  uint32_t when;
-  uint8_t signal_what;
-  bool active;
   evline* table;
   evline* current;
   uint8_t num_lines;
   static const IRtc* rtc;
 protected:
   void update(void);
-  uint32_t get_when(void) const { return when; }
-  bool get_active(void) const { return active; }
   bool is_valid(void) const;
 public:
   RtcEvTable(Connector& _conn,evline*,uint8_t);
@@ -47,7 +45,6 @@ public:
   uint32_t whenNext(void) const;
 
   static void setRtc(const IRtc*);
-
 };
 
 #endif // __RTCEVTABLE_H__
