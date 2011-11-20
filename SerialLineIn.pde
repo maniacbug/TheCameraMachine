@@ -45,23 +45,33 @@ void SerialLineIn::dispatch(void)
   {
     case 'D':
       // Dyymmdd: Set date
-      if ( rtc )
+      if ( ! rtc )
       {
-	now = DateTime(2000+conv2d(buf+1),conv2d(buf+3),conv2d(buf+5),now.hour(),now.minute(),now.second());
-	rtc->adjust(now.unixtime());
-      }
-      else
 	printf_P(PSTR("SERL Error: No RTC set\n\r"));
+	break;
+      }
+      if ( strlen(buf) != 7 )
+      {
+	printf_P(PSTR("Format: Dyymmdd\n\r"));
+	break;
+      }
+      now = DateTime(2000+conv2d(buf+1),conv2d(buf+3),conv2d(buf+5),now.hour(),now.minute(),now.second());
+      rtc->adjust(now.unixtime());
       break;
     case 'T':
       // Thhmmss: Set time
-      if ( rtc )
+      if ( ! rtc )
       {
-	now = DateTime(now.year(),now.month(),now.day(),conv2d(buf+1),conv2d(buf+3),conv2d(buf+5));
-	rtc->adjust(now.unixtime());
-      }
-      else
 	printf_P(PSTR("SERL Error: No RTC set\n\r"));
+	break;
+      }
+      if ( strlen(buf) != 7 )
+      {
+	printf_P(PSTR("Format: Dyymmdd\n\r"));
+	break;
+      }
+      now = DateTime(now.year(),now.month(),now.day(),conv2d(buf+1),conv2d(buf+3),conv2d(buf+5));
+      rtc->adjust(now.unixtime());
       break;
     case 'E':
       // E: Print EEPROM
