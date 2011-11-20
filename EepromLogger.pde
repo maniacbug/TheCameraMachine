@@ -19,9 +19,12 @@
 
 typedef EepromLogger::val1_t val1_t;
 static const int num_type_bits = 2;
-static const int type_shift = 8 - num_type_bits;
+static const int type_shift = 8*sizeof(val1_t) - num_type_bits;
 static const val1_t type_mask = (val1_t)((val1_t)(-1) << type_shift); 
 static const val1_t value_mask = (val1_t)(~type_mask);
+static const int time_shift = 3;
+static const val1_t min_time_diff = 1 << time_shift;
+static const uint32_t max_time_diff = (uint32_t)value_mask << time_shift;
 
 static const int type_command = 0;
 static const int type_notify = 1;
@@ -53,16 +56,16 @@ static inline val1_t make_notify(int index)
   return (type_notify << type_shift ) | ( index & value_mask );
 }
 
-static inline val1_t make_time(unsigned time_value)
+static inline val1_t make_time(uint32_t time_value)
 {
-  return (type_time << type_shift ) | ( time_value & value_mask );
+  return (type_time << type_shift ) | ( ( time_value >> time_shift ) & value_mask );
 }
 
 /****************************************************************************/
 
 uint32_t EepromLogger::decode_time_value(val1_t val) const
 {
-  return ( val & value_mask ) + marked_time;
+  return ( ( val & value_mask ) << time_shift ) + marked_time;
 }
 
 /****************************************************************************/
@@ -123,7 +126,7 @@ bool EepromLogger::fast_forward_command(int command)
 }
 /****************************************************************************/
 
-bool EepromLogger::play_command(EepromStream& stream,unsigned at,int command) const
+bool EepromLogger::play_command(EepromStream& stream,unsigned at,int command)
 {
   bool done = false;
   uint32_t now;
@@ -143,6 +146,7 @@ bool EepromLogger::play_command(EepromStream& stream,unsigned at,int command) co
     break;
   case command_marktime:
     stream.read(now);
+    marked_time = now;
     printf_P(PSTR("LOG  %04u MARK TIME %s\n\r"),at,DateTime(now).toString(buf,sizeof(buf)));
     break;
   default:
@@ -173,6 +177,10 @@ void EepromLogger::write_end(void)
     write(make_command(command_overflow));
     write(make_command(command_end));
     eep.seek(eep.tell() - sizeof(val1_t));
+
+    // We've lost our time reference now, so the next write should write a
+    // full time.
+    marked_time = 0;
   }
 }
 
@@ -182,20 +190,19 @@ void EepromLogger::write_time(void)
 {
   if ( rtc )
   {
-    const uint32_t min_diff = 10;
     uint32_t now = rtc->now_unixtime();
     uint32_t marked_diff = now - marked_time;
-    
+
     // If we have a mark time and the time SINCE that mark time can be
     // represented in a val1...
-    if ( marked_time && ( marked_diff < value_mask ) )
+    if ( marked_time && ( marked_diff < max_time_diff ) )
     {
       // If enough time has elapsed since the last time we wrote a time,
       // go ahead and write another -- otherwise don't bother
-      if ( ! last_time || ( now - last_time > min_diff ) )
+      if ( marked_diff > min_time_diff )
       {
-	last_time = now;
-	write(make_time(now - marked_time));
+	marked_time = now;
+	write(make_time(marked_diff));
       }
     }
     // Otherwise, write a mark time
@@ -244,6 +251,9 @@ void EepromLogger::clear(void)
   // Reset the eeprom stream
   eep.seek(0);
 
+  // Reset the reference time
+  marked_time = 0;
+
   // Write the begin/end for the current run
   write(make_command(command_begin));
   write_time();
@@ -291,7 +301,7 @@ void EepromLogger::fast_forward(void)
 
 /****************************************************************************/
 
-void EepromLogger::play(void) const 
+void EepromLogger::play(void)
 {
   printf_P(PSTR("LOG  **** Begin Log Playback\n\r"));
 
@@ -318,7 +328,8 @@ void EepromLogger::play(void) const
       printf_P(PSTR("LOG  %04u NOTF %S %u\n\r"),at,decode_object(val1),val1&value_mask);
       break;
     case type_time:
-      printf_P(PSTR("LOG  %04u TIME %s\n\r"),at,DateTime(decode_time_value(val1)).toString(buf,sizeof(buf)));
+      marked_time = decode_time_value(val1);
+      printf_P(PSTR("LOG  %04u TIME %s\n\r"),at,DateTime(marked_time).toString(buf,sizeof(buf)));
       break;
     case type_command:
       done = play_command(player,at,val1 & value_mask);

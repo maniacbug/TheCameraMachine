@@ -42,7 +42,7 @@ protected:
   prog_char* decode_signal(uint8_t) const;
   uint32_t decode_time_value(val1_t val) const;
   void fast_forward(void);
-  bool play_command(EepromStream&,unsigned at,int command) const;
+  bool play_command(EepromStream&,unsigned at,int command);
   bool fast_forward_command(int command);
   template <class T> void write(const T& t)
   {
@@ -54,7 +54,7 @@ protected:
 public:
   EepromLogger(void): SimpleLogger(32,32), overflow(false), rtc(NULL), marked_time(0) {}
   void begin(void);
-  void play(void) const;
+  void play(void);
   void clear(void);
   void setRtc(const IRtc* _rtc) 
   {
