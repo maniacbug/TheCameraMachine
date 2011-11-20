@@ -241,7 +241,16 @@ void EepromLogger::begin(void)
   }
 
   // Then write the begin/end for the current run
-  write(make_command(command_begin));
+  val1_t begin = make_command(command_begin);
+  val1_t first = 0;
+  unsigned pos = eep.tell();
+  if ( pos > 0 )
+  {
+    eep.seek(pos-1);
+    eep.read(first);
+  }
+  if ( first != begin )
+    write(begin);
   write_end();
 }
 
@@ -256,6 +265,7 @@ void EepromLogger::clear(void)
   marked_time = 0;
 
   // Write the begin/end for the current run
+  // Only if we're not already sitting on a begin
   write(make_command(command_begin));
   write_end();
 }

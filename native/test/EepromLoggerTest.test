@@ -188,5 +188,14 @@ public:
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("TIME"), 3 );
   }
+  void testMultipleBegins( void )
+  {
+    pEepromLogger->begin();
+    pEepromLogger->play();
+    
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("BEGIN"), 1 );
+
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
