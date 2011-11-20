@@ -6,20 +6,17 @@
 
 // C includes
 
+// Framework includes
+#include <AnyRtc.h>
+
 // Library includes
 #include <cxxtest/TestSuite.h>
 
 // Project includes
 #include <Globals.h>
-#include <Arduino.h>
 #include <hardware.h>
 #include <objects.h>
-#include <rtc.h>
 #include <events.h>
-
-#include <RTC_native.h>
-
-extern RTC_native rtc_native;
 
 using namespace std;
 
@@ -84,13 +81,13 @@ public:
   {
     // This has to be synced up with the actual first event :|
     uint32_t now = events.whenNext() - 1;
-    Rtc.adjust(now);
+    RTC.adjust(now);
     setup();
     printf_P("************************* Setup done");
     printf_P("loop()");
     loop();
     now += 2;
-    Rtc.adjust(now);
+    RTC.adjust(now);
     printf_P("loop()");
     loop();
     printf_P("loop()");

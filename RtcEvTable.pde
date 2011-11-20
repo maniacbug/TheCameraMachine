@@ -1,12 +1,10 @@
 // STL includes
 // C includes
 // Library includes
-#include <RTClib.h>
+#include <AnyRtc.h>
 // Project includes
 #include <RtcEvTable.h>
 #include <objects.h> // for logger
-
-const IRtc* RtcEvTable::rtc = NULL;
 
 /****************************************************************************/
 
@@ -20,9 +18,8 @@ uint32_t eventtime(RtcEvTable::evline& prog_event)
 
 void RtcEvTable::update(void)
 {
-  // We actually want to fire if now is AT or after 'when', so check whether
-  // it's AFTER a second BEFORE we're supposed to fire.
-  if ( rtc && is_valid() && rtc->is_after(whenNext()-1) )
+  // We actually want to fire if now is AT or after 'when'
+  if ( is_valid() && RTC.now() >= whenNext() )
   {
     emit(pgm_read_byte(&(*current)[6]));
     current++;
@@ -42,35 +39,20 @@ void RtcEvTable::begin(void)
   char buf[32];
 
   // First, print all out for debugging
-  if ( rtc )
+  printf_P(PSTR("REVT %u events\n\r"),num_lines);
+  while ( is_valid() )
   {
-    printf_P(PSTR("REVT %u events\n\r"),num_lines);
-    while ( is_valid() )
-    {
-      int signal = pgm_read_byte(&(*current)[6]);
-      printf_P(PSTR("REVT %s %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),logger.find_symbol(signal));
-      current++;
-    }
+    int signal = pgm_read_byte(&(*current)[6]);
+    printf_P(PSTR("REVT %s %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),logger.find_symbol(signal));
+    current++;
   }
-  else
-    printf_P(PSTR("REVT No RTC set!\n\r"));
 
   // Reset to the top
   current = table;
 
   // seek the current pointer to the right place
-  if ( rtc )
-  {
-    while ( is_valid() && rtc->is_after(whenNext()) )
-      current++;
-  }
-}
-
-/****************************************************************************/
-
-void RtcEvTable::setRtc(const IRtc* _rtc)
-{
-  rtc = _rtc;
+  while ( is_valid() && RTC.now() >= whenNext() )
+    current++;
 }
 
 /****************************************************************************/

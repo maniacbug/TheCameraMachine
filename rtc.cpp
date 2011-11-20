@@ -1,3 +1,4 @@
+#if 0
 #include <Wire.h>
 #include <RTClib.h>
 #include <RTC_DS1307.h>
@@ -34,6 +35,6 @@ uint32_t BoardRtc::now_unixtime(void) const
   DateTime result = RTC.now();
   return result.unixtime();
 }
-
+#endif
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 

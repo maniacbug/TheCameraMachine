@@ -1,9 +1,11 @@
+#include <MemoryFree.h>
+#include <AnyRtc.h>
+
 #include <hardware.h>
 #include <objects.h>
 #include <rtc.h>
 #include <signals.h>
 #include <events.h>
-#include <MemoryFree.h>
 #include <printf.h>
 
 #ifdef VERSION_H
@@ -11,6 +13,9 @@
 #else
 const char program_version[] = "Unknown";
 #endif
+
+extern void print_time(void);
+
 void setup(void)
 {
   //
@@ -22,6 +27,7 @@ void setup(void)
   printf_P(PSTR("\n\rTheCameraMachine - maniacbug@ymail.com\n\r"));
   printf_P(PSTR("VER. %s\n\r"),program_version);
   printf_P(PSTR("FREE %u\n\r"),freeMemory());
+  print_time();
   
   //
   // Pin Symbols
@@ -43,8 +49,7 @@ void setup(void)
   // Begin objects
   //
 
-  Rtc.begin();
-  RtcEvTable::setRtc(&Rtc);
+  RTC.begin();
   test_switch.begin();
   record_button.begin();
   power_led.begin();
@@ -65,8 +70,6 @@ void setup(void)
   alt_relay.listen(NULL);
   camera.listen(NULL);
   conn.setLogger(&logger);
-  logger.setRtc(&Rtc);
-  tty.setRtc(&Rtc);
 
   //
   // Logger symbols

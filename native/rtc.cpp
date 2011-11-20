@@ -1,3 +1,4 @@
+#if 0
 #include <Arduino.h>
 #include <RTC_native.h>
 
@@ -39,6 +40,7 @@ uint32_t BoardRtc::now_unixtime(void) const
 {
   return rtc_native.now().unixtime();
 }
+#endif
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 

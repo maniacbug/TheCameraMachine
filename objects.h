@@ -17,7 +17,6 @@
 #include <LancControl.h>
 #include <RtcEvTable.h>
 #include <SerialLineIn.h> 
-#include <rtc.h>
 
 /**
  * @file objects.h
@@ -28,7 +27,6 @@
 
 extern Updater up;
 extern Connector conn;
-extern BoardRtc Rtc;
 extern EmitButton test_switch;
 extern EmitButton record_button;
 extern PinControl power_relay;

@@ -7,7 +7,7 @@ LIB_DIRS	= $(HOME)/Source/Arduino/libraries ;
 SKETCH_DIR	= $(PWD:D) ;
 NATIVE_DIR	= $(PWD) ;
 TEST_DIR	= $(PWD)/test ;
-PROJECT_LIBS 	= Tictocs ; 
+PROJECT_LIBS 	= Tictocs AnyRtc ; 
 
 HDRS		+= $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) $(LIB_DIRS)/$(PROJECT_LIBS) ;
 DEFINES		+= NATIVE=1 VERSION_H ;

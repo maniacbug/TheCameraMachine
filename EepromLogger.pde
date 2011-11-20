@@ -9,7 +9,7 @@
 // STL includes
 // C includes
 // Library includes
-#include <RTClib.h>
+#include <AnyRtc.h>
 // Project includes
 #include <EepromLogger.h>
 
@@ -191,34 +191,31 @@ void EepromLogger::write_end(void)
 
 void EepromLogger::write_time(void) 
 {
-  if ( rtc )
-  {
-    uint32_t now = rtc->now_unixtime();
-    uint32_t marked_diff = now - marked_time;
+  uint32_t now = RTC.now();
+  uint32_t marked_diff = now - marked_time;
 
-    // If we have a mark time and the time SINCE that mark time can be
-    // represented in a val1...
-    if ( marked_time && ( marked_diff < max_time_diff ) )
+  // If we have a mark time and the time SINCE that mark time can be
+  // represented in a val1...
+  if ( marked_time && ( marked_diff < max_time_diff ) )
+  {
+    // If enough time has elapsed since the last time we wrote a time,
+    // go ahead and write another -- otherwise don't bother
+    if ( marked_diff > min_time_diff )
     {
-      // If enough time has elapsed since the last time we wrote a time,
-      // go ahead and write another -- otherwise don't bother
-      if ( marked_diff > min_time_diff )
-      {
-	marked_time = now;
-	write(make_time(marked_diff));
-      }
+      marked_time = now;
+      write(make_time(marked_diff));
     }
-    // Otherwise, write a mark time
-    else
-      write_marktime();
   }
+  // Otherwise, write a mark time
+  else
+    write_marktime();
 }
 
 /****************************************************************************/
 
 void EepromLogger::write_marktime(void) 
 {
-  marked_time = rtc->now_unixtime();
+  marked_time = RTC.now();
   write(make_command(command_marktime));
   write(marked_time);
 }

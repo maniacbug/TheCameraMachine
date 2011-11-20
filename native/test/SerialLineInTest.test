@@ -12,17 +12,17 @@
 #include <iostream>
 // C includes
 
-// Library includes
+// Framework includes
 #include <cxxtest/TestSuite.h>
+
+// Library includes
 #include <Updater.h>
-#include <Arduino.h>
-#include <RTClib.h>
+#include <AnyRtc.h>
 
 // Project includes
 #include <Globals.h>
-#include <SerialLineIn.h>
-#include <TestRtc.h>
 #include <objects.h>
+#include <SerialLineIn.h>
 
 using namespace std;
 
@@ -31,23 +31,19 @@ extern ostream& operator<<(ostream& os, const Logger& log);
 class SerialLineInTestSuite: public CxxTest::TestSuite
 {
   Updater* pUpdater;
-  TestRtc* pTestRtc;
   SerialLineIn* pSerialLineIn ;
 public:
   void setUp()
   {
     pUpdater = new Updater;
-    pTestRtc = new TestRtc;
     pSerialLineIn = new SerialLineIn;
     pUpdater->add(pSerialLineIn);
-    SerialLineIn::setRtc(pTestRtc);
     theLogger.clear();
   }
   
   void tearDown()
   {
     delete pSerialLineIn;
-    delete pTestRtc;
     delete pUpdater;
   }
 
@@ -60,7 +56,7 @@ public:
     theSerialBuffer.setInput("D111101\nT010203\n");
     pSerialLineIn->update();
     //cerr << theLogger;
-    TS_ASSERT_EQUALS( pTestRtc->now, DateTime("Nov 01 2011","01:02:03").unixtime() );
+    TS_ASSERT_EQUALS( RTC.now(), DateTime("Nov 01 2011","01:02:03").unixtime() );
   }
   void testEepromPlay( void )
   {

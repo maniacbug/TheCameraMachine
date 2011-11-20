@@ -4,14 +4,16 @@
 
 // C includes
 
-// Library includes
+// Framework includes
 #include <cxxtest/TestSuite.h>
 
-// Project includes
-#include <RtcEvent.h> // for IRtc
-#include <RtcEvTable.h>
+// Library includes
+#include <AnyRtc.h>
 #include <Updater.h>
 #include <Connector.h>
+
+// Project includes
+#include <RtcEvTable.h>
 #include <Globals.h>
 
 using namespace std;
@@ -39,17 +41,11 @@ class RtcEvTableTestSuite: public CxxTest::TestSuite
       ++fired;
     }
   };
-  struct Rtc: public IRtc
-  {
-    uint32_t now;
-    virtual bool is_after(uint32_t when) const { return now > when; }
-  };
   
   RtcEvTable* pRtcEvTable;  
   Updater* pUpdater;
   Connector* pConnector;
   listener* plisten;
-  Rtc rtc;
 public:
   void setUp()
   {
@@ -60,8 +56,7 @@ public:
     pRtcEvTable = NULL;
     plisten = new listener(*pConnector);
 
-    rtc.now = 0;
-    RtcEvTable::setRtc(&rtc);
+    RTC.begin();
   }
 
   void tearDown( void )
@@ -89,38 +84,42 @@ public:
   void testFires( void )
   {
     pRtcEvTable = new RtcEvTable(*pConnector,events,4);
-    rtc.now = pRtcEvTable->whenNext() - 1;
+    uint32_t timeval = pRtcEvTable->whenNext() - 1;
+    RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
     plisten->listen(pRtcEvTable,1);
    
-    rtc.now += 2;
+    RTC.adjust(timeval+2);
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
   }
   void testDoesntFireOld( void )
   {
     pRtcEvTable = new RtcEvTable(*pConnector,events,4);
-    rtc.now = pRtcEvTable->whenNext() + 1;
+    uint32_t timeval = pRtcEvTable->whenNext() + 1;
+    RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
     plisten->listen(pRtcEvTable,1);
    
-    rtc.now += 2;
+    RTC.adjust(timeval+2);
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,0);
   }
   void testFiresSecond( void )
   {
     pRtcEvTable = new RtcEvTable(*pConnector,events,4);
-    rtc.now = pRtcEvTable->whenNext() + 1;
+    uint32_t timeval = pRtcEvTable->whenNext() + 1;
+    RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
     plisten->listen(pRtcEvTable,2);
    
-    rtc.now = pRtcEvTable->whenNext() - 1;
+    timeval = pRtcEvTable->whenNext() - 1;
+    RTC.adjust(timeval);
     pUpdater->update();
-    rtc.now += 2;
+    RTC.adjust(timeval+2);
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
   }

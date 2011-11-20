@@ -13,7 +13,6 @@
 // STL includes
 // C includes
 // Library includes
-#include <RtcEvent.h> // for IRtc
 #include <Connector.h>
 #include <IUpdate.h>
 // Project includes
@@ -35,7 +34,6 @@ private:
   evline* table;
   evline* current;
   uint8_t num_lines;
-  static const IRtc* rtc;
 protected:
   void update(void);
   bool is_valid(void) const;
@@ -44,8 +42,6 @@ public:
   void begin(void);
   void reset(void) { current = table; }
   uint32_t whenNext(void) const;
-
-  static void setRtc(const IRtc*);
 };
 
 #endif // __RTCEVTABLE_H__

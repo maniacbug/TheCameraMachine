@@ -14,13 +14,15 @@
 
 // C includes
 
-// Library includes
+// Framework includes
 #include <cxxtest/TestSuite.h>
 #include <Logger.h>
 
+// Library includes
+#include <AnyRtc.h>
+
 // Project includes
 #include <Globals.h>
-#include <rtc.h>
 #include <EepromLogger.h>
 
 using namespace std;
@@ -59,17 +61,17 @@ class EepromLoggerTestSuite: public CxxTest::TestSuite
   Connector* pconn;
   Sender* pSender;
   EepromLogger_test* pEepromLogger;
-  BoardRtc* pBoardRtc;
 public:
   void setUp()
   {
+    RTC.begin();
+
     theLogger.clear();
     theEeprom.clear();
 
     pconn = new Connector;
     pSender = new Sender(*pconn);
     pEepromLogger = new EepromLogger_test();
-    pBoardRtc = new BoardRtc;
 
     pEepromLogger->begin();
     pEepromLogger->setSymbol( test_signal, "test_signal" );
@@ -78,7 +80,6 @@ public:
   
   void tearDown()
   {
-    delete pBoardRtc;
     delete pEepromLogger;
     delete pSender;
     delete pconn;
@@ -146,11 +147,10 @@ public:
     
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("RESTARTED"), 1 );
-    TS_ASSERT_EQUALS( theLogger.lines_contain("EEPR "), 7 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("EEPR "), 28 );
   }
   void testMarkTime( void )
   {
-    pEepromLogger->setRtc(pBoardRtc);
     pEepromLogger->begin();
     pEepromLogger->test_log_emit( pSender, test_signal );
     theLogger.clear();
@@ -160,7 +160,6 @@ public:
   }
   void testSameTime( void )
   {
-    pEepromLogger->setRtc(pBoardRtc);
     pEepromLogger->begin();
     pEepromLogger->test_log_emit( pSender, test_signal );
     pEepromLogger->test_log_emit( pSender, test_signal );
@@ -172,14 +171,13 @@ public:
   }
   void testDifferentTime( void )
   {
-    pEepromLogger->setRtc(pBoardRtc);
     pEepromLogger->begin();
     pEepromLogger->test_log_emit( pSender, test_signal );
     pEepromLogger->test_log_emit( pSender, test_signal );
-    pBoardRtc->adjust(pBoardRtc->now_unixtime() + 20);
+    RTC.adjust(RTC.now() + 20);
     pEepromLogger->test_log_emit( pSender, test_signal );
     pEepromLogger->test_log_emit( pSender, test_signal );
-    pBoardRtc->adjust(pBoardRtc->now_unixtime() + 20);
+    RTC.adjust(RTC.now() + 20);
     pEepromLogger->test_log_emit( pSender, test_signal );
     pEepromLogger->test_log_emit( pSender, test_signal );
     theLogger.clear();

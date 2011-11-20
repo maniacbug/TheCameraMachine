@@ -1,8 +1,4 @@
-#include <RTClib.h>
-#include <RtcEvent.h>
-
 #include <events.h>
-#include <objects.h>
 #include <signals.h>
 
 // Warning, this table must be in clock order, earliest events first

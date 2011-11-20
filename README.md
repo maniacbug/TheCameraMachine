@@ -7,7 +7,7 @@ Pre-programmable camera controller.
 ## Arduino Libraries (Required)
 
 1. Tictocs library
-2. RTClib
+2. AnyRtc
 3. MemoryFree
 
 ## Native Components (Optional)
