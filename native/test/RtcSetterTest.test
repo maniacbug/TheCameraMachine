@@ -12,6 +12,7 @@
 // Project includes
 #include <RtcSetter.h>
 #include <Globals.h>
+#include <TestRtc.h>
 
 #include <Arduino.h>
 #include <RTClib.h>
@@ -20,14 +21,6 @@ using namespace std;
 
 class RtcSetterTestSuite: public CxxTest::TestSuite
 {
-  struct TestRtc: public IRtc
-  {
-    uint32_t now;
-    TestRtc(void): now(0) {}
-    virtual bool is_after(uint32_t _time) const { return now > _time; }
-    virtual void adjust(uint32_t _time) { now = _time; }
-  };
-
   Updater* pup;
   TestRtc* prtc;
   RtcSetter* psetter;

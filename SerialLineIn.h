@@ -13,6 +13,7 @@
 // C includes
 // Library includes
 #include <IUpdate.h>
+#include <RtcEvent.h> // for IRtc
 // Project includes
 
 /**
@@ -25,11 +26,16 @@ class SerialLineIn: public IUpdate
 private:
   char buf[32];
   char* current;
+  static IRtc* rtc;
 protected:
   void dispatch(void);
 public:
   SerialLineIn(void);
   void update(void);
+  static void setRtc(IRtc* _rtc)
+  {
+    rtc = _rtc;
+  }
 };
 /****************************************************************************/
 
