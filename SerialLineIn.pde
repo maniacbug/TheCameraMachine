@@ -12,6 +12,7 @@
 #include <RTClib.h>
 // Project includes
 #include <SerialLineIn.h>
+#include <objects.h>
 
 IRtc* SerialLineIn::rtc = NULL;
 
@@ -62,6 +63,9 @@ void SerialLineIn::dispatch(void)
       else
 	printf_P(PSTR("SERL Error: No RTC set\n\r"));
     case 'E':
+      // E: Print EEPROM
+      logger.play();
+
       break;
   }
 }

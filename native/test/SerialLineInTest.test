@@ -22,6 +22,7 @@
 #include <Globals.h>
 #include <SerialLineIn.h>
 #include <TestRtc.h>
+#include <objects.h>
 
 using namespace std;
 
@@ -40,6 +41,7 @@ public:
     pSerialLineIn = new SerialLineIn;
     pUpdater->add(pSerialLineIn);
     SerialLineIn::setRtc(pTestRtc);
+    theLogger.clear();
   }
   
   void tearDown()
@@ -57,8 +59,18 @@ public:
   {
     theSerialBuffer.setInput("D111101\nT010203\n");
     pSerialLineIn->update();
-    cerr << theLogger;
+    //cerr << theLogger;
     TS_ASSERT_EQUALS( pTestRtc->now, DateTime("Nov 01 2011","01:02:03").unixtime() );
+  }
+  void testEepromPlay( void )
+  {
+    logger.begin();
+    logger.clear();
+    theSerialBuffer.setInput("E\n");
+    pSerialLineIn->update();
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("BEGIN"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("END"), 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

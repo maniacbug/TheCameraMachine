@@ -239,6 +239,19 @@ void EepromLogger::begin(void)
 
 /****************************************************************************/
 
+void EepromLogger::clear(void) 
+{
+  // Reset the eeprom stream
+  eep.seek(0);
+
+  // Write the begin/end for the current run
+  write(make_command(command_begin));
+  write_time();
+  write_end();
+}
+
+/****************************************************************************/
+
 void EepromLogger::fast_forward(void)
 {
   val1_t val1;

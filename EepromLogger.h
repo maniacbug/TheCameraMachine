@@ -53,8 +53,9 @@ protected:
 
 public:
   EepromLogger(void): SimpleLogger(32,32), overflow(false), rtc(NULL), marked_time(0) {}
-  void begin();
-  void play() const;
+  void begin(void);
+  void play(void) const;
+  void clear(void);
   void setRtc(const IRtc* _rtc) 
   {
     rtc = _rtc;

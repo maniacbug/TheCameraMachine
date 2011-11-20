@@ -19,6 +19,9 @@
 /**
  * Monitors serial input, compiles a line buffer, takes actions when the line
  * is full.
+ *
+ * This is not a general-purpose component, it relies on the objects defined
+ * for this sketch, because it controls them.
  */
 
 class SerialLineIn: public IUpdate
