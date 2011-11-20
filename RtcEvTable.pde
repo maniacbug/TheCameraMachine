@@ -24,7 +24,7 @@ void RtcEvTable::update(void)
   // it's AFTER a second BEFORE we're supposed to fire.
   if ( rtc && is_valid() && rtc->is_after(whenNext()-1) )
   {
-    emit(pgm_read_byte(&((*current)[6])));
+    emit(pgm_read_byte(&(*current)[6]));
     current++;
   }
 }
@@ -47,7 +47,7 @@ void RtcEvTable::begin(void)
     printf_P(PSTR("REVT %u events\n\r"),num_lines);
     while ( is_valid() )
     {
-      int signal = pgm_read_byte(&((*current)[6]));
+      int signal = pgm_read_byte(&(*current)[6]);
       printf_P(PSTR("REVT %s %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),logger.find_symbol(signal));
       current++;
     }
