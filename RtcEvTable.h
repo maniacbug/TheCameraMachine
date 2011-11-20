@@ -24,6 +24,7 @@
  *
  * This is currently application-specific only because it relies on the
  * logger by name.  This is not needed.  It could rely on a SimpleLibrary*.
+ * Or even a 'dictionary' interface.
  */
 
 class RtcEvTable: public Connectable, public IUpdate

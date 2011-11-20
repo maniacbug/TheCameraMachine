@@ -13,13 +13,17 @@
 // C includes
 // Library includes
 #include <SimpleLogger.h>
-#include <RtcEvent.h>
+#include <RtcEvent.h> // for IRtc*
 
 // Project includes
 #include <EepromStream.h>
 
 /**
  * Logs Tictocs events to EEPROM.
+ *
+ * This is a general-purpose library, which could be abstracted out to the 
+ * Tictocs library.  Doing so would require solving the RTC mess, and
+ * bringing EepromStream with it.
  *
  * @todo Abstract out to Tictocs library
  * @todo Better separate protocol details from logic

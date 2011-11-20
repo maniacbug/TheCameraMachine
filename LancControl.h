@@ -19,7 +19,12 @@
  * Control a LANC-based camera.
  *
  * @warning Not fully implemented.  Currently just controls the camera by
- * toggling the command pin.
+ * pulsing the command pin.
+ *
+ * Currently this is application-specific only because it relies on the
+ * application's signals.  Should refactor it so that the specific signals
+ * used are passed in.  Then it would be truly generic and can/should be
+ * abstracted into its own library.
  */
 
 class LancControl: public Connectable

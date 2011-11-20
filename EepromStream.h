@@ -20,6 +20,9 @@
  * Turns the EEPROM into one big read/writeable stream.  Makes it simple to
  * read or write any object.
  *
+ * This is a general-purpose class, and could be abstracted out into its own
+ * library.
+ *
  * @todo Could implement the Print class
  */
 
