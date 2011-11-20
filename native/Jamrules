@@ -10,7 +10,7 @@ TEST_DIR	= $(PWD)/test ;
 PROJECT_LIBS 	= Tictocs ; 
 
 HDRS		+= $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) $(LIB_DIRS)/$(PROJECT_LIBS) ;
-DEFINES		+= NATIVE=1 ;
+DEFINES		+= NATIVE=1 VERSION_H ;
 
 CORE_MODULES	= [ GLOB $(CORE_DIR) : *.cpp ] ; 
 INTERNAL_MODULES = [ GLOB $(INTERNAL_DIR) : *.cpp ] ;
@@ -44,6 +44,22 @@ else
 	LINKFLAGS	+= -lrt ;
 	C++FLAGS	+= -std=c++0x ;
 }
+
+rule GitVersion
+{
+	Always $(<) ;
+	Depends all : $(<) ;
+}
+
+actions GitVersion
+{
+	echo "const char program_version[] = \"\\" > $(<)
+	git log -1 --pretty=format:%h >> $(<)
+	echo "\";" >> $(<)
+}
+
+GitVersion version.h ;
+
 
 rule TestSuite
 {

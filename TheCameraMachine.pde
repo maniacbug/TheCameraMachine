@@ -6,6 +6,11 @@
 #include <MemoryFree.h>
 #include <printf.h>
 
+#ifdef VERSION_H
+#include <version.h>
+#else
+const char program_version[] = "Unknown";
+#endif
 void setup(void)
 {
   //
@@ -14,7 +19,8 @@ void setup(void)
 
   Serial.begin(57600);
   printf_begin();
-  printf_P(PSTR("TheCameraMachine - maniacbug@ymail.com\n\r"));
+  printf_P(PSTR("\n\rTheCameraMachine - maniacbug@ymail.com\n\r"));
+  printf_P(PSTR("VER. %s\n\r"),program_version);
   printf_P(PSTR("FREE %u\n\r"),freeMemory());
   
   //
@@ -63,7 +69,6 @@ void setup(void)
   conn.setLogger(&logger);
   logger.setRtc(&Rtc);
 
-
   //
   // Logger symbols
   //
@@ -89,10 +94,6 @@ void setup(void)
   
   // Begin the logger after all the symbols are set.
   logger.begin();
-
-  //
-  // Timeline
-  //
 
   //
   // Register updating objects
