@@ -10,7 +10,8 @@
 #include <IUpdate.h>
 
 /**
- * Example for how classes should be declared
+ * Maintains a list of time values and a signal to emit.  Monitors RTC time
+ * and emits the signal when the time for each passes.
  */
 
 class RtcEvTable: public Connectable, public IUpdate
@@ -33,6 +34,7 @@ protected:
 public:
   RtcEvTable(Connector& _conn,evline*,uint8_t);
   void begin(void);
+  void reset(void) { current = table; }
   uint32_t whenNext(void) const;
 
   static void setRtc(const IRtc*);

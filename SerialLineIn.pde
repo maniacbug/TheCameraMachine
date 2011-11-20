@@ -73,6 +73,25 @@ void SerialLineIn::dispatch(void)
       now = DateTime(now.year(),now.month(),now.day(),conv2d(buf+1),conv2d(buf+3),conv2d(buf+5));
       rtc->adjust(now.unixtime());
       break;
+    case '@':
+      // Special time values
+
+      if ( !strcmp(buf+1,"N") )
+      {
+	rtc->adjust(events.whenNext());
+      }
+      else if ( !strcmp(buf+1,"1") )
+      {
+	events.reset();
+	rtc->adjust(events.whenNext());
+      }
+      else if ( !strcmp(buf+1,"0") )
+      {
+	rtc->adjust(DateTime(2011,1,1,0,0,0).unixtime());
+      }
+      else
+	printf_P(PSTR("Error: Unknown @ value: %s"),buf+1);
+      break;
     case 'E':
       // E: Print EEPROM
       logger.play();
