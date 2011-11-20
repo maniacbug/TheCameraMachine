@@ -86,5 +86,17 @@ public:
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("not found"), 1 );
   }
+
+  //
+  // Upcoming features
+  //
+  void todo_testEmitSignal( void )
+  {
+    theSerialBuffer.setInput("Ssignal_power_on\n");
+  }
+  void todo_testEmitAsObject( void )
+  {
+    theSerialBuffer.setInput("Opower_button signal_power_on\n");
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
