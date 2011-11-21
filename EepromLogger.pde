@@ -328,10 +328,10 @@ void EepromLogger::play(void)
     {
     case type_emit:
       player.read(byte2);
-      printf_P(PSTR("LOG  %04u EMIT %S %u %S %u\n\r"),at,decode_object(val1),val1&value_mask,decode_signal(byte2),byte2);
+      printf_P(PSTR("LOG  %04u EMIT %S %S\n\r"),at,decode_object(val1),decode_signal(byte2));
       break;
     case type_notify:
-      printf_P(PSTR("LOG  %04u NOTF %S %u\n\r"),at,decode_object(val1),val1&value_mask);
+      printf_P(PSTR("LOG  %04u NOTF %S\n\r"),at,decode_object(val1));
       break;
     case type_time:
       marked_time = decode_time_value(val1);
