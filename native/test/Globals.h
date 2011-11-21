@@ -15,6 +15,8 @@
 #include <EepromInternal.h>
 #include <SpiQueue.h>
 #include <Scheduler.h>
+#include <WireQueue.h>
+
 // Project includes
 
 extern Dispatcher theDispatcher;
@@ -25,6 +27,7 @@ extern SerialBuffer theSerialBuffer;
 extern Eeprom theEeprom;
 extern SpiQueue theSpiQueue;
 extern Scheduler theScheduler;
+extern WireQueue theWireQueue;
 
 #endif // __GLOBAL_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

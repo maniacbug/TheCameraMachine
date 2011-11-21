@@ -14,8 +14,6 @@
 const char program_version[] = "Unknown";
 #endif
 
-extern void print_time(void);
-
 void setup(void)
 {
   //
@@ -27,7 +25,6 @@ void setup(void)
   printf_P(PSTR("\n\rTheCameraMachine - maniacbug@ymail.com\n\r"));
   printf_P(PSTR("VER. %s\n\r"),program_version);
   printf_P(PSTR("FREE %u\n\r"),freeMemory());
-  print_time();
   
   //
   // Pin Symbols
@@ -49,7 +46,7 @@ void setup(void)
   // Begin objects
   //
 
-  RTC.begin();
+  rtc_begin();
   test_switch.begin();
   record_button.begin();
   power_led.begin();
