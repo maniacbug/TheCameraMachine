@@ -9,6 +9,7 @@ extern void print_time(void);
 
 void rtc_begin(void)
 {
+  Wire.begin();
   RTC.begin(&rtc_internal);
   print_time();
 }
