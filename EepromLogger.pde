@@ -436,8 +436,7 @@ void EepromLogger::log_emit(const Connectable* object, uint8_t signal)
   SimpleLogger::log_emit(object,signal);
 
   write_time();
-  write(make_emit_1(find_index(object)));
-  write(make_emit_2(find_index(signal)));
+  write(emit_t(find_index(object),find_index(signal)));
   write_end();
 }
 
