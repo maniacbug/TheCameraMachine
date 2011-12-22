@@ -14,10 +14,34 @@
 #include <EepromLogger.h>
 
 /****************************************************************************/
+/****************************************************************************/
 
-// Protocol Layer
+/* PROTOCOL LAYER: The only things that know the bit ordering of the protocol */ 
 
-typedef EepromLogger::val1_t val1_t;
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * Protocol description
+ *
+ * Byte #1: d6-7: type (see type_xxx)
+ *          d0-5: value
+ *
+ * Value for type_command; See command_xxxx
+ *       for type_notify: Object index into dictionary
+ *       for type_emit: Object index into dictionary
+ *       for type_time: Time offset, shifted right by time_shift 
+ *
+ * Following for command_marktime: uint32_t unix time stamp
+ *           for type_emit: d0-5: Signal index into dictionary
+ *                          d6-7: Reserved
+ */
+
+/****************************************************************************/
+
+// Constants & Simple Types 
+
+typedef uint8_t val1_t;
 static const int num_type_bits = 2;
 static const int type_shift = 8*sizeof(val1_t) - num_type_bits;
 static const val1_t type_mask = (val1_t)((val1_t)(-1) << type_shift); 
@@ -38,23 +62,11 @@ static const int command_marktime = 4;
 
 /****************************************************************************/
 
-// Refactored protocol objects
+// Protocol Types 
 
-/**
- * Protocol description
- *
- * Byte #1: d6-7: type (see type_xxx)
- *          d0-5: value
- *
- * Value for type_command; See command_xxxx
- *       for type_notify: Object index into dictionary
- *       for type_emit: Object index into dictionary
- *       for type_time: Time offset, shifted right by time_shift 
- *
- * Following for command_marktime: uint32_t unix time stamp
- *           for type_emit: d0-5: Signal index into dictionary
- *                          d6-7: Reserved
- */
+// Each type contains the in-EEPROM representation of the logged data, and
+// has the responsibility to create that representation from original data
+// or extract the original data from the representation.
 
 struct command_t
 {
@@ -165,20 +177,6 @@ bool is_command(const T& t,val1_t v)
 
 /****************************************************************************/
 
-uint32_t EepromLogger::decode_time_value(val1_t val) const
-{
-  return ( ( val & value_mask ) << time_shift ) + marked_time;
-}
-
-/****************************************************************************/
-
-prog_char* EepromLogger::decode_object(val1_t val) const
-{
-  return lookup_object(val & value_mask);
-}
-
-/****************************************************************************/
-
 prog_char* EepromLogger::lookup_object(uint8_t object_index) const
 {
   prog_char* result = PSTR("Unknown");
@@ -188,13 +186,6 @@ prog_char* EepromLogger::lookup_object(uint8_t object_index) const
     result = lookup;
 
   return result;
-}
-
-/****************************************************************************/
-
-prog_char* EepromLogger::decode_signal(val1_t val) const
-{
-  return lookup_signal(val & (0xFF >> 2));
 }
 
 /****************************************************************************/
@@ -209,6 +200,14 @@ prog_char* EepromLogger::lookup_signal(uint8_t signal_index) const
 
   return result;
 }
+
+/****************************************************************************/
+/****************************************************************************/
+
+/* PLAYBACK: Things which read from the log */ 
+
+/****************************************************************************/
+/****************************************************************************/
 
 /****************************************************************************/
 
@@ -296,7 +295,7 @@ void EepromLogger::playback(EepromStream& player, bool print)
 void EepromLogger::fast_forward(void)
 {
   playback(eep,false);
-  eep.seek(eep.tell()-1);
+  eep.seek(eep.tell()- sizeof(end_t));
 }
 
 /****************************************************************************/
@@ -337,7 +336,7 @@ void EepromLogger::begin(void)
   unsigned pos = eep.tell();
   if ( pos > 0 )
   {
-    eep.seek(pos-1);
+    eep.seek(pos - sizeof(current));
     eep.read(current);
   }
   if ( current != begin_marker )

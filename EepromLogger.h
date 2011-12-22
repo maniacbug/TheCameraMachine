@@ -30,8 +30,6 @@
 
 class EepromLogger: public SimpleLogger
 {
-public:
-  typedef uint8_t val1_t;
 private:
   EepromStream eep;
   uint8_t overflow;
@@ -43,9 +41,6 @@ protected:
   void write_end(void);
   void write_marktime(void); 
   void write_time(void);
-  uint32_t decode_time_value(val1_t val) const;
-  prog_char* decode_object(val1_t) const;
-  prog_char* decode_signal(val1_t) const;
   prog_char* lookup_object(uint8_t) const;
   prog_char* lookup_signal(uint8_t) const;
   void fast_forward(void);

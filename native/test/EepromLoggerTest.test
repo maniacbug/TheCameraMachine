@@ -147,8 +147,6 @@ public:
     
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("RESTARTED"), 1 );
-    TS_ASSERT( theLogger.lines_contain("EEPR 27") );
-    TS_ASSERT_EQUALS( theLogger.lines_contain("EEPR 28"), 0 );
   }
   void testMarkTime( void )
   {
