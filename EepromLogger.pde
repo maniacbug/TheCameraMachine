@@ -212,76 +212,6 @@ prog_char* EepromLogger::lookup_signal(uint8_t signal_index) const
 
 /****************************************************************************/
 
-void EepromLogger::fast_forward(void)
-{
-  val1_t current;
-  EepromStream& player = eep;
-
-  bool done = false;
-  while (!done)
-  {
-    player.peek(current);
-    if ( player.didOverflow() )
-      break; 
-
-    if ( is_type(command_t(0),current) )
-    {
-      if ( is_command(begin_t(),current) )
-      {
-	begin_t x;
-	player.read(x);
-      }
-      else if ( is_command(end_t(),current) )
-      {
-	end_t x;
-	player.read(x);
-	done = true;
-      }
-      else if ( is_command(overflow_t(),current) )
-      {
-	overflow_t x;
-	player.read(x);
-      }
-      else if ( is_command(marktime_t(),current) )
-      {
-	marktime_t x;
-	player.read(x);
-	marked_time = x.time();
-      }
-      else
-      {
-	player.read(current);
-	done = true;
-      }
-    }
-    else if ( is_type(notify_t(),current) )
-    {
-      notify_t x;
-      player.read(x);
-    }
-    else if ( is_type(emit_t(),current))
-    {
-      emit_t x;
-      player.read(x);
-    }
-    else if ( is_type(reltime_t(),current))
-    {
-      reltime_t x;
-      player.read(x);
-      
-      marked_time += x.time_value();
-    }
-    else
-    {
-      player.read(current);
-      done = true;
-    }
-  }
-  player.seek(eep.tell()-1);
-}
-
-/****************************************************************************/
-
 void EepromLogger::playback(EepromStream& player, bool print)
 {
   if (print) printf_P(PSTR("LOG  **** Begin Log Playback\n\r"));
@@ -359,6 +289,14 @@ void EepromLogger::playback(EepromStream& player, bool print)
       done = true;
     }
   }
+}
+
+/****************************************************************************/
+
+void EepromLogger::fast_forward(void)
+{
+  playback(eep,false);
+  eep.seek(eep.tell()-1);
 }
 
 /****************************************************************************/
