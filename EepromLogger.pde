@@ -36,6 +36,87 @@ static const int command_end = 2;
 static const int command_overflow = 3;
 static const int command_marktime = 4;
 
+/****************************************************************************/
+
+// Refactored protocol objects
+
+/**
+ * Protocol description
+ *
+ * Byte #1: d6-7: type (see type_xxx)
+ *          d0-5: value
+ *
+ * Value for type_command; See command_xxxx
+ *       for type_notify: Object index into dictionary
+ *       for type_emit: Object index into dictionary
+ *       for type_time: Time offset, shifted right by time_shift 
+ *
+ * Following for command_marktime: uint32_t unix time stamp
+ *           for type_emit: d0-5: Signal index into dictionary
+ *                          d6-7: Reserved
+ */
+
+struct command_t
+{
+  val1_t v1;
+  command_t(int command)
+  {
+    v1 = (type_command << type_shift ) | ( command & value_mask );
+  }
+};
+
+struct begin_t: command_t
+{
+  begin_t(void): command_t(command_begin) {}
+};
+
+struct end_t: command_t
+{
+  end_t(void): command_t(command_end) {}
+};
+
+struct overflow_t: command_t
+{
+  overflow_t(void): command_t(command_overflow) {}
+};
+
+struct marktime_t: command_t
+{
+  uint32_t tval;
+  marktime_t(uint32_t _tval): command_t(command_overflow), tval(_tval) {}
+};
+
+struct notify_t
+{
+  val1_t v1;
+  notify_t(int object_index)
+  {
+    v1 = (type_notify << type_shift ) | ( object_index & value_mask );
+  }
+};
+
+struct emit_t 
+{
+  val1_t v1;
+  uint8_t v2;
+  emit_t(int object_index, int signal_index)
+  {
+    v1 = (type_emit << type_shift ) | ( object_index & value_mask );
+    v2 = signal_index & (0xFF >> 2);
+  }
+};
+
+struct reltime_t
+{
+  val1_t v1;
+  reltime_t(uint32_t time_value)
+  {
+    v1 = (type_time << type_shift ) | ( ( time_value >> time_shift ) & value_mask );
+  }
+};
+
+/****************************************************************************/
+
 static inline val1_t make_command(int command)
 {
   return (type_command << type_shift ) | ( command & value_mask );
