@@ -21,7 +21,7 @@ LIBRARY_MODULES	= [ GLOB $(LIB_DIRS)/$(PROJECT_LIBS) : *.cpp ] ;
 SKETCH_MODULES	= [ GLOB $(SKETCH_DIR) : *.ino *.pde ] ;
 NATIVE_MODULES	= [ GLOB $(PWD) : *.cpp ] ;
 
-CXXTEST_GEN	= $(CXXTEST_DIR)/cxxtestgen.py ;
+CXXTEST_GEN	= $(CXXTEST_DIR)/bin/cxxtestgen ;
 LINK		= c++ ;
 C++		= c++ ;
 LOCATE_TARGET	= out ;
@@ -35,7 +35,6 @@ if ( $(OS) = MACOSX )
 {
 	HDRS 		+= /Developer/SDKs/MacOSX10.6.sdk/usr/include ;
 	DEFINES 	+= MAC=1 ;
-	CXXTEST_GEN	= $(CXXTEST_DIR)/python/scripts/cxxtestgen ;
 	LINKFLAGS	+= -lpthread ;
 }
 else
