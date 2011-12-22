@@ -75,7 +75,7 @@ commands:
 
 There are also certain test situations supported.
 
-* @0: Set the clock to a very early date (Jan 01, 2000)
+* @0: Set the clock to a very early date (Jan 01, 2011)
 * @1: Set the clock to the first event in the event table.  This will cause the first event to fire immediately.
 * @N: Set the clock to the next upcoming event in the event table.  This will cause it to fire immediately.
 
@@ -92,7 +92,7 @@ library.  Everything which can happen in the system is managed by an
 independent object.
 
 Objects which monitor some external state implement the IUpdate interface and 
-add themselves to the Updater, which causes them to use a little slide of
+add themselves to the Updater, which causes them to use a little slice of
 loop() time to monitor their state.
 
 These objects are:
