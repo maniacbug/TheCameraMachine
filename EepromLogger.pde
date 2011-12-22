@@ -83,8 +83,8 @@ struct overflow_t: command_t
 struct marktime_t: command_t
 {
   uint32_t tval;
-  marktime_t(uint32_t _tval): command_t(command_overflow), tval(_tval) {}
-};
+  marktime_t(uint32_t _tval): command_t(command_marktime), tval(_tval) {}
+} __attribute__ ((packed));
 
 struct notify_t
 {
@@ -242,39 +242,6 @@ bool EepromLogger::play_command(EepromStream& stream,unsigned at,int command)
 
 /****************************************************************************/
 
-void EepromLogger::write_time(void) 
-{
-  uint32_t now = RTC.now();
-  uint32_t marked_diff = now - marked_time;
-
-  // If we have a mark time and the time SINCE that mark time can be
-  // represented in a val1...
-  if ( marked_time && ( marked_diff < max_time_diff ) )
-  {
-    // If enough time has elapsed since the last time we wrote a time,
-    // go ahead and write another -- otherwise don't bother
-    if ( marked_diff > min_time_diff )
-    {
-      marked_time = now;
-      write(make_time(marked_diff));
-    }
-  }
-  // Otherwise, write a mark time
-  else
-    write_marktime();
-}
-
-/****************************************************************************/
-
-void EepromLogger::write_marktime(void) 
-{
-  marked_time = RTC.now();
-  write(make_command(command_marktime));
-  write(marked_time);
-}
-
-/****************************************************************************/
-
 void EepromLogger::begin(void) 
 {
   // Reset the eeprom stream
@@ -409,6 +376,38 @@ void EepromLogger::play(void)
 
 /****************************************************************************/
 /****************************************************************************/
+
+/****************************************************************************/
+
+void EepromLogger::write_time(void) 
+{
+  uint32_t now = RTC.now();
+  uint32_t marked_diff = now - marked_time;
+
+  // If we have a mark time and the time SINCE that mark time can be
+  // represented in a val1...
+  if ( marked_time && ( marked_diff < max_time_diff ) )
+  {
+    // If enough time has elapsed since the last time we wrote a time,
+    // go ahead and write another -- otherwise don't bother
+    if ( marked_diff > min_time_diff )
+    {
+      marked_time = now;
+      write(reltime_t(marked_diff));
+    }
+  }
+  // Otherwise, write a mark time
+  else
+    write_marktime();
+}
+
+/****************************************************************************/
+
+void EepromLogger::write_marktime(void) 
+{
+  marked_time = RTC.now();
+  write(marktime_t(marked_time));
+}
 
 /****************************************************************************/
 
