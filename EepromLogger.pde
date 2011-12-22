@@ -267,7 +267,7 @@ void EepromLogger::begin(void)
     eep.read(first);
   }
   if ( first != begin )
-    write(begin);
+    write_begin();
   write_end();
 }
 
@@ -283,7 +283,7 @@ void EepromLogger::clear(void)
 
   // Write the begin/end for the current run
   // Only if we're not already sitting on a begin
-  write(make_command(command_begin));
+  write_begin();
   write_end();
 }
 
@@ -407,6 +407,13 @@ void EepromLogger::write_marktime(void)
 {
   marked_time = RTC.now();
   write(marktime_t(marked_time));
+}
+
+/****************************************************************************/
+
+void EepromLogger::write_begin(void) 
+{
+  write(begin_t());
 }
 
 /****************************************************************************/

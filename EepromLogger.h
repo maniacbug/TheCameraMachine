@@ -39,6 +39,7 @@ private:
 protected:
   virtual void log_emit(const Connectable* object, uint8_t signal);
   virtual void log_notify(const Connectable* object);
+  void write_begin(void);
   void write_end(void);
   void write_marktime(void); 
   void write_time(void);
