@@ -59,10 +59,15 @@ static const int command_marktime = 4;
 struct command_t
 {
   val1_t v1;
+  command_t(void): v1(0)
+  {
+  }
   command_t(int command)
   {
     v1 = (type_command << type_shift ) | ( command & value_mask );
   }
+  bool operator==(const command_t& _rhs) const { return v1 == _rhs.v1; }
+  bool operator!=(const command_t& _rhs) const { return v1 != _rhs.v1; }
 };
 
 struct begin_t: command_t
@@ -114,33 +119,6 @@ struct reltime_t
     v1 = (type_time << type_shift ) | ( ( time_value >> time_shift ) & value_mask );
   }
 };
-
-/****************************************************************************/
-
-static inline val1_t make_command(int command)
-{
-  return (type_command << type_shift ) | ( command & value_mask );
-}
-
-static inline val1_t make_emit_1(int index)
-{
-  return (type_emit << type_shift ) | ( index & value_mask );
-}
-
-static inline uint8_t make_emit_2(int index)
-{
-  return index & (0xFF >> 2);
-}
-
-static inline val1_t make_notify(int index)
-{
-  return (type_notify << type_shift ) | ( index & value_mask );
-}
-
-static inline val1_t make_time(uint32_t time_value)
-{
-  return (type_time << type_shift ) | ( ( time_value >> time_shift ) & value_mask );
-}
 
 /****************************************************************************/
 
@@ -249,24 +227,24 @@ void EepromLogger::begin(void)
 
   // First, seek to find the end of the existing logs, only applicable if
   // the first byte is a 'begin'
-  val1_t at0;
-  eep.peek(at0);
-  if ( at0 == make_command(command_begin) )
+  const begin_t begin_marker;
+  command_t current;
+  eep.peek(current);
+  if ( current == begin_marker ) 
   {
     //play();
     fast_forward();
   }
 
   // Then write the begin/end for the current run
-  val1_t begin = make_command(command_begin);
-  val1_t first = 0;
+  current = command_t();
   unsigned pos = eep.tell();
   if ( pos > 0 )
   {
     eep.seek(pos-1);
-    eep.read(first);
+    eep.read(current);
   }
-  if ( first != begin )
+  if ( current != begin_marker )
     write_begin();
   write_end();
 }
