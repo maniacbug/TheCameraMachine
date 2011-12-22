@@ -242,34 +242,6 @@ bool EepromLogger::play_command(EepromStream& stream,unsigned at,int command)
 
 /****************************************************************************/
 
-void EepromLogger::write_end(void) 
-{
-  write(make_command(command_end));
-  eep.seek(eep.tell() - sizeof(val1_t));
-
-  // Manage overflow.  If the previous set of writes wrapped us around,
-  // clear everything and start over.
-
-  if (overflow)
-  {
-    overflow = false;
-    
-    // We've lost our time reference now, so the next write should write a
-    // full time.
-    marked_time = 0;
-
-    eep.seek(0);
-    write(make_command(command_begin));
-    write(make_command(command_overflow));
-    write_time();
-    write(make_command(command_end));
-    eep.seek(eep.tell() - sizeof(val1_t));
-
-  }
-}
-
-/****************************************************************************/
-
 void EepromLogger::write_time(void) 
 {
   uint32_t now = RTC.now();
@@ -426,6 +398,42 @@ void EepromLogger::play(void)
       done = true;
       break;
     }
+  }
+}
+
+
+/****************************************************************************/
+/****************************************************************************/
+
+/* LOGGERS: Things which write to the log */
+
+/****************************************************************************/
+/****************************************************************************/
+
+/****************************************************************************/
+
+void EepromLogger::write_end(void) 
+{
+  write(end_t());
+  eep.seek(eep.tell() - sizeof(val1_t));
+
+  // Manage overflow.  If the previous set of writes wrapped us around,
+  // clear everything and start over.
+
+  if (overflow)
+  {
+    overflow = false;
+    
+    // We've lost our time reference now, so the next write should write a
+    // full time.
+    marked_time = 0;
+
+    eep.seek(0);
+    write(begin_t());
+    write(overflow_t());
+    write_time();
+    write(end_t());
+    eep.seek(eep.tell() - sizeof(val1_t));
   }
 }
 
