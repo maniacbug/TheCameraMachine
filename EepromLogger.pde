@@ -447,7 +447,7 @@ void EepromLogger::log_notify(const Connectable* object)
   SimpleLogger::log_notify(object);
 
   write_time();
-  write(make_notify(find_index(object)));
+  write(notify_t(find_index(object)));
   write_end();
 }
 
