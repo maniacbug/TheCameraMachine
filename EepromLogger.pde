@@ -212,77 +212,80 @@ prog_char* EepromLogger::lookup_signal(uint8_t signal_index) const
 
 /****************************************************************************/
 
-// This is really kind of a mess :(
-bool EepromLogger::fast_forward_command(int command)
-{
-  bool done = false;
-  uint32_t now;
-
-  switch (command)
-  {
-  case command_begin:
-  case command_overflow:
-    break;
-  case command_marktime:
-    eep.read(now);
-    marked_time = now;
-    break;
-  case command_end:
-    done = true;
-    break;
-  default:
-    done = true;
-    break;
-  };
-
-  return done;
-}
-
-/****************************************************************************/
-
 void EepromLogger::fast_forward(void)
 {
-  val1_t val1;
-  uint8_t byte2;
+  val1_t current;
+  EepromStream& player = eep;
 
   bool done = false;
   while (!done)
   {
-    eep.read(val1);
-    if ( eep.didOverflow() )
+    player.peek(current);
+    if ( player.didOverflow() )
+      break; 
+
+    if ( is_type(command_t(0),current) )
     {
-      eep.seek(1);
-      break;
+      if ( is_command(begin_t(),current) )
+      {
+	begin_t x;
+	player.read(x);
+      }
+      else if ( is_command(end_t(),current) )
+      {
+	end_t x;
+	player.read(x);
+	done = true;
+      }
+      else if ( is_command(overflow_t(),current) )
+      {
+	overflow_t x;
+	player.read(x);
+      }
+      else if ( is_command(marktime_t(),current) )
+      {
+	marktime_t x;
+	player.read(x);
+	marked_time = x.time();
+      }
+      else
+      {
+	player.read(current);
+	done = true;
+      }
     }
-    
-    switch ( val1 >> type_shift )
+    else if ( is_type(notify_t(),current) )
     {
-    case type_emit:
-      eep.read(byte2);
-      break;
-    case type_notify:
-      break;
-    case type_time:
-      marked_time = decode_time_value(val1);
-      break;
-    case type_command:
-      done = fast_forward_command(val1 & value_mask);
-      break;
-    default:
+      notify_t x;
+      player.read(x);
+    }
+    else if ( is_type(emit_t(),current))
+    {
+      emit_t x;
+      player.read(x);
+    }
+    else if ( is_type(reltime_t(),current))
+    {
+      reltime_t x;
+      player.read(x);
+      
+      marked_time += x.time_value();
+    }
+    else
+    {
+      player.read(current);
       done = true;
-      break;
     }
   }
-  eep.seek(eep.tell()-1);
+  player.seek(eep.tell()-1);
 }
 
 /****************************************************************************/
 
-void EepromLogger::play(void)
+void EepromLogger::playback(EepromStream& player, bool print)
 {
-  printf_P(PSTR("LOG  **** Begin Log Playback\n\r"));
+  if (print) printf_P(PSTR("LOG  **** Begin Log Playback\n\r"));
 
-  EepromStream player;
   val1_t current; 
   char buf[32];
 
@@ -300,32 +303,32 @@ void EepromLogger::play(void)
       {
 	begin_t x;
 	player.read(x);
-	printf_P(PSTR("LOG  %04u BEGIN\n\r"),at);
+	if (print) printf_P(PSTR("LOG  %04u BEGIN\n\r"),at);
       }
       else if ( is_command(end_t(),current) )
       {
 	end_t x;
 	player.read(x);
-	printf_P(PSTR("LOG  %04u END\n\r"),at);
+	if (print) printf_P(PSTR("LOG  %04u END\n\r"),at);
 	done = true;
       }
       else if ( is_command(overflow_t(),current) )
       {
 	overflow_t x;
 	player.read(x);
-	printf_P(PSTR("LOG  %04u RESTARTED due to EEPROM overflow\n\r"),at);
+	if (print) printf_P(PSTR("LOG  %04u RESTARTED due to EEPROM overflow\n\r"),at);
       }
       else if ( is_command(marktime_t(),current) )
       {
 	marktime_t x;
 	player.read(x);
 	marked_time = x.time();
-	printf_P(PSTR("LOG  %04u MARK TIME %s\n\r"),at,DateTime(marked_time).toString(buf,sizeof(buf)));
+	if (print) printf_P(PSTR("LOG  %04u MARK TIME %s\n\r"),at,DateTime(marked_time).toString(buf,sizeof(buf)));
       }
       else
       {
 	player.read(current);
-	printf_P(PSTR("LOG  %04u Unknown command %u"),at,current);
+	if (print) printf_P(PSTR("LOG  %04u Unknown command %u"),at,current);
 	done = true;
       }
     }
@@ -333,13 +336,13 @@ void EepromLogger::play(void)
     {
       notify_t x;
       player.read(x);
-      printf_P(PSTR("LOG  %04u NOTF %S\n\r"),at,lookup_object(x.object_index()));
+      if (print) printf_P(PSTR("LOG  %04u NOTF %S\n\r"),at,lookup_object(x.object_index()));
     }
     else if ( is_type(emit_t(),current))
     {
       emit_t x;
       player.read(x);
-      printf_P(PSTR("LOG  %04u EMIT %S %S\n\r"),at,lookup_object(x.object_index()),lookup_signal(x.signal_index()));
+      if (print) printf_P(PSTR("LOG  %04u EMIT %S %S\n\r"),at,lookup_object(x.object_index()),lookup_signal(x.signal_index()));
     }
     else if ( is_type(reltime_t(),current))
     {
@@ -347,15 +350,22 @@ void EepromLogger::play(void)
       player.read(x);
       
       marked_time += x.time_value();
-      printf_P(PSTR("LOG  %04u TIME %s\n\r"),at,DateTime(marked_time).toString(buf,sizeof(buf)));
+      if (print) printf_P(PSTR("LOG  %04u TIME %s\n\r"),at,DateTime(marked_time).toString(buf,sizeof(buf)));
     }
     else
     {
       player.read(current);
-      printf_P(PSTR("LOG  %04u Unknown value %u\n\r"),at,current);
+      if (print) printf_P(PSTR("LOG  %04u Unknown value %u\n\r"),at,current);
       done = true;
     }
   }
+}
+
+/****************************************************************************/
+void EepromLogger::play(void)
+{
+  EepromStream player;
+  playback(player,true);
 }
 
 /****************************************************************************/

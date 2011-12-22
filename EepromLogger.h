@@ -49,7 +49,7 @@ protected:
   prog_char* lookup_object(uint8_t) const;
   prog_char* lookup_signal(uint8_t) const;
   void fast_forward(void);
-  bool fast_forward_command(int command);
+  void playback(EepromStream& player, bool print);
   template <class T> void write(const T& t)
   {
     // cache our own overflow over multiple writes
