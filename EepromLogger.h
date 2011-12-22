@@ -46,8 +46,9 @@ protected:
   uint32_t decode_time_value(val1_t val) const;
   prog_char* decode_object(val1_t) const;
   prog_char* decode_signal(val1_t) const;
+  prog_char* lookup_object(uint8_t) const;
+  prog_char* lookup_signal(uint8_t) const;
   void fast_forward(void);
-  bool play_command(EepromStream&,unsigned at,int command);
   bool fast_forward_command(int command);
   template <class T> void write(const T& t)
   {
