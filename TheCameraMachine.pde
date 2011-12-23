@@ -60,6 +60,8 @@ void setup(void)
   // Connect objects
   //
 
+  // Note that these listen to any emitters.  To restrict only to
+  // a single channel, they would have to be pointed at that channel.
   power_led.listen(NULL);
   record_led.listen(NULL);
   other_led.listen(NULL);
@@ -89,7 +91,7 @@ void setup(void)
   logger.setSymbol(&record_led, PSTR("record_led"));
   logger.setSymbol(&other_led, PSTR("other_led"));
   logger.setSymbol(&camera, PSTR("camera"));
-  logger.setSymbol(&events, PSTR("events"));
+  logger.setSymbol(events.channel(0), PSTR("events ch#0"));
   
   // Begin the logger after all the symbols are set.
   logger.begin();

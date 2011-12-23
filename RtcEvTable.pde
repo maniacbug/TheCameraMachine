@@ -6,6 +6,11 @@
 #include <RtcEvTable.h>
 #include <objects.h> // for logger
 
+inline void* operator new(size_t, void* __p)
+{
+    return __p;
+}
+
 /****************************************************************************/
 
 uint32_t eventtime(RtcEvTable::evline& prog_event)
@@ -21,15 +26,22 @@ void RtcEvTable::update(void)
   // We actually want to fire if now is AT or after 'when'
   if ( is_valid() && RTC.now() >= whenNext() )
   {
-    emit(pgm_read_byte(&(*current)[6]));
+    channel(pgm_read_byte(&(*current)[6]))->emit(pgm_read_byte(&(*current)[7]));
     current++;
   }
 }
 
 /****************************************************************************/
-RtcEvTable::RtcEvTable(Connector& _conn,evline* _table,uint8_t _num_lines):
-	Connectable(_conn), table(_table), current(_table), num_lines(_num_lines) 
+RtcEvTable::RtcEvTable(Connector& _conn,evline* _table,uint8_t _num_lines, 
+    uint8_t _num_channels):
+	table(_table), current(_table), num_lines(_num_lines), num_channels(_num_channels) 
 {
+  // Placement new called over an array.  Very nasty.  But C++ affords no
+  // other way to call constructors on array members.
+  channels = reinterpret_cast<Channel*>( malloc( num_channels * sizeof(Connectable) ) );
+  int i = num_channels;
+  while (i--)
+    new (channels + i) Channel(_conn);
 }
 
 /****************************************************************************/
@@ -42,8 +54,8 @@ void RtcEvTable::begin(void)
   printf_P(PSTR("REVT %u events\n\r"),num_lines);
   while ( is_valid() )
   {
-    int signal = pgm_read_byte(&(*current)[6]);
-    printf_P(PSTR("REVT %s %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),logger.find_symbol(signal));
+    int signal = pgm_read_byte(&(*current)[7]);
+    printf_P(PSTR("REVT %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&(*current)[6]),logger.find_symbol(signal));
     current++;
   }
 
@@ -70,6 +82,16 @@ uint32_t RtcEvTable::whenNext(void) const
 bool RtcEvTable::is_valid(void) const
 {
   return (current < table + num_lines);
+}
+
+/****************************************************************************/
+
+RtcEvTable::Channel* RtcEvTable::channel(uint8_t _channel)
+{
+  if ( _channel < num_channels )
+    return channels + _channel;
+  else
+    return NULL;
 }
 
 /****************************************************************************/

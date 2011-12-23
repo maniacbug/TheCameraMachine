@@ -26,22 +26,35 @@
  * Or even a 'dictionary' interface.
  */
 
-class RtcEvTable: public Connectable, public IUpdate
+class RtcEvTable: public IUpdate
 {
 public:
-  typedef prog_uint8_t evline[7];
+  typedef prog_uint8_t evline[8];
+  struct Channel: Connectable
+  {
+    Channel(Connector& _conn): Connectable(_conn)
+    {
+    }
+    void emit(uint8_t signal)
+    {
+      Connectable::emit(signal);
+    }
+  };
 private:
   evline* table;
   evline* current;
+  Channel* channels;
   uint8_t num_lines;
+  uint8_t num_channels;
 protected:
   void update(void);
   bool is_valid(void) const;
 public:
-  RtcEvTable(Connector& _conn,evline*,uint8_t);
+  RtcEvTable(Connector& _conn,evline* events,uint8_t num_lines, uint8_t num_channels = 1);
   void begin(void);
   void reset(void) { current = table; }
   uint32_t whenNext(void) const;
+  Channel* channel(uint8_t);
 };
 
 #endif // __RTCEVTABLE_H__

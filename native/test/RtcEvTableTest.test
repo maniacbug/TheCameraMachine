@@ -20,12 +20,12 @@ using namespace std;
 
 extern "C" void mock_time_reset(void);
 
-static uint8_t events[][7] = {
-  //YY,MM,DD HH MM SS, signal
-  { 11,12, 1, 0, 0, 0, 1 },
-  { 11,12, 1, 0, 0, 2, 2 },
-  { 11,12, 1, 0, 0, 6, 3 },
-  { 11,12, 1, 0, 0, 7, 4 },
+static uint8_t events[][8] = {
+  //YY,MM,DD HH MM SS,CH, signal
+  { 11,12, 1, 0, 0, 0, 0, 1 },
+  { 11,12, 1, 0, 0, 2, 0, 2 },
+  { 11,12, 1, 0, 0, 6, 0, 3 },
+  { 11,12, 1, 0, 0, 7, 0, 4 },
 };
 
 class RtcEvTableTestSuite: public CxxTest::TestSuite
@@ -88,7 +88,7 @@ public:
     RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
-    plisten->listen(pRtcEvTable,1);
+    plisten->listen(pRtcEvTable->channel(0),/*signal*/ 1);
    
     RTC.adjust(timeval+2);
     pUpdater->update();
@@ -101,7 +101,7 @@ public:
     RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
-    plisten->listen(pRtcEvTable,1);
+    plisten->listen(pRtcEvTable->channel(0),/*signal*/ 1);
    
     RTC.adjust(timeval+2);
     pUpdater->update();
@@ -114,7 +114,7 @@ public:
     RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
-    plisten->listen(pRtcEvTable,2);
+    plisten->listen(pRtcEvTable->channel(0),/*signal*/ 2);
    
     timeval = pRtcEvTable->whenNext() - 1;
     RTC.adjust(timeval);
@@ -122,6 +122,20 @@ public:
     RTC.adjust(timeval+2);
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
+  }
+  void testDoesntFireCh1( void )
+  {
+    // Same as testFires, only listen to channel 1, so it should NOT fire.
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4,2); // 2 channels!!
+    uint32_t timeval = pRtcEvTable->whenNext() - 1;
+    RTC.adjust(timeval);
+    pRtcEvTable->begin();
+    pUpdater->add(pRtcEvTable);
+    plisten->listen(pRtcEvTable->channel(1),/*signal*/ 1);
+   
+    RTC.adjust(timeval+2);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,0);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

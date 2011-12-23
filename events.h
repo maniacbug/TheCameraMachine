@@ -17,7 +17,7 @@
  * Declaration of application-specific events table
  */
 
-extern uint8_t events_table[][7];
+extern uint8_t events_table[][8];
 extern int num_events;
 
 #endif // __EVENTS_H__

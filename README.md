@@ -26,18 +26,18 @@ which control what happens when.  To do so, edit events.pde, and modify the
 'events\_table' array.
 
 Here is an example.  It says that at Midnight (00:00:00) on Nov 19, 2011, the
-"signal\_power\_on" should be raised.  This will cause any components who are
-listening for that signal to do their thing.
+"signal\_power\_on" should be raised on channel 0.  This will cause any 
+components who are listening on that channel for that signal to do their thing.
 
 Be warned that the table must be in chronological order, with the earliest
 events coming first.
 
-    prog_uint8_t events_table[][7] PROGMEM = {
-      //YY,MM,DD HH MM SS, signal
-      { 11,11,19, 0, 0, 0, signal_power_on },
-      { 11,11,19, 0, 0,10, signal_start_record },
-      { 11,11,19, 0, 0,12, signal_stop_record },
-      { 11,11,19, 0, 0,14, signal_power_off  },
+    prog_uint8_t events_table[][8] PROGMEM = {
+      //YY,MM,DD HH MM SS,CH, signal
+      { 11,11,19, 0, 0, 0, 0, signal_power_on },
+      { 11,11,19, 0, 0,10, 0, signal_start_record },
+      { 11,11,19, 0, 0,12, 0, signal_stop_record },
+      { 11,11,19, 0, 0,14, 0, signal_power_off  },
     };
 
 A full list of signals is available in the file signals.h.
