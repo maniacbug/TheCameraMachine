@@ -20,7 +20,7 @@ using namespace std;
 
 extern "C" void mock_time_reset(void);
 
-static uint8_t events[][8] = {
+static RtcEvTable::evline events[] = {
   //YY,MM,DD HH MM SS,CH, signal
   { 11,12, 1, 0, 0, 0, 0, 1 },
   { 11,12, 1, 0, 0, 2, 0, 2 },

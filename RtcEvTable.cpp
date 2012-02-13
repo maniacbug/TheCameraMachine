@@ -32,9 +32,27 @@ void RtcEvTable::update(void)
   // We actually want to fire if now is AT or after 'when'
   if ( is_valid() && RTC.now() >= whenNext() )
   {
-    channel(pgm_read_byte(&(*current)[6]))->emit(pgm_read_byte(&(*current)[7]));
+    channel(current_channel())->emit(current_signal());
     current++;
   }
+}
+
+/****************************************************************************/
+
+RtcEvTable::ev_t RtcEvTable::current_channel(void) const
+{
+  ev_t result;
+  memcpy_P(&result,*current+6,sizeof(result));
+  return result;
+}
+
+/****************************************************************************/
+
+RtcEvTable::ev_t RtcEvTable::current_signal(void) const
+{
+  ev_t result;
+  memcpy_P(&result,*current+7,sizeof(result));
+  return result;
 }
 
 /****************************************************************************/
@@ -60,8 +78,7 @@ void RtcEvTable::begin(void)
   printf_P(PSTR("REVT %u events\n\r"),num_lines);
   while ( is_valid() )
   {
-    int signal = pgm_read_byte(&(*current)[7]);
-    printf_P(PSTR("REVT %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&(*current)[6]),logger.find_symbol(signal));
+    printf_P(PSTR("REVT %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),current_channel(),logger.find_symbol(current_signal()));
     current++;
   }
 
