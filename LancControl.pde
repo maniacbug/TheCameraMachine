@@ -44,12 +44,19 @@ bool LancControl::isRecording(void) const
 
 void LancControl::onNotify(const Connectable* ,uint8_t signal )
 {
+  int i;
+
   switch (signal)
   {
   case signal_power_on:
     printf_P(PSTR("LANC Power Up\n\r"));
 
-    lanc_serial.print("atsp\r\n");
+    i=3;
+    while(i--)
+    {
+      lanc_serial.print("atsp\r\n");
+      delay(100);
+    }
 
     break;
   case signal_power_off:
