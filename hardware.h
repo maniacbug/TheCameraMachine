@@ -40,8 +40,8 @@ const int record_led_pin = 6;
 const int other_led_pin = 5;
 const int power_relay_pin = 4;
 const int alt_relay_pin = A0;
-const int lanc_tx_pin = 2;
-const int lanc_rx_pin = 3;
+const int lanc_rx_pin = 2;
+const int lanc_tx_pin = 3;
 
 #endif
 

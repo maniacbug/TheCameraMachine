@@ -13,6 +13,7 @@
 // C includes
 // Library includes
 #include <Connector.h>
+#include <SoftwareSerial.h>
 // Project includes
 
 /**
@@ -31,12 +32,11 @@ class LancControl: public Connectable
 {
 private:
   bool is_recording;
-  int command_pin;
-  int data_pin;
+  SoftwareSerial lanc_serial;
 protected:
   virtual void onNotify(const Connectable* ,uint8_t signal );
 public:
-  LancControl(Connector& _conn, int _command_pin, int _data_pin);
+  LancControl(Connector& _conn, int _rx_pin, int _tx_pin);
   void begin(void);
   void listen(Connectable* _who);
   bool isRecording(void) const;

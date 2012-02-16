@@ -1,6 +1,9 @@
 #include <MemoryFree.h>
 #include <AnyRtc.h>
-
+#include <Tictocs.h>
+#include <Wire.h>
+#include <EEPROM.h>
+#include <SoftwareSerial.h>
 #include <hardware.h>
 #include <objects.h>
 #include <rtc.h>

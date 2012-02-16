@@ -7,9 +7,8 @@
 
 /****************************************************************************/
 
-LancControl::LancControl(Connector& _conn, int _command_pin, int _data_pin):
-  Connectable(_conn), is_recording(false), command_pin(_command_pin),
-  data_pin(_data_pin)
+LancControl::LancControl(Connector& _conn, int _rx_pin, int _tx_pin):
+  Connectable(_conn), is_recording(false), lanc_serial(_rx_pin,_tx_pin) 
 {
 }
 
@@ -17,9 +16,10 @@ LancControl::LancControl(Connector& _conn, int _command_pin, int _data_pin):
 
 void LancControl::begin(void)
 {
-  pinMode(data_pin,INPUT);
-  digitalWrite(data_pin,HIGH);
-  pinMode(command_pin,OUTPUT);
+  lanc_serial.begin(9600);
+  lanc_serial.print("ATZ");
+  while (lanc_serial.available())
+    Serial.write(lanc_serial.read());
 }
 
 /****************************************************************************/
@@ -28,6 +28,8 @@ void LancControl::listen(Connectable* _who)
 {
   Connectable::listen(_who,signal_start_record);
   Connectable::listen(_who,signal_stop_record);
+  Connectable::listen(_who,signal_power_on);
+  Connectable::listen(_who,signal_power_off);
 }
 
 /****************************************************************************/
@@ -43,19 +45,38 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
 {
   switch (signal)
   {
+  case signal_power_on:
+    is_recording = true;
+    printf_P(PSTR("LANC Power Up\n\r"));
+
+    lanc_serial.print("atsp\r\n");
+
+    break;
+  case signal_power_off:
+    is_recording = true;
+    printf_P(PSTR("LANC Power Down\n\r"));
+
+    lanc_serial.print("105e\r\n");
+    delay(100);
+    lanc_serial.write(32);
+
+    break;
   case signal_start_record:
     is_recording = true;
     printf_P(PSTR("LANC Recording\n\r"));
 
-    // Just for test, pulse the command_pin
-    digitalWrite(command_pin,HIGH);
-    delay(250);
-    digitalWrite(command_pin,LOW);
+    lanc_serial.print("103a\r\n");
+    delay(100);
+    lanc_serial.write(32);
 
     break;
   case signal_stop_record:
     is_recording = false;
     printf_P(PSTR("LANC Stopping\n\r"));
+    lanc_serial.print("1033\r\n");
+    delay(100);
+    lanc_serial.write(32);
+    
     break;
   }
 }
