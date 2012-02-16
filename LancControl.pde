@@ -81,6 +81,7 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
     is_recording = ! is_recording;
     if ( is_recording )
     {
+      emit(signal_start_record);
       printf_P(PSTR("LANC Recording\n\r"));
       lanc_serial.print("103a\r\n");
       delay(100);
@@ -88,6 +89,7 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
     }
     else
     {
+      emit(signal_stop_record);
       printf_P(PSTR("LANC Stopping\n\r"));
       lanc_serial.print("1033\r\n");
       delay(100);
