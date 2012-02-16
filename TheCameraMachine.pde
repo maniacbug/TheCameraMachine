@@ -85,6 +85,7 @@ void setup(void)
   logger.setSymbol(signal_alt_relay_off, PSTR("alt_relay_off"));
   logger.setSymbol(signal_other_led_on, PSTR("other_led_on"));
   logger.setSymbol(signal_other_led_off, PSTR("other_led_off"));
+  logger.setSymbol(signal_toggle_record, PSTR("toggle_record"));
 
   logger.setSymbol(&test_switch, PSTR("test_switch"));
   logger.setSymbol(&record_button, PSTR("record_button"));

@@ -9,7 +9,7 @@
 Updater up;
 Connector conn;
 EmitButton test_switch(conn,test_switch_pin,signal_power_on,signal_power_off);
-EmitButton record_button(conn,record_button_pin,signal_start_record,signal_stop_record);
+EmitButton record_button(conn,record_button_pin,signal_toggle_record);
 PinControl power_relay(conn,power_relay_pin,signal_power_off,signal_power_on);
 PinControl alt_relay(conn,alt_relay_pin,signal_alt_relay_off,signal_alt_relay_on);
 PinControl power_led(conn,power_led_pin,signal_power_off,signal_power_on);

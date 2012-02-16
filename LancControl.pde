@@ -30,6 +30,7 @@ void LancControl::listen(Connectable* _who)
   Connectable::listen(_who,signal_stop_record);
   Connectable::listen(_who,signal_power_on);
   Connectable::listen(_who,signal_power_off);
+  Connectable::listen(_who,signal_toggle_record);
 }
 
 /****************************************************************************/
@@ -46,14 +47,12 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
   switch (signal)
   {
   case signal_power_on:
-    is_recording = true;
     printf_P(PSTR("LANC Power Up\n\r"));
 
     lanc_serial.print("atsp\r\n");
 
     break;
   case signal_power_off:
-    is_recording = true;
     printf_P(PSTR("LANC Power Down\n\r"));
 
     lanc_serial.print("105e\r\n");
@@ -77,6 +76,23 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
     delay(100);
     lanc_serial.write(32);
     
+    break;
+  case signal_toggle_record:
+    is_recording = ! is_recording;
+    if ( is_recording )
+    {
+      printf_P(PSTR("LANC Recording\n\r"));
+      lanc_serial.print("103a\r\n");
+      delay(100);
+      lanc_serial.write(32);
+    }
+    else
+    {
+      printf_P(PSTR("LANC Stopping\n\r"));
+      lanc_serial.print("1033\r\n");
+      delay(100);
+      lanc_serial.write(32);
+    }
     break;
   }
 }
