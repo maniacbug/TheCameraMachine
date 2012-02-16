@@ -29,7 +29,7 @@
 class RtcEvTable: public IUpdate
 {
 public:
-  typedef prog_uint8_t evline[8];
+  typedef uint8_t evline[8];
   struct Channel: Connectable
   {
     Channel(Connector& _conn): Connectable(_conn)
@@ -41,8 +41,8 @@ public:
     }
   };
 private:
-  evline* table;
-  evline* current;
+  const evline* table;
+  const evline* current;
   Channel* channels;
   uint8_t num_lines;
   uint8_t num_channels;
@@ -50,7 +50,7 @@ protected:
   void update(void);
   bool is_valid(void) const;
 public:
-  RtcEvTable(Connector& _conn,evline* events,uint8_t num_lines, uint8_t num_channels = 1);
+  RtcEvTable(Connector& _conn,const evline* events,uint8_t num_lines, uint8_t num_channels = 1);
   void begin(void);
   void reset(void) { current = table; }
   uint32_t whenNext(void) const;

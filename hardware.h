@@ -15,8 +15,8 @@
  * Pinouts for the hardware on which this sketch is running
  */
 
-// rcfisher1 board
-#if 1
+// rcfisher1 board (sky camera)
+#if 0
 
 const int test_switch_pin = 9;
 const int record_button_pin = A2;
@@ -30,7 +30,8 @@ const int lanc_data_pin = A1;
 
 #endif
 
-#if 0
+// video board
+#if 1
 
 const int test_switch_pin = 9;
 const int record_button_pin = 8;
@@ -38,9 +39,9 @@ const int power_led_pin = 7;
 const int record_led_pin = 6;
 const int other_led_pin = 5;
 const int power_relay_pin = 4;
-const int alt_relay_pin = 3;
-const int lanc_command_pin = A0;
-const int lanc_data_pin = A1;
+const int alt_relay_pin = A0;
+const int lanc_tx_pin = 2;
+const int lanc_rx_pin = 3;
 
 #endif
 

@@ -3,7 +3,7 @@
 
 // Warning, this table must be in clock order, earliest events first
 
-prog_uint8_t events_table[][8] PROGMEM = {
+const uint8_t events_table[][8] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
   { 11,11,19, 0, 0, 0, 0,signal_power_on },
   { 11,11,19, 0, 0,10, 0,signal_start_record },

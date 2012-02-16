@@ -29,15 +29,15 @@ PORT_u2 	= /dev/ttyUSB2 ;
 
 if $(OS) = MACOSX 
 {
-	AVR_BIN 	= /usr/local/avrtools/bin ;
-	AVR_ETC 	= /usr/local/avrtools/etc ;
-	AVR_INCLUDE	= /usr/local/avrtools/include ; 
+	AVR_BIN 	?= /usr/local/avrtools/bin ;
+	AVR_ETC 	?= /usr/local/avrtools/etc ;
+	AVR_INCLUDE	?= /usr/local/avrtools/include ; 
 }
 else
 {
-	AVR_BIN 	= /usr/bin ;
-	AVR_INCLUDE 	= /usr/lib/avr/include ;
-	AVR_ETC 	= /etc ; 
+	AVR_BIN 	?= /usr/bin ;
+	AVR_INCLUDE 	?= /usr/lib/avr/include ;
+	AVR_ETC 	?= /etc ; 
 }
 
 # (5) Directories where Arduino core and libraries are located

@@ -177,11 +177,11 @@ bool is_command(const T& t,val1_t v)
 
 /****************************************************************************/
 
-prog_char* EepromLogger::lookup_object(uint8_t object_index) const
+const char* EepromLogger::lookup_object(uint8_t object_index) const
 {
-  prog_char* result = PSTR("Unknown");
+  const char* result = PSTR("Unknown");
 
-  prog_char* lookup = object_at(object_index);
+  const char* lookup = object_at(object_index);
   if (lookup)
     result = lookup;
 
@@ -190,11 +190,11 @@ prog_char* EepromLogger::lookup_object(uint8_t object_index) const
 
 /****************************************************************************/
 
-prog_char* EepromLogger::lookup_signal(uint8_t signal_index) const
+const char* EepromLogger::lookup_signal(uint8_t signal_index) const
 {
-  prog_char* result = PSTR("Unknown");
+  const char* result = PSTR("Unknown");
   
-  prog_char* lookup = signal_at(signal_index);
+  const char* lookup = signal_at(signal_index);
   if (lookup)
     result = lookup;
 

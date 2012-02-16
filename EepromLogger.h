@@ -41,8 +41,8 @@ protected:
   void write_end(void);
   void write_marktime(void); 
   void write_time(void);
-  prog_char* lookup_object(uint8_t) const;
-  prog_char* lookup_signal(uint8_t) const;
+  const char* lookup_object(uint8_t) const;
+  const char* lookup_signal(uint8_t) const;
   void fast_forward(void);
   void playback(EepromStream& player, bool print);
   template <class T> void write(const T& t)

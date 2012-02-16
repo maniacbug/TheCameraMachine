@@ -13,7 +13,7 @@ inline void* operator new(size_t, void* __p)
 
 /****************************************************************************/
 
-uint32_t eventtime(RtcEvTable::evline& prog_event)
+uint32_t eventtime(const RtcEvTable::evline& prog_event)
 {
   RtcEvTable::evline event;
   memcpy_P(&event,&prog_event,sizeof(event));
@@ -32,7 +32,7 @@ void RtcEvTable::update(void)
 }
 
 /****************************************************************************/
-RtcEvTable::RtcEvTable(Connector& _conn,evline* _table,uint8_t _num_lines, 
+RtcEvTable::RtcEvTable(Connector& _conn,const evline* _table,uint8_t _num_lines, 
     uint8_t _num_channels):
 	table(_table), current(_table), num_lines(_num_lines), num_channels(_num_channels) 
 {
