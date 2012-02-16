@@ -49,6 +49,11 @@ bool SerialLineIn::dispatch(void)
     case 'D':
       // Dyymmdd: Set date
       handled = true;
+      if ( strlen(buf) == 1 )
+      {
+	print_time();
+	break;
+      }
       if ( strlen(buf) != 7 )
       {
 	printf_P(PSTR("SERL Format: Dyymmdd\n\r"));
