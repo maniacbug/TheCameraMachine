@@ -78,7 +78,7 @@ void setup(void)
   // Note that these listen to any emitters.  To restrict only to
   // a single channel, they would have to be pointed at that channel.
   power_led.listen(NULL);
-  record_led.listen(&camera);
+  record_led.listen(NULL);
   other_led.listen(NULL);
   power_relay.listen(NULL);
   alt_relay.listen(NULL);

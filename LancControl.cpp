@@ -32,6 +32,8 @@ void LancControl::begin(void)
 
 void LancControl::listen(Connectable* _who)
 {
+  Connectable::listen(_who,signal_start_record);
+  Connectable::listen(_who,signal_stop_record);
   Connectable::listen(_who,signal_power_on);
   Connectable::listen(_who,signal_power_off);
   Connectable::listen(_who,signal_toggle_record);
@@ -93,18 +95,10 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
     if ( is_recording )
     {
       emit(signal_start_record);
-      printf_P(PSTR("LANC Recording\n\r"));
-      lanc_serial.print("103a\r\n");
-      delay(100);
-      lanc_serial.write(32);
     }
     else
     {
       emit(signal_stop_record);
-      printf_P(PSTR("LANC Stopping\n\r"));
-      lanc_serial.print("1033\r\n");
-      delay(100);
-      lanc_serial.write(32);
     }
     break;
   }
