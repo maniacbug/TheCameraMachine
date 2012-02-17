@@ -32,8 +32,6 @@ void LancControl::begin(void)
 
 void LancControl::listen(Connectable* _who)
 {
-  Connectable::listen(_who,signal_start_record);
-  Connectable::listen(_who,signal_stop_record);
   Connectable::listen(_who,signal_power_on);
   Connectable::listen(_who,signal_power_off);
   Connectable::listen(_who,signal_toggle_record);
