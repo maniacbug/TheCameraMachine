@@ -6,9 +6,9 @@ Pre-programmable camera controller.
 
 ## Arduino Libraries (Required)
 
-1. Tictocs library
-2. AnyRtc
-3. MemoryFree
+1. (Tictocs library)[https://github.com/maniacbug/AnyRtc]
+2. (AnyRtc library)[https://github.com/maniacbug/Tictocs]
+3. (MemoryFree library)[https://github.com/maniacbug/MemoryFree]
 
 ## Native Components (Optional)
 
@@ -22,7 +22,7 @@ Only needed if you want to target the native machine and run tests.
 ## Events List
 
 The primary configuration for the controller is to modify the list of events
-which control what happens when.  To do so, edit events.pde, and modify the
+which control what happens when.  To do so, edit events.cpp, and modify the
 'events\_table' array.
 
 Here is an example.  It says that at Midnight (00:00:00) on Nov 19, 2011, the
@@ -32,7 +32,7 @@ components who are listening on that channel for that signal to do their thing.
 Be warned that the table must be in chronological order, with the earliest
 events coming first.
 
-    prog_uint8_t events_table[][8] PROGMEM = {
+    uint8_t events_table[][8] PROGMEM = {
       //YY,MM,DD HH MM SS,CH, signal
       { 11,11,19, 0, 0, 0, 0, signal_power_on },
       { 11,11,19, 0, 0,10, 0, signal_start_record },
@@ -53,9 +53,9 @@ is laid out differently, modify this file.
 
 While the unit is running, certain useful information will be printed to the
 Serial Monitor.  Likewise, certain comments are accepted to work with the
-unit.  To send a command, connect the serial monitor, select "Line Endings:
-CR+LF", type a command into the line entry box, and hit "Send".  Commands can
-be sent at any time.
+unit.  To send a command, connect the serial monitor, set the speed to 
+"57600 baud", select "Line Endings:CR+LF", type a command into the line entry
+box, and hit "Send".  Commands can be sent at any time.
 
 ## EEPROM Log
 
@@ -108,7 +108,7 @@ signal, and get 'notified' when an object emits one.  The entire logic of
 the sketch is implemented in the signal-based relationship between objects
 and in each object's onNotify handler.
 
-The objects.h file declares these objects, and the objects.pde file
+The objects.h file declares these objects, and the objects.cpp file
 defines them, and all the wiring up of the objects is handled in the
 setup() function.
 
