@@ -6,9 +6,9 @@ Pre-programmable camera controller.
 
 ## Arduino Libraries (Required)
 
-1. (Tictocs library)[https://github.com/maniacbug/AnyRtc]
-2. (AnyRtc library)[https://github.com/maniacbug/Tictocs]
-3. (MemoryFree library)[https://github.com/maniacbug/MemoryFree]
+1. [Tictocs library](https://github.com/maniacbug/AnyRtc)
+2. [AnyRtc library](https://github.com/maniacbug/Tictocs)
+3. [MemoryFree library](https://github.com/maniacbug/MemoryFree)
 
 ## Native Components (Optional)
 
