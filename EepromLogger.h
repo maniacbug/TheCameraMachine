@@ -15,7 +15,7 @@
 #include <SimpleLogger.h>
 
 // Project includes
-#include <EepromStream.h>
+#include "EepromStream.h"
 
 /**
  * Logs Tictocs events to EEPROM.

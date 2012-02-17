@@ -13,10 +13,11 @@
 #include <Connector.h>
 #include <EmitButton.h>
 #include <PinControl.h>
-#include <EepromLogger.h>
-#include <LancControl.h>
-#include <RtcEvTable.h>
-#include <SerialLineIn.h> 
+// Project includes
+#include "RtcEvTable.h"
+#include "SerialLineIn.h" 
+#include "EepromLogger.h"
+#include "LancControl.h"
 
 /**
  * @file objects.h

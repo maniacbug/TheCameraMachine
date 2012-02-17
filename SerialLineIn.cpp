@@ -8,12 +8,18 @@
 
 // STL includes
 // C includes
+// Framework includes
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
 // Library includes
 #include <AnyRtc.h>
 #include <MemoryFree.h>
 // Project includes
-#include <SerialLineIn.h>
-#include <objects.h>
+#include "SerialLineIn.h"
+#include "objects.h"
 
 /****************************************************************************/
 

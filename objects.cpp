@@ -1,10 +1,19 @@
+// Framework includes
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
+
+// Library includes
 #include <Connector.h>
 
-#include <objects.h>
-#include <hardware.h>
-#include <signals.h>
-#include <rtc.h>
-#include <events.h>
+// Project includes
+#include "objects.h"
+#include "hardware.h"
+#include "signals.h"
+#include "rtc.h"
+#include "events.h"
 
 Updater up;
 Connector conn;

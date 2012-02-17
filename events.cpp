@@ -1,5 +1,12 @@
-#include <events.h>
-#include <signals.h>
+// Framework includes
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
+// Project includes
+#include "events.h"
+#include "signals.h"
 
 // Warning, this table must be in clock order, earliest events first
 

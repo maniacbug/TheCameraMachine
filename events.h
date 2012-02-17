@@ -9,7 +9,8 @@
 #ifndef __EVENTS_H__
 #define __EVENTS_H__
 
-#include <RtcEvTable.h>
+// Project includes
+#include "RtcEvTable.h"
 
 /**
  * @file events.h

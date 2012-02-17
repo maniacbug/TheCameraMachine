@@ -1,15 +1,27 @@
+// Framework includes
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
+#include <Wire.h>
+#include <SPI.h>
+#include <EEPROM.h>
+#include <SoftwareSerial.h>
+
+// Library includes
 #include <MemoryFree.h>
 #include <AnyRtc.h>
 #include <Tictocs.h>
-#include <Wire.h>
-#include <EEPROM.h>
-#include <SoftwareSerial.h>
-#include <hardware.h>
-#include <objects.h>
-#include <rtc.h>
-#include <signals.h>
-#include <events.h>
-#include <printf.h>
+// Project includes
+#include "hardware.h"
+#include "objects.h"
+#include "rtc.h"
+#include "signals.h"
+#include "events.h"
+#include "printf.h"
+
+const int marker = 0; // Unused
 
 #ifdef VERSION_H
 #include <version.h>

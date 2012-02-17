@@ -1,9 +1,15 @@
 // STL includes
 // C includes
+// Framework includes
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
 // Library includes
 // Project includes
-#include <signals.h>
-#include <LancControl.h>
+#include "signals.h"
+#include "LancControl.h"
 
 /****************************************************************************/
 

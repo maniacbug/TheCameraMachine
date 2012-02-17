@@ -1,10 +1,16 @@
 // STL includes
 // C includes
+// Framework includes
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
 // Library includes
 #include <AnyRtc.h>
 // Project includes
-#include <RtcEvTable.h>
-#include <objects.h> // for logger
+#include "RtcEvTable.h"
+#include "objects.h" // for logger
 
 inline void* operator new(size_t, void* __p)
 {

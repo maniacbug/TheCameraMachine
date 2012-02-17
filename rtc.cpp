@@ -1,7 +1,15 @@
+// Framework includes
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
 #include <Wire.h>
+// Library includes
 #include <AnyRtc.h>
 #include <RTC_DS1307.h>
-#include <rtc.h>
+// Project includes
+#include "rtc.h"
 
 static RTC_DS1307 rtc_internal;
 
