@@ -65,6 +65,14 @@ void RtcEvTable::begin(void)
   // seek the current pointer to the right place
   while ( is_valid() && RTC.now() >= whenNext() )
     current++;
+
+  if ( is_valid() )
+  {
+    int signal = pgm_read_byte(&(*current)[7]);
+    printf_P(PSTR("REVT next event is %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&(*current)[6]),logger.find_symbol(signal));
+  }
+  else
+    printf_P(PSTR("REVT No more events remain.\n\r"));
 }
 
 /****************************************************************************/
