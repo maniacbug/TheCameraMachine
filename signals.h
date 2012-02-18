@@ -7,5 +7,6 @@ const uint8_t signal_alt_relay_off = 6;
 const uint8_t signal_other_led_on = 7;
 const uint8_t signal_other_led_off = 8;
 const uint8_t signal_toggle_record = 9;
+const uint8_t signal_fire_camera = 10;
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

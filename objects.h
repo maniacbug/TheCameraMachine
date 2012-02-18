@@ -38,6 +38,7 @@ extern PinControl other_led;
 extern LancControl camera;
 extern EepromLogger logger;
 extern RtcEvTable events;
+extern SignalEvTable fire_camera;
 extern SerialLineIn tty;
 
 #endif // __OBJECTS_H__
