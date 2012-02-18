@@ -49,7 +49,7 @@ private:
   uint8_t num_channels;
 protected:
   void update(void);
-  virtual bool is_time_now(void) const;
+  bool is_time_now(void) const;
   ev_t current_channel(void) const;
   ev_t current_signal(void) const;
 public:
@@ -59,7 +59,7 @@ public:
   void reset(void) { current = table; }
   void invalidate(void);
   bool is_valid(void) const;
-  uint32_t whenNext(void) const;
+  virtual uint32_t whenNext(void) const;
   Channel* channel(uint8_t);
 };
 
@@ -75,11 +75,11 @@ class SignalEvTable: public RtcEvTable, public Connectable
   uint8_t signal_start;
   uint32_t started_at;
 protected:
-  virtual bool is_time_now(void) const;
   virtual void onNotify(const Connectable* ,uint8_t signal );
 public:
   SignalEvTable(Connector& _conn,uint8_t _signal_launch,const evline* events,uint8_t num_lines, uint8_t num_channels = 1);
   void listen(Connectable* _who);
+  virtual uint32_t whenNext(void) const;
 };
 
 #endif // __RTCEVTABLE_H__

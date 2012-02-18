@@ -145,16 +145,6 @@ RtcEvTable::Channel* RtcEvTable::channel(uint8_t _channel)
 
 /****************************************************************************/
 
-bool SignalEvTable::is_time_now(void) const
-{
-  bool valid = is_valid();
-  uint32_t now = RTC.now();
-  uint32_t when = whenNext();
-  return valid && now >= ( when + started_at );
-}
-
-/****************************************************************************/
-
 void SignalEvTable::onNotify(const Connectable* ,uint8_t signal )
 {
   if ( signal == signal_start )
@@ -178,6 +168,16 @@ SignalEvTable::SignalEvTable(Connector& _conn,uint8_t _signal_start,const evline
 void SignalEvTable::listen(Connectable* _who)
 {
   Connectable::listen(_who,signal_start);
+}
+
+/****************************************************************************/
+
+uint32_t SignalEvTable::whenNext(void) const
+{
+  if ( is_valid() )
+    return RtcEvTable::whenNext() + started_at; 
+  else
+    return -1; 
 }
 
 /****************************************************************************/
