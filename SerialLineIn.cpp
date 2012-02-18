@@ -87,12 +87,16 @@ bool SerialLineIn::dispatch(void)
 
       if ( !strcmp(buf+1,"N") )
       {
-	RTC.adjust(events.whenNext());
+	uint32_t when = events.whenNext();
+	if ( fire_camera.is_valid() )
+	  when = fire_camera.whenNext();
+	RTC.adjust(when);
 	print_time();
       }
       else if ( !strcmp(buf+1,"1") )
       {
 	events.reset();
+	fire_camera.invalidate();
 	RTC.adjust(events.whenNext());
 	print_time();
       }
