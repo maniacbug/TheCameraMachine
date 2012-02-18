@@ -119,6 +119,7 @@ void setup(void)
   logger.setSymbol(&other_led, PSTR("other_led"));
   logger.setSymbol(&camera, PSTR("camera"));
   logger.setSymbol(events.channel(0), PSTR("events ch#0"));
+  logger.setSymbol(&fire_camera, PSTR("fire_camera"));
   logger.setSymbol(fire_camera.channel(0), PSTR("fire_camera ch#0"));
   
   // Begin the logger after all the symbols are set.
