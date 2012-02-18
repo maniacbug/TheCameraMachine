@@ -140,6 +140,30 @@ public:
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
   }
+  void testSeqFiresAll( void )
+  {
+    setup_events();
+    setup_sequence();
+
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 1);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 2);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 3);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 4);
+   
+    RTC.adjust(timeval+2);
+    pUpdater->update();
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+    RTC.adjust(timeval+3);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,2);
+    RTC.adjust(timeval+7);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,3);
+    RTC.adjust(timeval+8);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,4);
+  }
   void testDoesntFireOld( void )
   {
     pRtcEvTable = new RtcEvTable(*pConnector,events,4);
