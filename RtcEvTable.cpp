@@ -96,8 +96,8 @@ void RtcEvTable::begin(void)
 
   if ( is_valid() )
   {
-    int signal = pgm_read_byte(&(*current)[7]);
-    printf_P(PSTR("REVT next event is %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&(*current)[6]),logger.find_symbol(signal));
+    int signal = current_signal(); 
+    printf_P(PSTR("REVT next event is %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),current_channel(),logger.find_symbol(signal));
   }
   else
     printf_P(PSTR("REVT No more events remain.\n\r"));
@@ -128,6 +128,37 @@ RtcEvTable::Channel* RtcEvTable::channel(uint8_t _channel)
     return channels + _channel;
   else
     return NULL;
+}
+
+/****************************************************************************/
+
+bool SignalEvTable::is_time_now(void) const
+{
+  return is_valid() && RTC.now() >= ( whenNext() + started_at );
+}
+
+/****************************************************************************/
+
+void SignalEvTable::onNotify(const Connectable* ,uint8_t signal )
+{
+  if ( signal == signal_start )
+  {
+    started_at = RTC.now();
+    reset();
+  }
+}
+
+/****************************************************************************/
+
+SignalEvTable::SignalEvTable(Connector& _conn,uint8_t _signal_start,const evline* events,uint8_t num_lines, uint8_t num_channels): RtcEvTable(_conn,events,num_lines,num_channels), Connectable(_conn), signal_start(_signal_start)
+{
+}
+
+/****************************************************************************/
+
+void SignalEvTable::listen(Connectable* _who)
+{
+  Connectable::listen(_who,signal_start);
 }
 
 /****************************************************************************/
