@@ -51,6 +51,7 @@ protected:
   void update(void);
   bool is_valid(void) const;
   virtual bool is_time_now(void) const;
+  void make_invalid(void);
   ev_t current_channel(void) const;
   ev_t current_signal(void) const;
 public:

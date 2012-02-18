@@ -121,6 +121,13 @@ uint32_t RtcEvTable::whenNext(void) const
 
 /****************************************************************************/
 
+void RtcEvTable::make_invalid(void)
+{
+  current = table + num_lines;
+}
+
+/****************************************************************************/
+
 bool RtcEvTable::is_valid(void) const
 {
   return (current < table + num_lines);
@@ -140,7 +147,10 @@ RtcEvTable::Channel* RtcEvTable::channel(uint8_t _channel)
 
 bool SignalEvTable::is_time_now(void) const
 {
-  return is_valid() && RTC.now() >= ( whenNext() + started_at );
+  bool valid = is_valid();
+  uint32_t now = RTC.now();
+  uint32_t when = whenNext();
+  return valid && now >= ( when + started_at );
 }
 
 /****************************************************************************/
@@ -149,7 +159,8 @@ void SignalEvTable::onNotify(const Connectable* ,uint8_t signal )
 {
   if ( signal == signal_start )
   {
-    started_at = RTC.now();
+    // Started a second ago, so the first event fires immediately
+    started_at = RTC.now() - 1;
     reset();
   }
 }
@@ -158,6 +169,8 @@ void SignalEvTable::onNotify(const Connectable* ,uint8_t signal )
 
 SignalEvTable::SignalEvTable(Connector& _conn,uint8_t _signal_start,const evline* events,uint8_t num_lines, uint8_t num_channels): RtcEvTable(_conn,events,num_lines,num_channels), Connectable(_conn), signal_start(_signal_start)
 {
+  // The initialized state of a signal ev table is the INVALID state
+  make_invalid();
 }
 
 /****************************************************************************/
