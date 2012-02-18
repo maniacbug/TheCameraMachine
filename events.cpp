@@ -10,7 +10,7 @@
 
 // Warning, this table must be in clock order, earliest events first
 
-const uint8_t events_table[][8] PROGMEM = {
+const RtcEvTable::evline events_table[] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
   { 12, 2,16,22, 0, 0, 0,signal_power_on },
   { 12, 2,16,22, 0,10, 0,signal_start_record },

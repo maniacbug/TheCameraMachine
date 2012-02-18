@@ -18,7 +18,7 @@
  * Declaration of application-specific events table
  */
 
-extern const uint8_t events_table[][8];
+extern const RtcEvTable::evline events_table[];
 extern int num_events;
 
 #endif // __EVENTS_H__
