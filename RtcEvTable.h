@@ -48,16 +48,37 @@ private:
   uint8_t num_channels;
 protected:
   void update(void);
-  bool is_valid(void) const;
   bool is_time_now(void) const;
   ev_t current_channel(void) const;
   ev_t current_signal(void) const;
 public:
   RtcEvTable(Connector& _conn,const evline* events,uint8_t num_lines, uint8_t num_channels = 1);
+  virtual ~RtcEvTable();
   void begin(void);
   void reset(void) { current = table; }
-  uint32_t whenNext(void) const;
+  void invalidate(void);
+  bool is_valid(void) const;
+  virtual uint32_t whenNext(void) const;
   Channel* channel(uint8_t);
+};
+
+/**
+ * Specialization of RtcEvTable for use as a stand-alone timer-
+ * based event table
+ *
+ * Listens for a signal, and then starts 
+ */
+
+class SignalEvTable: public RtcEvTable, public Connectable
+{
+  uint8_t signal_start;
+  uint32_t started_at;
+protected:
+  virtual void onNotify(const Connectable* ,uint8_t signal );
+public:
+  SignalEvTable(Connector& _conn,uint8_t _signal_launch,const evline* events,uint8_t num_lines, uint8_t num_channels = 1);
+  void listen(Connectable* _who);
+  virtual uint32_t whenNext(void) const;
 };
 
 #endif // __RTCEVTABLE_H__

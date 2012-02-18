@@ -20,7 +20,8 @@
 
 extern const RtcEvTable::evline events_table[];
 extern int num_events;
-
+extern const RtcEvTable::evline events_fire_camera[];
+extern int num_events_fire_camera;
 #endif // __EVENTS_H__
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

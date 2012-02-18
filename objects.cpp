@@ -35,5 +35,6 @@ PinControl other_led(conn,other_led_pin,signal_other_led_off,signal_other_led_on
 LancControl camera(conn,lanc_rx_pin,lanc_tx_pin);
 EepromLogger logger;
 RtcEvTable events(conn,events_table,num_events);
+SignalEvTable fire_camera(conn,signal_fire_camera,events_fire_camera,num_events_fire_camera);
 SerialLineIn tty;
 // vim:cin:ai:sts=2 sw=2 ft=cpp

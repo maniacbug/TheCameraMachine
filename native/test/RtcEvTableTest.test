@@ -28,6 +28,15 @@ static RtcEvTable::evline events[] = {
   { 11,12, 1, 0, 0, 7, 0, 4 },
 };
 
+static RtcEvTable::evline sequence_events[] = {
+  //YY,MM,DD HH MM SS,CH, signal
+  {  0, 0, 0, 0, 0, 0, 0, 5 },
+  {  0, 0, 0, 0, 0, 2, 0, 6 },
+  {  0, 0, 0, 0, 0, 6, 0, 7 },
+  {  0, 0, 0, 0, 0, 7, 0, 8 },
+};
+int num_sequence_events = sizeof(sequence_events)/sizeof(RtcEvTable::evline);
+
 class RtcEvTableTestSuite: public CxxTest::TestSuite
 {
   static const uint8_t signal_go = 1;
@@ -43,9 +52,11 @@ class RtcEvTableTestSuite: public CxxTest::TestSuite
   };
   
   RtcEvTable* pRtcEvTable;  
+  SignalEvTable* pSignalEvTable;  
   Updater* pUpdater;
   Connector* pConnector;
   listener* plisten;
+  uint32_t timeval;
 public:
   void setUp()
   {
@@ -54,6 +65,7 @@ public:
     pUpdater = new Updater();
     pConnector = new Connector();
     pRtcEvTable = NULL;
+    pSignalEvTable = NULL;
     plisten = new listener(*pConnector);
 
     RTC.begin();
@@ -64,6 +76,8 @@ public:
     delete plisten;
     if ( pRtcEvTable )
       delete pRtcEvTable;
+    if ( pSignalEvTable )
+      delete pSignalEvTable;
     delete pConnector;
     delete pUpdater;
     theLogger.setVerbose(false);
@@ -74,6 +88,11 @@ public:
     pRtcEvTable = new RtcEvTable(*pConnector,events,4);
     TS_ASSERT(pRtcEvTable);
   }
+  void testSeqEmpty( void )
+  {
+    pSignalEvTable = new SignalEvTable(*pConnector,1,sequence_events,num_sequence_events);
+    TS_ASSERT(pSignalEvTable);
+  }
 
   void testUpdate( void )
   {
@@ -83,16 +102,97 @@ public:
   
   void testFires( void )
   {
-    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
-    uint32_t timeval = pRtcEvTable->whenNext() - 1;
-    RTC.adjust(timeval);
-    pRtcEvTable->begin();
-    pUpdater->add(pRtcEvTable);
+    setup_events();
+
     plisten->listen(pRtcEvTable->channel(0),/*signal*/ 1);
    
     RTC.adjust(timeval+2);
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
+  }
+  void setup_events( void )
+  {
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
+    timeval = pRtcEvTable->whenNext() - 1;
+    RTC.adjust(timeval);
+    pRtcEvTable->begin();
+    pUpdater->add(pRtcEvTable);
+  }
+  void setup_sequence( void )
+  {
+    pSignalEvTable = new SignalEvTable(*pConnector,1,sequence_events,num_sequence_events);
+    pSignalEvTable->listen(pRtcEvTable->channel(0));
+    pSignalEvTable->begin();
+    pUpdater->add(pSignalEvTable);
+  }
+  void testSeqFires( void )
+  {
+    setup_events();
+    setup_sequence();
+
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 5);
+   
+    RTC.adjust(timeval+2);
+    pUpdater->update();
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+  }
+  void testSeqReset( void )
+  {
+    setup_events();
+    setup_sequence();
+
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 5);
+   
+    RTC.adjust(timeval+2);
+    pUpdater->update();
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+
+    pSignalEvTable->invalidate();
+    RTC.adjust(timeval+3);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+  }
+  void testSeqFiresAll( void )
+  {
+    setup_events();
+    setup_sequence();
+
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 5);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 6);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 7);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 8);
+   
+    RTC.adjust(timeval+2);
+    pUpdater->update();
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+    RTC.adjust(timeval+3);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,2);
+    RTC.adjust(timeval+7);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,3);
+    RTC.adjust(timeval+8);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,4);
+    RTC.adjust(timeval+20);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,4);
+  }
+  void testIsValid(void)
+  {
+    setup_events();
+
+    TS_ASSERT( pRtcEvTable->is_valid() );
+  }
+  void testIsNotValid(void)
+  {
+    setup_events();
+    pRtcEvTable->invalidate();
+
+    TS_ASSERT( ! pRtcEvTable->is_valid() );
   }
   void testDoesntFireOld( void )
   {
@@ -101,6 +201,7 @@ public:
     RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
+
     plisten->listen(pRtcEvTable->channel(0),/*signal*/ 1);
    
     RTC.adjust(timeval+2);

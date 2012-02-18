@@ -82,6 +82,12 @@ RtcEvTable::RtcEvTable(Connector& _conn,const evline* _table,uint8_t _num_lines,
 }
 
 /****************************************************************************/
+RtcEvTable::~RtcEvTable()
+{
+  free(channels);
+}
+
+/****************************************************************************/
 
 void RtcEvTable::begin(void)
 {
@@ -104,8 +110,8 @@ void RtcEvTable::begin(void)
 
   if ( is_valid() )
   {
-    int signal = pgm_read_byte(&(*current)[7]);
-    printf_P(PSTR("REVT next event is %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),pgm_read_byte(&(*current)[6]),logger.find_symbol(signal));
+    int signal = current_signal(); 
+    printf_P(PSTR("REVT next event is %s on %u %S\n\r"),DateTime(whenNext()).toString(buf,sizeof(buf)),current_channel(),logger.find_symbol(signal));
   }
   else
     printf_P(PSTR("REVT No more events remain.\n\r"));
@@ -123,6 +129,13 @@ uint32_t RtcEvTable::whenNext(void) const
 
 /****************************************************************************/
 
+void RtcEvTable::invalidate(void)
+{
+  current = table + num_lines;
+}
+
+/****************************************************************************/
+
 bool RtcEvTable::is_valid(void) const
 {
   return (current < table + num_lines);
@@ -136,6 +149,43 @@ RtcEvTable::Channel* RtcEvTable::channel(uint8_t _channel)
     return channels + _channel;
   else
     return NULL;
+}
+
+/****************************************************************************/
+
+void SignalEvTable::onNotify(const Connectable* ,uint8_t signal )
+{
+  if ( signal == signal_start )
+  {
+    // Started a second ago, so the first event fires immediately
+    started_at = RTC.now() - 1;
+    reset();
+  }
+}
+
+/****************************************************************************/
+
+SignalEvTable::SignalEvTable(Connector& _conn,uint8_t _signal_start,const evline* events,uint8_t num_lines, uint8_t num_channels): RtcEvTable(_conn,events,num_lines,num_channels), Connectable(_conn), signal_start(_signal_start)
+{
+  // The initialized state of a signal ev table is the INVALID state
+  invalidate();
+}
+
+/****************************************************************************/
+
+void SignalEvTable::listen(Connectable* _who)
+{
+  Connectable::listen(_who,signal_start);
+}
+
+/****************************************************************************/
+
+uint32_t SignalEvTable::whenNext(void) const
+{
+  if ( is_valid() )
+    return RtcEvTable::whenNext() + started_at; 
+  else
+    return -1; 
 }
 
 /****************************************************************************/

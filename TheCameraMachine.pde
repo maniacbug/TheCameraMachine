@@ -78,6 +78,7 @@ void setup(void)
   power_relay.begin();
   alt_relay.begin();
   camera.begin();
+  fire_camera.begin();
 
   //
   // Connect objects
@@ -91,6 +92,7 @@ void setup(void)
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
   camera.listen(NULL);
+  fire_camera.listen(NULL);
   conn.setLogger(&logger);
 
   //
@@ -106,6 +108,7 @@ void setup(void)
   logger.setSymbol(signal_other_led_on, PSTR("other_led_on"));
   logger.setSymbol(signal_other_led_off, PSTR("other_led_off"));
   logger.setSymbol(signal_toggle_record, PSTR("toggle_record"));
+  logger.setSymbol(signal_fire_camera, PSTR("fire_camera"));
 
   logger.setSymbol(&test_switch, PSTR("test_switch"));
   logger.setSymbol(&record_button, PSTR("record_button"));
@@ -116,6 +119,7 @@ void setup(void)
   logger.setSymbol(&other_led, PSTR("other_led"));
   logger.setSymbol(&camera, PSTR("camera"));
   logger.setSymbol(events.channel(0), PSTR("events ch#0"));
+  logger.setSymbol(fire_camera.channel(0), PSTR("fire_camera ch#0"));
   
   // Begin the logger after all the symbols are set.
   logger.begin();
@@ -128,6 +132,7 @@ void setup(void)
   up.add(&test_switch);
   up.add(&record_button);
   up.add(&events);
+  up.add(&fire_camera);
   up.add(&tty);
 }
 
