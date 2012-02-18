@@ -181,6 +181,19 @@ public:
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,4);
   }
+  void testIsValid(void)
+  {
+    setup_events();
+
+    TS_ASSERT( pRtcEvTable->is_valid() );
+  }
+  void testIsNotValid(void)
+  {
+    setup_events();
+    pRtcEvTable->invalidate();
+
+    TS_ASSERT( ! pRtcEvTable->is_valid() );
+  }
   void testDoesntFireOld( void )
   {
     pRtcEvTable = new RtcEvTable(*pConnector,events,4);
