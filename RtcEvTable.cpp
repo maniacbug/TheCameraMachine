@@ -74,6 +74,12 @@ RtcEvTable::RtcEvTable(Connector& _conn,const evline* _table,uint8_t _num_lines,
 }
 
 /****************************************************************************/
+RtcEvTable::~RtcEvTable()
+{
+  free(channels);
+}
+
+/****************************************************************************/
 
 void RtcEvTable::begin(void)
 {

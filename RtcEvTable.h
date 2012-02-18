@@ -55,6 +55,7 @@ protected:
   ev_t current_signal(void) const;
 public:
   RtcEvTable(Connector& _conn,const evline* events,uint8_t num_lines, uint8_t num_channels = 1);
+  virtual ~RtcEvTable();
   void begin(void);
   void reset(void) { current = table; }
   uint32_t whenNext(void) const;
