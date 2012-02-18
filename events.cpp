@@ -16,10 +16,10 @@
 
 const RtcEvTable::evline events_table[] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
-  { 12, 2,18, 7, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18, 7,30, 0, 0,signal_fire_camera },
-  { 12, 2,18, 8, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18, 8,30, 0, 0,signal_fire_camera },
+  { 12, 2,19, 7, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19, 7,30, 0, 0,signal_fire_camera },
+  { 12, 2,19, 8, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19, 8,30, 0, 0,signal_fire_camera },
   
 };
 int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
