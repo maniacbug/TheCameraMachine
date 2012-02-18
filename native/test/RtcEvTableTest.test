@@ -30,10 +30,10 @@ static RtcEvTable::evline events[] = {
 
 static RtcEvTable::evline sequence_events[] = {
   //YY,MM,DD HH MM SS,CH, signal
-  {  0, 0, 0, 0, 0, 0, 0, 1 },
-  {  0, 0, 0, 0, 0, 2, 0, 2 },
-  {  0, 0, 0, 0, 0, 6, 0, 3 },
-  {  0, 0, 0, 0, 0, 7, 0, 4 },
+  {  0, 0, 0, 0, 0, 0, 0, 5 },
+  {  0, 0, 0, 0, 0, 2, 0, 6 },
+  {  0, 0, 0, 0, 0, 6, 0, 7 },
+  {  0, 0, 0, 0, 0, 7, 0, 8 },
 };
 int num_sequence_events = sizeof(sequence_events)/sizeof(RtcEvTable::evline);
 
@@ -102,11 +102,8 @@ public:
   
   void testFires( void )
   {
-    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
-    uint32_t timeval = pRtcEvTable->whenNext() - 1;
-    RTC.adjust(timeval);
-    pRtcEvTable->begin();
-    pUpdater->add(pRtcEvTable);
+    setup_events();
+
     plisten->listen(pRtcEvTable->channel(0),/*signal*/ 1);
    
     RTC.adjust(timeval+2);
@@ -133,7 +130,7 @@ public:
     setup_events();
     setup_sequence();
 
-    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 1);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 5);
    
     RTC.adjust(timeval+2);
     pUpdater->update();
@@ -145,10 +142,10 @@ public:
     setup_events();
     setup_sequence();
 
-    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 1);
-    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 2);
-    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 3);
-    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 4);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 5);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 6);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 7);
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 8);
    
     RTC.adjust(timeval+2);
     pUpdater->update();
@@ -163,6 +160,9 @@ public:
     RTC.adjust(timeval+8);
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,4);
+    RTC.adjust(timeval+20);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,4);
   }
   void testDoesntFireOld( void )
   {
@@ -171,6 +171,7 @@ public:
     RTC.adjust(timeval);
     pRtcEvTable->begin();
     pUpdater->add(pRtcEvTable);
+
     plisten->listen(pRtcEvTable->channel(0),/*signal*/ 1);
    
     RTC.adjust(timeval+2);
