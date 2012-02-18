@@ -28,6 +28,15 @@ static RtcEvTable::evline events[] = {
   { 11,12, 1, 0, 0, 7, 0, 4 },
 };
 
+static RtcEvTable::evline sequence_events[] = {
+  //YY,MM,DD HH MM SS,CH, signal
+  {  0, 0, 0, 0, 0, 0, 0, 1 },
+  {  0, 0, 0, 0, 0, 2, 0, 2 },
+  {  0, 0, 0, 0, 0, 6, 0, 3 },
+  {  0, 0, 0, 0, 0, 7, 0, 4 },
+};
+int num_sequence_events = sizeof(sequence_events)/sizeof(RtcEvTable::evline);
+
 class RtcEvTableTestSuite: public CxxTest::TestSuite
 {
   static const uint8_t signal_go = 1;
@@ -43,6 +52,7 @@ class RtcEvTableTestSuite: public CxxTest::TestSuite
   };
   
   RtcEvTable* pRtcEvTable;  
+  SignalEvTable* pSignalEvTable;  
   Updater* pUpdater;
   Connector* pConnector;
   listener* plisten;
@@ -54,6 +64,7 @@ public:
     pUpdater = new Updater();
     pConnector = new Connector();
     pRtcEvTable = NULL;
+    pSignalEvTable = NULL;
     plisten = new listener(*pConnector);
 
     RTC.begin();
@@ -64,6 +75,8 @@ public:
     delete plisten;
     if ( pRtcEvTable )
       delete pRtcEvTable;
+    if ( pSignalEvTable )
+      delete pSignalEvTable;
     delete pConnector;
     delete pUpdater;
     theLogger.setVerbose(false);
@@ -73,6 +86,11 @@ public:
   {
     pRtcEvTable = new RtcEvTable(*pConnector,events,4);
     TS_ASSERT(pRtcEvTable);
+  }
+  void testSeqEmpty( void )
+  {
+    pSignalEvTable = new SignalEvTable(*pConnector,1,sequence_events,num_sequence_events);
+    TS_ASSERT(pSignalEvTable);
   }
 
   void testUpdate( void )
