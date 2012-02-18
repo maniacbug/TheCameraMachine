@@ -137,6 +137,23 @@ public:
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
   }
+  void testSeqReset( void )
+  {
+    setup_events();
+    setup_sequence();
+
+    plisten->listen(pSignalEvTable->channel(0),/*signal*/ 5);
+   
+    RTC.adjust(timeval+2);
+    pUpdater->update();
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+
+    pSignalEvTable->invalidate();
+    RTC.adjust(timeval+3);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plisten->fired,1);
+  }
   void testSeqFiresAll( void )
   {
     setup_events();

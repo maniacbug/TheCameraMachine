@@ -51,7 +51,6 @@ protected:
   void update(void);
   bool is_valid(void) const;
   virtual bool is_time_now(void) const;
-  void make_invalid(void);
   ev_t current_channel(void) const;
   ev_t current_signal(void) const;
 public:
@@ -59,6 +58,7 @@ public:
   virtual ~RtcEvTable();
   void begin(void);
   void reset(void) { current = table; }
+  void invalidate(void);
   uint32_t whenNext(void) const;
   Channel* channel(uint8_t);
 };

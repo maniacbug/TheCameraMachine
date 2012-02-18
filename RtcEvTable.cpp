@@ -121,7 +121,7 @@ uint32_t RtcEvTable::whenNext(void) const
 
 /****************************************************************************/
 
-void RtcEvTable::make_invalid(void)
+void RtcEvTable::invalidate(void)
 {
   current = table + num_lines;
 }
@@ -170,7 +170,7 @@ void SignalEvTable::onNotify(const Connectable* ,uint8_t signal )
 SignalEvTable::SignalEvTable(Connector& _conn,uint8_t _signal_start,const evline* events,uint8_t num_lines, uint8_t num_channels): RtcEvTable(_conn,events,num_lines,num_channels), Connectable(_conn), signal_start(_signal_start)
 {
   // The initialized state of a signal ev table is the INVALID state
-  make_invalid();
+  invalidate();
 }
 
 /****************************************************************************/
