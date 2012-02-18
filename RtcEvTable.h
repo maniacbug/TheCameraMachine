@@ -50,6 +50,7 @@ private:
 protected:
   void update(void);
   bool is_valid(void) const;
+  bool is_time_now(void) const;
   ev_t current_channel(void) const;
   ev_t current_signal(void) const;
 public:

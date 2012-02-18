@@ -26,11 +26,16 @@ uint32_t eventtime(const RtcEvTable::evline& prog_event)
   return DateTime(event[0],event[1],event[2],event[3],event[4],event[5]).unixtime();
 }
 /****************************************************************************/
+bool RtcEvTable::is_time_now(void) const
+{
+  return is_valid() && RTC.now() >= whenNext();
+}
+/****************************************************************************/
 
 void RtcEvTable::update(void)
 {
   // We actually want to fire if now is AT or after 'when'
-  if ( is_valid() && RTC.now() >= whenNext() )
+  if ( is_time_now() ) 
   {
     channel(current_channel())->emit(current_signal());
     current++;
@@ -86,7 +91,7 @@ void RtcEvTable::begin(void)
   current = table;
 
   // seek the current pointer to the right place
-  while ( is_valid() && RTC.now() >= whenNext() )
+  while ( is_time_now() ) 
     current++;
 
   if ( is_valid() )
