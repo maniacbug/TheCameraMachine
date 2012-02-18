@@ -53,8 +53,8 @@ void setup(void)
   pinSymbol(record_led_pin,"record_led");
   pinSymbol(power_relay_pin,"power_relay");
   pinSymbol(alt_relay_pin,"alt_relay");
-  pinSymbol(lanc_command_pin,"lanc_command");
-  pinSymbol(lanc_data_pin,"lanc_data");
+  pinSymbol(lanc_rx_pin,"lanc_rx");
+  pinSymbol(lanc_tx_pin,"lanc_tx");
 #endif
 
   //

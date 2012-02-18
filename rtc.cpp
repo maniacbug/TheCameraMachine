@@ -1,4 +1,5 @@
 // Framework includes
+#ifndef NATIVE
 #if ARDUINO < 100
 #include <WProgram.h>
 #else
@@ -21,6 +22,6 @@ void rtc_begin(void)
   RTC.begin(&rtc_internal);
   print_time();
 }
-
+#endif
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 
