@@ -126,7 +126,7 @@ uint32_t RtcEvTable::whenNext(void) const
   if ( is_valid() )
     return eventtime(*current); 
   else
-    return eventtime(*(table + num_lines - 1)) + 1;
+    return -1; 
 }
 
 /****************************************************************************/
