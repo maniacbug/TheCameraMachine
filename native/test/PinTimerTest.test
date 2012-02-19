@@ -16,6 +16,7 @@
 // Library headers
 #include <cxxtest/TestSuite.h>
 #include <Connector.h>
+#include <Updater.h>
 // Project headers
 // This component's header
 #include <PinTimer.h>
@@ -36,6 +37,7 @@ class PinTimerTestSuite: public CxxTest::TestSuite
   };
 
   Connector* pConnector;
+  Updater* pUpdater;
   PinTimer* pPinTimer;
   
   static const int pin = 1;
@@ -48,15 +50,18 @@ public:
   {
     thePins.clear();
 
+    pUpdater = new Updater();
     pConnector = new Connector;
     pPinTimer = new PinTimer(*pConnector,pin,signal_low,signal_high,duration);
     pPinTimer->listen(NULL);
+    pUpdater->add(pPinTimer);
   }
   
   void tearDown()
   {
     delete pPinTimer;
     delete pConnector;
+    delete pUpdater;
   }
 
   void testEmpty( void )
@@ -73,6 +78,18 @@ public:
     Sender(*pConnector).send(signal_high);
 
     TS_ASSERT(thePins.hwGetDigital(pin));
+  }
+  void testGoesBackLow( void )
+  {
+    delay(duration+1);
+    pUpdater->update();
+    
+    Sender(*pConnector).send(signal_high);
+
+    delay(duration+1);
+    pUpdater->update();
+
+    TS_ASSERT(!thePins.hwGetDigital(pin));
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

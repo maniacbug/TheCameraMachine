@@ -21,6 +21,22 @@ PinTimer::PinTimer(Connector& _conn,int _pin,uint8_t _signal_low,
   PinControl(_conn,_pin,_signal_low,_signal_high),
   Tictocs::Timer(_interval)
 {
+  disable();
+}
+
+/****************************************************************************/
+
+void PinTimer::onFired(void)
+{
+  digitalWrite(get_pin(),digitalRead(get_pin())^HIGH);
+}
+
+/****************************************************************************/
+
+void PinTimer::onNotify(const Connectable* who, uint8_t signal)
+{
+  PinControl::onNotify(who,signal);
+  reset();
 }
 
 /****************************************************************************/

@@ -18,13 +18,16 @@
 // Project headers
 
 /**
- * Example for how classes should be declared
+ * Control a pin, and automatically set it back after a certain
+ * interval
  */
 
 class PinTimer: public PinControl, public Tictocs::Timer
 {
 private:
 protected:
+  virtual void onFired(void);
+  virtual void onNotify(const Connectable* who, uint8_t signal);
 public:
   PinTimer(Connector& _conn,int _pin,uint8_t _signal_low,uint8_t _signal_high,unsigned long _interval);
 };
