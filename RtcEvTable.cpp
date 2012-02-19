@@ -185,6 +185,14 @@ SignalEvTable::SignalEvTable(Connector& _conn,uint8_t _signal_start,const evline
 
 /****************************************************************************/
 
+void SignalEvTable::begin(Updater& up,Connectable* _who)
+{
+  RtcEvTable::begin(up);
+  listen(_who);
+}
+
+/****************************************************************************/
+
 void SignalEvTable::listen(Connectable* _who)
 {
   Connectable::listen(_who,signal_start);

@@ -80,6 +80,8 @@ protected:
   virtual void onNotify(const Connectable* ,uint8_t signal );
 public:
   SignalEvTable(Connector& _conn,uint8_t _signal_launch,const evline* events,uint8_t num_lines, uint8_t num_channels = 1);
+  void begin(void) { RtcEvTable::begin(); }
+  void begin(Updater&,Connectable* _who);
   void listen(Connectable* _who);
   virtual uint32_t whenNext(void) const;
 };

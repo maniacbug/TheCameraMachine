@@ -78,7 +78,7 @@ void setup(void)
   power_relay.begin();
   alt_relay.begin();
   camera.begin(NULL);
-  fire_camera.begin();
+  fire_camera.begin(up,NULL);
   tty.begin(up);
 
   //
@@ -92,8 +92,6 @@ void setup(void)
   other_led.listen(NULL);
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
-  fire_camera.listen(NULL);
-  conn.setLogger(&logger);
 
   //
   // Logger symbols
@@ -124,6 +122,9 @@ void setup(void)
   
   // Begin the logger after all the symbols are set.
   logger.begin();
+  conn.setLogger(&logger);
+  
+  // Begin the main events after the logger is set up
   events.begin(up);
 
   //
@@ -132,7 +133,6 @@ void setup(void)
 
   up.add(&test_switch);
   up.add(&record_button);
-  up.add(&fire_camera);
 }
 
 void loop(void)
