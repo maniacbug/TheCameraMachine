@@ -29,6 +29,7 @@ PinTimer::PinTimer(Connector& _conn,int _pin,uint8_t _signal_low,
 void PinTimer::onFired(void)
 {
   digitalWrite(get_pin(),digitalRead(get_pin())^HIGH);
+  disable();
 }
 
 /****************************************************************************/

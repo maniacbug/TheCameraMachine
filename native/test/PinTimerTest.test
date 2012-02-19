@@ -91,5 +91,16 @@ public:
 
     TS_ASSERT(!thePins.hwGetDigital(pin));
   }
+  void testStaysLow( void )
+  {
+    Sender(*pConnector).send(signal_high);
+
+    delay(duration+1);
+    pUpdater->update();
+    delay(duration+1);
+    pUpdater->update();
+
+    TS_ASSERT(!thePins.hwGetDigital(pin));
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
