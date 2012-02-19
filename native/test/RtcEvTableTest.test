@@ -238,5 +238,15 @@ public:
     pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,0);
   }
+  void testAllEventsInPast( void )
+  {
+    uint32_t future = DateTime(2030,1,1,0,0,0).unixtime();
+    RTC.adjust(future);
+    
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4);
+    pRtcEvTable->begin();
+
+    TS_ASSERT( ! pRtcEvTable->is_valid() );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
