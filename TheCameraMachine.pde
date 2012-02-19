@@ -70,28 +70,16 @@ void setup(void)
   //
 
   rtc_begin();
-  test_switch.begin();
-  record_button.begin();
-  power_led.begin();
-  record_led.begin();
-  other_led.begin();
-  power_relay.begin();
-  alt_relay.begin();
+  test_switch.begin(up);
+  record_button.begin(up);
+  power_led.begin(NULL);
+  record_led.begin(NULL);
+  other_led.begin(NULL);
+  power_relay.begin(NULL);
+  alt_relay.begin(NULL);
   camera.begin(NULL);
   fire_camera.begin(up,NULL);
   tty.begin(up);
-
-  //
-  // Connect objects
-  //
-
-  // Note that these listen to any emitters.  To restrict only to
-  // a single channel, they would have to be pointed at that channel.
-  power_led.listen(NULL);
-  record_led.listen(NULL);
-  other_led.listen(NULL);
-  power_relay.listen(NULL);
-  alt_relay.listen(NULL);
 
   //
   // Logger symbols
@@ -126,13 +114,6 @@ void setup(void)
   
   // Begin the main events after the logger is set up
   events.begin(up);
-
-  //
-  // Register updating objects
-  //
-
-  up.add(&test_switch);
-  up.add(&record_button);
 }
 
 void loop(void)
