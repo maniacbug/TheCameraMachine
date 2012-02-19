@@ -79,6 +79,7 @@ void setup(void)
   alt_relay.begin();
   camera.begin(NULL);
   fire_camera.begin();
+  tty.begin(up);
 
   //
   // Connect objects
@@ -133,7 +134,6 @@ void setup(void)
   up.add(&record_button);
   up.add(&events);
   up.add(&fire_camera);
-  up.add(&tty);
 }
 
 void loop(void)
