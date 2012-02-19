@@ -287,12 +287,16 @@ void EepromLogger::playback(EepromStream& player, bool print)
       marked_time += x.time_value();
       if (print) printf_P(PSTR("LOG  %04u TIME %s\n\r"),at,DateTime(marked_time).toString(buf,sizeof(buf)));
     }
+// This is impossible to get, because the entire bit space of types is covered by the
+// valid types
+#if 0
     else
     {
       player.read(current);
       if (print) printf_P(PSTR("LOG  %04u Unknown value %u\n\r"),at,current);
       done = true;
     }
+#endif
   }
 }
 

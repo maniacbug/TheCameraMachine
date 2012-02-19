@@ -192,7 +192,17 @@ public:
     
     //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("BEGIN"), 1 );
-
+  }
+  void testUnknownCommand( void )
+  {
+    pEepromLogger->begin();
+    
+    // garbage
+    theEeprom.writeByte(0,0xF);
+    
+    pEepromLogger->play();
+    cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("Unknown command"), 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
