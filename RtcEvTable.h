@@ -16,6 +16,8 @@
 #include <IUpdate.h>
 // Project includes
 
+class Updater;
+
 /**
  * Maintains a list of time values and a signal to emit.  Monitors RTC time
  * and emits the signal when the time for each passes.
@@ -55,6 +57,7 @@ public:
   RtcEvTable(Connector& _conn,const evline* events,uint8_t num_lines, uint8_t num_channels = 1);
   virtual ~RtcEvTable();
   void begin(void);
+  void begin(Updater&);
   void reset(void) { current = table; }
   void invalidate(void);
   bool is_valid(void) const;

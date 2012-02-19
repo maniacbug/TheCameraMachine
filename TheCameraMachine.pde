@@ -124,7 +124,7 @@ void setup(void)
   
   // Begin the logger after all the symbols are set.
   logger.begin();
-  events.begin();
+  events.begin(up);
 
   //
   // Register updating objects
@@ -132,7 +132,6 @@ void setup(void)
 
   up.add(&test_switch);
   up.add(&record_button);
-  up.add(&events);
   up.add(&fire_camera);
 }
 
