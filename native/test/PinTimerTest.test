@@ -12,6 +12,7 @@
 #include <iostream>
 // C headers
 // Framework headers
+#include <Pins.h>
 // Library headers
 #include <cxxtest/TestSuite.h>
 #include <Connector.h>
@@ -21,8 +22,19 @@
 
 using namespace std;
 
+extern Pins thePins;
+
 class PinTimerTestSuite: public CxxTest::TestSuite
 {
+  struct Sender: public Connectable
+  {
+    void send(uint8_t _signal)
+    {
+      emit(_signal);
+    }
+    Sender(Connector& _conn): Connectable(_conn) {}
+  };
+
   Connector* pConnector;
   PinTimer* pPinTimer;
   
@@ -30,11 +42,15 @@ class PinTimerTestSuite: public CxxTest::TestSuite
   static const int signal_low = 2;
   static const int signal_high = 3;
   static const unsigned long duration = 500;
+  
 public:
   void setUp()
   {
+    thePins.clear();
+
     pConnector = new Connector;
     pPinTimer = new PinTimer(*pConnector,pin,signal_low,signal_high,duration);
+    pPinTimer->listen(NULL);
   }
   
   void tearDown()
@@ -46,6 +62,17 @@ public:
   void testEmpty( void )
   {
     TS_ASSERT(pPinTimer);
+  }
+
+  void testStartsLow( void )
+  {
+    TS_ASSERT(!thePins.hwGetDigital(pin));
+  }
+  void testGoesHigh( void )
+  {
+    Sender(*pConnector).send(signal_high);
+
+    TS_ASSERT(thePins.hwGetDigital(pin));
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
