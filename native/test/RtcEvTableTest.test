@@ -258,5 +258,11 @@ public:
     
     TS_ASSERT( pRtcEvTable->whenNext() > future );
   }
+  void testInvalidChannel( void )
+  {
+    pRtcEvTable = new RtcEvTable(*pConnector,events,4,2); // 2 channels!!
+  
+    TS_ASSERT( pRtcEvTable->channel(3) == NULL );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
