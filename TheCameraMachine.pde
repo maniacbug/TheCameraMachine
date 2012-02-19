@@ -62,7 +62,9 @@ void setup(void)
   pinSymbol(power_relay_pin,"power_relay");
   pinSymbol(alt_relay_pin,"alt_relay");
   pinSymbol(lanc_rx_pin,"lanc_rx");
-  pinSymbol(lanc_tx_pin,"lanc_tx");
+  pinSymbol(focus_pin,"focus");
+  pinSymbol(shutter_pin,"shutter");
+  pinSymbol(piezo_pin,"piezo");
 #endif
 
   //
@@ -77,6 +79,7 @@ void setup(void)
   other_led.begin();
   power_relay.begin();
   alt_relay.begin();
+  focus.begin();
   camera.begin();
   fire_camera.begin();
 
@@ -91,6 +94,7 @@ void setup(void)
   other_led.listen(NULL);
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
+  focus.listen(NULL);
   camera.listen(NULL);
   fire_camera.listen(NULL);
   conn.setLogger(&logger);
@@ -109,6 +113,9 @@ void setup(void)
   logger.setSymbol(signal_other_led_off, PSTR("other_led_off"));
   logger.setSymbol(signal_toggle_record, PSTR("toggle_record"));
   logger.setSymbol(signal_fire_camera, PSTR("fire_camera"));
+  logger.setSymbol(signal_focus_on, PSTR("focus_on"));
+  logger.setSymbol(signal_focus_off, PSTR("focus_off"));
+  logger.setSymbol(signal_shutter_tap, PSTR("shutter_tap"));
 
   logger.setSymbol(&test_switch, PSTR("test_switch"));
   logger.setSymbol(&record_button, PSTR("record_button"));
@@ -118,6 +125,7 @@ void setup(void)
   logger.setSymbol(&record_led, PSTR("record_led"));
   logger.setSymbol(&other_led, PSTR("other_led"));
   logger.setSymbol(&camera, PSTR("camera"));
+  logger.setSymbol(&focus, PSTR("focus"));
   logger.setSymbol(events.channel(0), PSTR("events ch#0"));
   logger.setSymbol(&fire_camera, PSTR("fire_camera"));
   logger.setSymbol(fire_camera.channel(0), PSTR("fire_camera ch#0"));

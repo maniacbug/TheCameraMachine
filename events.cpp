@@ -16,14 +16,14 @@
 
 const RtcEvTable::evline events_table[] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
-  { 12, 2,18,13, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18,14, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18,15, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18,16, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18,17, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18,18, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18,19, 0, 0, 0,signal_fire_camera },
-  { 12, 2,18,20, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,13, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,14, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,15, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,16, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,17, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,18, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,19, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,20, 0, 0, 0,signal_fire_camera },
   
 };
 int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
@@ -40,6 +40,18 @@ const RtcEvTable::evline events_fire_camera[] PROGMEM = {
   {  0, 0, 0, 0, 1,20, 0,signal_power_off  },
 };
 int num_events_fire_camera = sizeof(events_fire_camera)/sizeof(RtcEvTable::evline);
+
+//
+// EVENT TABLE for skycam GH-2
+//
+
+const RtcEvTable::evline events_skycam_gh2[] PROGMEM = {
+  //YY,MM,DD HH MM SS,CH, signal
+  {  0, 0, 0, 0, 0, 0, 0,signal_focus_on },
+  {  0, 0, 0, 0, 0, 2, 0,signal_shutter_tap },
+  {  0, 0, 0, 0, 0, 3, 0,signal_focus_off },
+};
+int num_events_skycam_gh2 = sizeof(events_skycam_gh2)/sizeof(RtcEvTable::evline);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 

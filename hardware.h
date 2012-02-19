@@ -42,6 +42,9 @@ const int power_relay_pin = 4;
 const int alt_relay_pin = A0;
 const int lanc_rx_pin = 2;
 const int lanc_tx_pin = 3;
+const int focus_pin = A1;
+const int shutter_pin = A2;
+const int piezo_pin = A3;
 
 #endif
 

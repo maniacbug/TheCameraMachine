@@ -35,6 +35,7 @@ extern PinControl alt_relay;
 extern PinControl power_led;
 extern PinControl record_led;
 extern PinControl other_led;
+extern PinControl focus;
 extern LancControl camera;
 extern EepromLogger logger;
 extern RtcEvTable events;

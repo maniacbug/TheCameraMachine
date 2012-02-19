@@ -8,5 +8,8 @@ const uint8_t signal_other_led_on = 7;
 const uint8_t signal_other_led_off = 8;
 const uint8_t signal_toggle_record = 9;
 const uint8_t signal_fire_camera = 10;
+const uint8_t signal_focus_on = 11;
+const uint8_t signal_focus_off = 12;
+const uint8_t signal_shutter_tap = 13;
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
