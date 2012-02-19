@@ -16,4 +16,13 @@
 
 /****************************************************************************/
 
+PinTimer::PinTimer(Connector& _conn,int _pin,uint8_t _signal_low,
+    uint8_t _signal_high,unsigned long _interval):
+  PinControl(_conn,_pin,_signal_low,_signal_high),
+  Tictocs::Timer(_interval)
+{
+}
+
+/****************************************************************************/
+
 // vim:cin:ai:sts=2 sw=2 ft=cpp

@@ -13,17 +13,20 @@
 // C headers
 // Framework headers
 // Library headers
+#include <TictocTimer.h>
+#include <PinControl.h>
 // Project headers
 
 /**
  * Example for how classes should be declared
  */
 
-class PinTimer
+class PinTimer: public PinControl, public Tictocs::Timer
 {
 private:
 protected:
 public:
+  PinTimer(Connector& _conn,int _pin,uint8_t _signal_low,uint8_t _signal_high,unsigned long _interval);
 };
 
 #endif // __PINTIMER_H__

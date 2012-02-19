@@ -14,6 +14,7 @@
 // Framework headers
 // Library headers
 #include <cxxtest/TestSuite.h>
+#include <Connector.h>
 // Project headers
 // This component's header
 #include <PinTimer.h>
@@ -22,16 +23,24 @@ using namespace std;
 
 class PinTimerTestSuite: public CxxTest::TestSuite
 {
-  PinTimer* pPinTimer ;
+  Connector* pConnector;
+  PinTimer* pPinTimer;
+  
+  static const int pin = 1;
+  static const int signal_low = 2;
+  static const int signal_high = 3;
+  static const unsigned long duration = 500;
 public:
   void setUp()
   {
-    pPinTimer = new PinTimer();
+    pConnector = new Connector;
+    pPinTimer = new PinTimer(*pConnector,pin,signal_low,signal_high,duration);
   }
   
   void tearDown()
   {
     delete pPinTimer;
+    delete pConnector;
   }
 
   void testEmpty( void )
