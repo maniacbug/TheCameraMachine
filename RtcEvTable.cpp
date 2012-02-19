@@ -21,7 +21,7 @@
 #include "objects.h" // for logger
 
 #if 1 
-inline void* operator new(size_t, void* __p)
+void* operator new(size_t, void* __p)
 {
     return __p;
 }

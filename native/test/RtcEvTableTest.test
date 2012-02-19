@@ -258,6 +258,13 @@ public:
     
     TS_ASSERT( pRtcEvTable->whenNext() > future );
   }
+  void testSeqWhenNextInvalid( void )
+  {
+    pSignalEvTable = new SignalEvTable(*pConnector,1,sequence_events,num_sequence_events);
+    uint32_t future = DateTime(2030,1,1,0,0,0).unixtime();
+    
+    TS_ASSERT( pSignalEvTable->whenNext() > future );
+  }
   void testInvalidChannel( void )
   {
     pRtcEvTable = new RtcEvTable(*pConnector,events,4,2); // 2 channels!!
