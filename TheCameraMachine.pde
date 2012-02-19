@@ -77,7 +77,7 @@ void setup(void)
   other_led.begin();
   power_relay.begin();
   alt_relay.begin();
-  camera.begin();
+  camera.begin(NULL);
   fire_camera.begin();
 
   //
@@ -91,7 +91,6 @@ void setup(void)
   other_led.listen(NULL);
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
-  camera.listen(NULL);
   fire_camera.listen(NULL);
   conn.setLogger(&logger);
 

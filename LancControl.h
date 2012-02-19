@@ -38,6 +38,7 @@ protected:
 public:
   LancControl(Connector& _conn, int _rx_pin, int _tx_pin);
   void begin(void);
+  void begin(Connectable* _who); // begin+listen
   void listen(Connectable* _who);
   bool isRecording(void) const;
 };
