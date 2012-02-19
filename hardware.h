@@ -46,6 +46,11 @@ const int focus_pin = A1;
 const int shutter_pin = A2;
 const int piezo_pin = A3;
 
+// Define only one of these, undef the rest
+
+#define SKYCAM_GH2
+#undef HANDYCAM
+
 #endif
 
 #endif // __HARDWARE_H__

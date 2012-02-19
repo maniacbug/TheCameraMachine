@@ -80,6 +80,7 @@ void setup(void)
   power_relay.begin();
   alt_relay.begin();
   focus.begin();
+  shutter_tap.begin();
   camera.begin();
   fire_camera.begin();
 
@@ -94,6 +95,7 @@ void setup(void)
   other_led.listen(NULL);
   power_relay.listen(NULL);
   alt_relay.listen(NULL);
+  shutter_tap.listen(NULL);
   focus.listen(NULL);
   camera.listen(NULL);
   fire_camera.listen(NULL);
@@ -126,6 +128,7 @@ void setup(void)
   logger.setSymbol(&other_led, PSTR("other_led"));
   logger.setSymbol(&camera, PSTR("camera"));
   logger.setSymbol(&focus, PSTR("focus"));
+  logger.setSymbol(&shutter_tap, PSTR("shutter_tap"));
   logger.setSymbol(events.channel(0), PSTR("events ch#0"));
   logger.setSymbol(&fire_camera, PSTR("fire_camera"));
   logger.setSymbol(fire_camera.channel(0), PSTR("fire_camera ch#0"));
@@ -141,6 +144,7 @@ void setup(void)
   up.add(&test_switch);
   up.add(&record_button);
   up.add(&events);
+  up.add(&shutter_tap);
   up.add(&fire_camera);
   up.add(&tty);
 }

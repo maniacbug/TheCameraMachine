@@ -33,9 +33,18 @@ PinControl power_led(conn,power_led_pin,signal_power_off,signal_power_on);
 PinControl record_led(conn,record_led_pin,signal_stop_record,signal_start_record);
 PinControl other_led(conn,other_led_pin,signal_other_led_off,signal_other_led_on);
 PinControl focus(conn,focus_pin,signal_focus_off,signal_focus_on);
+PinTimer shutter_tap(conn,shutter_pin,0,signal_shutter_tap,500);
 LancControl camera(conn,lanc_rx_pin,lanc_tx_pin);
 EepromLogger logger;
 RtcEvTable events(conn,events_table,num_events);
-SignalEvTable fire_camera(conn,signal_fire_camera,events_skycam_gh2,num_events_skycam_gh2); //events_fire_camera,num_events_fire_camera);
 SerialLineIn tty;
+
+#ifdef SKYCAM_GH2
+SignalEvTable fire_camera(conn,signal_fire_camera,events_skycam_gh2,num_events_skycam_gh2);
+#endif
+
+#ifdef HANDYCAM
+SignalEvTable fire_camera(conn,signal_fire_camera,events_fire_camera,num_events_fire_camera);
+#endif
+
 // vim:cin:ai:sts=2 sw=2 ft=cpp
