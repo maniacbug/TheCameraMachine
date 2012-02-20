@@ -229,8 +229,7 @@ void EepromLogger::playback(EepromStream& player, bool print)
   {
     unsigned at = player.tell();
     player.peek(current);
-    if ( player.didOverflow() )
-      break; 
+    done =  player.didOverflow();
 
     if ( is_type(command_t(0),current) )
     {
