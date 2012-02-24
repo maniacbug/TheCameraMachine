@@ -17,13 +17,28 @@ Only needed if you want to target the native machine and run tests.
 1. cxxtest
 2. Arduino Native Core
 
+# Hardware Variants
+
+The Camera Machine support two hardware configurations:
+
+* Skycam
+* Handicam
+
+The same software runs on each.  The difference is in how the hardware is connected
+and the sequences of events which play out on each.
+
+Please see Skycam/hardware.h for the pinouts expected on the Skycam board,
+and see Handicam/hardware.h for the pinouts expected on the Handicam board.
+
+For the event sequence, see Skycam/Skycam.pde and Handicam/Handicam.pde.
+
 # Configuring
 
 ## Events List
 
 The primary configuration for the controller is to modify the list of events
-which control what happens when.  To do so, edit events.cpp, and modify the
-'events\_table' array.
+which control what happens when.  To do so, edit the PDE file for the particular
+hardware board, and modify the 'events\_table' array.
 
 Here is an example.  It says that at Midnight (00:00:00) on Nov 19, 2011, the
 "signal\_power\_on" should be raised on channel 0.  This will cause any 
@@ -41,11 +56,6 @@ events coming first.
     };
 
 A full list of signals is available in the file signals.h.
-
-## Hardware
-
-The hardware configuration is described in the file hardware.h.  If the board
-is laid out differently, modify this file.
 
 # Running
 
