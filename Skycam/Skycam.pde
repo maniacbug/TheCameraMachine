@@ -20,15 +20,33 @@
 #include "events.h"
 
 //
-// EVENT TABLE for skycam GH-2
+// MAIN EVENT TABLE for skycam 
 //
 
 const RtcEvTable::evline events_table[] PROGMEM = {
+  //YY,MM,DD HH MM SS,CH, signal
+  { 12, 2,19,13, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,14, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,15, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,16, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,17, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,18, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,19, 0, 0, 0,signal_fire_camera },
+  { 12, 2,19,20, 0, 0, 0,signal_fire_camera },
+  
+};
+int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
+
+//
+// FIRE CAMERA EVENTS for signal_fire_camera (skycam GH-2)
+//
+
+const RtcEvTable::evline events_fire_camera[] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
   {  0, 0, 0, 0, 0, 0, 0,signal_focus_on },
   {  0, 0, 0, 0, 0, 2, 0,signal_shutter_tap },
   {  0, 0, 0, 0, 0, 3, 0,signal_focus_off },
 };
-int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
+int num_events_fire_camera = sizeof(events_fire_camera)/sizeof(RtcEvTable::evline);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

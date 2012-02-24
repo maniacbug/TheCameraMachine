@@ -34,8 +34,9 @@ EepromLogger logger;
 RtcEvTable events(conn,events_table,num_events);
 SerialLineIn tty;
 
-// Specialized objects
+// Specialized objects for SKYCAM
 PinControl focus(conn,focus_pin,signal_focus_off,signal_focus_on);
 PinTimer shutter_tap(conn,shutter_pin,0,signal_shutter_tap,500);
+SignalEvTable fire_camera(conn,signal_fire_camera,events_fire_camera,num_events_fire_camera);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

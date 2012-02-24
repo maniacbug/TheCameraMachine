@@ -40,7 +40,7 @@ const RtcEvTable::evline events_table[] PROGMEM = {
 int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
 
 //
-// EVENT TABLE for signal_fire_camera
+// FIRE CAMERA EVENTS for signal_fire_camera
 //
 
 const RtcEvTable::evline events_fire_camera[] PROGMEM = {

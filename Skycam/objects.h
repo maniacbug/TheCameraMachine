@@ -42,10 +42,7 @@ extern EepromLogger logger;
 extern RtcEvTable events;
 extern SignalEvTable fire_camera;
 extern SerialLineIn tty;
-
-#ifdef HAVE_LANC
 extern LancControl camera;
-#endif
 
 #endif // __OBJECTS_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

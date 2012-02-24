@@ -27,6 +27,7 @@ const int piezo_pin = A1;
 
 #define BOARD_SKYCAM
 #define HAVE_FOCUS_SHUTTER
+#define HAVE_FIRE_CAMERA
 
 #endif // __HARDWARE_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp
