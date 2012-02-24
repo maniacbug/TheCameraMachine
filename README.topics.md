@@ -1,3 +1,7 @@
+## topic_subdirs
+
+To make mulitple configurations easier, I am copying files into individual directories.
+
 ## topic_skycam
 
 ### Skycam GH-2
