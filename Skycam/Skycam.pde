@@ -17,6 +17,7 @@
 //Project includes
 #include <RtcEvTable.h>
 #include "signals.h"
+#include "events.h"
 
 //
 // EVENT TABLE for skycam GH-2
@@ -28,6 +29,6 @@ const RtcEvTable::evline events_table[] PROGMEM = {
   {  0, 0, 0, 0, 0, 2, 0,signal_shutter_tap },
   {  0, 0, 0, 0, 0, 3, 0,signal_focus_off },
 };
-int num_events_table = sizeof(events_table)/sizeof(RtcEvTable::evline);
+int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

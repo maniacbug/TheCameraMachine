@@ -15,17 +15,22 @@
  * Pinouts for the hardware on which this sketch is running
  */
 
-// Skycam board
+// Handicam board 
 
 const int test_switch_pin = 9;
-const int power_led_pin = 12;
-const int record_led_pin = 10;
-const int other_led_pin = 8;
-const int focus_pin = 7;
-const int shutter_pin = 13;
-const int piezo_pin = A1;
+const int record_button_pin = 8;
+const int power_led_pin = 7;
+const int record_led_pin = 6;
+const int other_led_pin = 5;
+const int power_relay_pin = 4;
+const int alt_relay_pin = A0;
+const int lanc_rx_pin = 2;
+const int lanc_tx_pin = 3;
 
 #define BOARD_HANDICAM
+#define HAVE_LANC
+#define HAVE_RELAYS
+#define HAVE_RECORD_BUTTON
 
 #endif // __HARDWARE_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

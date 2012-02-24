@@ -75,8 +75,11 @@ void setup(void)
   power_led.begin();
   record_led.begin();
   other_led.begin();
+  
+#ifdef HAVE_FOCUS_SHUTTER
   focus.begin();
   shutter_tap.begin();
+#endif
 
 #ifdef HAVE_RELAYS
   power_relay.begin();
@@ -103,8 +106,11 @@ void setup(void)
   // a single channel, they would have to be pointed at that channel.
   power_led.listen(NULL);
   other_led.listen(NULL);
+
+#ifdef HAVE_FOCUS_SHUTTER
   shutter_tap.listen(NULL);
   focus.listen(NULL);
+#endif
   
 #ifdef HAVE_RELAYS
   power_relay.listen(NULL);
@@ -147,10 +153,13 @@ void setup(void)
   logger.setSymbol(&power_led, PSTR("power_led"));
   logger.setSymbol(&record_led, PSTR("record_led"));
   logger.setSymbol(&other_led, PSTR("other_led"));
-  logger.setSymbol(&focus, PSTR("focus"));
-  logger.setSymbol(&shutter_tap, PSTR("shutter_tap"));
   logger.setSymbol(events.channel(0), PSTR("events ch#0"));
   
+#ifdef HAVE_FOCUS_SHUTTER
+  logger.setSymbol(&focus, PSTR("focus"));
+  logger.setSymbol(&shutter_tap, PSTR("shutter_tap"));
+#endif
+
 #ifdef HAVE_RELAYS
   logger.setSymbol(&power_relay, PSTR("power_relay"));
   logger.setSymbol(&alt_relay, PSTR("alt_relay"));
@@ -179,9 +188,12 @@ void setup(void)
 
   up.add(&test_switch);
   up.add(&events);
-  up.add(&shutter_tap);
   up.add(&tty);
   
+#ifdef HAVE_FOCUS_SHUTTER
+  up.add(&shutter_tap);
+#endif
+
 #ifdef HAVE_RECORD_BUTTON
   up.add(&record_button);
 #endif

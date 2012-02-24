@@ -26,6 +26,7 @@ const int shutter_pin = 13;
 const int piezo_pin = A1;
 
 #define BOARD_SKYCAM
+#define HAVE_FOCUS_SHUTTER
 
 #endif // __HARDWARE_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp
