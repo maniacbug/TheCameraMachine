@@ -12,7 +12,7 @@
 // Library headers
 // Project headers
 // This component's header
-#include <PinTimer.h>
+#include "PinTimer.h"
 
 /****************************************************************************/
 
