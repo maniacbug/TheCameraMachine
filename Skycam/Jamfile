@@ -10,6 +10,7 @@ for _f in [ GLOB $(ORIGINAL_SOURCE_DIR) : $(ORIGINAL_FILES) ]
 {
 	File $(_f:D=$(PWD)) : $(_f) ;
 	Depends files : $(_f:D=$(PWD)) ;
+	Clean clean : $(_f:D=$(PWD)) ;
 }
 
 # (2) Board Information

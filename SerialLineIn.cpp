@@ -88,15 +88,19 @@ bool SerialLineIn::dispatch(void)
       if ( !strcmp(buf+1,"N") )
       {
 	uint32_t when = events.whenNext();
+#ifdef HAVE_FIRE_CAMERA
 	if ( fire_camera.is_valid() )
 	  when = fire_camera.whenNext();
+#endif
 	RTC.adjust(when);
 	print_time();
       }
       else if ( !strcmp(buf+1,"1") )
       {
 	events.reset();
+#ifdef HAVE_FIRE_CAMERA
 	fire_camera.invalidate();
+#endif
 	RTC.adjust(events.whenNext());
 	print_time();
       }

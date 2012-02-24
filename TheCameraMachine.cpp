@@ -12,12 +12,11 @@
 #else
 #include <Arduino.h>
 #endif
+// Library includes
 #include <Wire.h>
 #include <SPI.h>
 #include <EEPROM.h>
 #include <SoftwareSerial.h>
-
-// Library includes
 #include <MemoryFree.h>
 #include <AnyRtc.h>
 #include <Tictocs.h>
@@ -73,16 +72,28 @@ void setup(void)
 
   rtc_begin();
   test_switch.begin();
-  record_button.begin();
   power_led.begin();
   record_led.begin();
   other_led.begin();
-  power_relay.begin();
-  alt_relay.begin();
   focus.begin();
   shutter_tap.begin();
+
+#ifdef HAVE_RELAYS
+  power_relay.begin();
+  alt_relay.begin();
+#endif
+
+#ifdef HAVE_RECORD_BUTTON
+  record_button.begin();
+#endif
+
+#ifdef HAVE_LANC
   camera.begin();
+#endif
+
+#ifdef HAVE_FIRE_CAMERA 
   fire_camera.begin();
+#endif
 
   //
   // Connect objects
@@ -91,14 +102,27 @@ void setup(void)
   // Note that these listen to any emitters.  To restrict only to
   // a single channel, they would have to be pointed at that channel.
   power_led.listen(NULL);
-  record_led.listen(NULL);
   other_led.listen(NULL);
-  power_relay.listen(NULL);
-  alt_relay.listen(NULL);
   shutter_tap.listen(NULL);
   focus.listen(NULL);
+  
+#ifdef HAVE_RELAYS
+  power_relay.listen(NULL);
+  alt_relay.listen(NULL);
+#endif
+  
+#ifdef HAVE_RECORD_BUTTON
+  record_led.listen(NULL);
+#endif
+  
+#ifdef HAVE_LANC
   camera.listen(NULL);
+#endif
+  
+#ifdef HAVE_FIRE_CAMERA 
   fire_camera.listen(NULL);
+#endif
+
   conn.setLogger(&logger);
 
   //
@@ -120,18 +144,30 @@ void setup(void)
   logger.setSymbol(signal_shutter_tap, PSTR("shutter_tap"));
 
   logger.setSymbol(&test_switch, PSTR("test_switch"));
-  logger.setSymbol(&record_button, PSTR("record_button"));
-  logger.setSymbol(&power_relay, PSTR("power_relay"));
-  logger.setSymbol(&alt_relay, PSTR("alt_relay"));
   logger.setSymbol(&power_led, PSTR("power_led"));
   logger.setSymbol(&record_led, PSTR("record_led"));
   logger.setSymbol(&other_led, PSTR("other_led"));
-  logger.setSymbol(&camera, PSTR("camera"));
   logger.setSymbol(&focus, PSTR("focus"));
   logger.setSymbol(&shutter_tap, PSTR("shutter_tap"));
   logger.setSymbol(events.channel(0), PSTR("events ch#0"));
+  
+#ifdef HAVE_RELAYS
+  logger.setSymbol(&power_relay, PSTR("power_relay"));
+  logger.setSymbol(&alt_relay, PSTR("alt_relay"));
+#endif
+
+#ifdef HAVE_RECORD_BUTTON
+  logger.setSymbol(&record_button, PSTR("record_button"));
+#endif
+  
+#ifdef HAVE_LANC
+  logger.setSymbol(&camera, PSTR("camera"));
+#endif
+  
+#ifdef HAVE_FIRE_CAMERA 
   logger.setSymbol(&fire_camera, PSTR("fire_camera"));
   logger.setSymbol(fire_camera.channel(0), PSTR("fire_camera ch#0"));
+#endif
   
   // Begin the logger after all the symbols are set.
   logger.begin();
@@ -142,11 +178,17 @@ void setup(void)
   //
 
   up.add(&test_switch);
-  up.add(&record_button);
   up.add(&events);
   up.add(&shutter_tap);
-  up.add(&fire_camera);
   up.add(&tty);
+  
+#ifdef HAVE_RECORD_BUTTON
+  up.add(&record_button);
+#endif
+
+#ifdef HAVE_FIRE_CAMERA 
+  up.add(&fire_camera);
+#endif
 }
 
 void loop(void)
