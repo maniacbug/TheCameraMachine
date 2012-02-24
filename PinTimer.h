@@ -17,6 +17,8 @@
 #include <PinControl.h>
 // Project headers
 
+class Updater;
+
 /**
  * Control a pin, and automatically set it back after a certain
  * interval
@@ -30,6 +32,7 @@ protected:
   virtual void onNotify(const Connectable* who, uint8_t signal);
 public:
   PinTimer(Connector& _conn,int _pin,uint8_t _signal_low,uint8_t _signal_high,unsigned long _interval);
+  void begin(Updater& up,Connectable* who);
 };
 
 #endif // __PINTIMER_H__

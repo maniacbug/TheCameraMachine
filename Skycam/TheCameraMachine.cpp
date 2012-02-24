@@ -71,65 +71,33 @@ void setup(void)
   //
 
   rtc_begin();
-  test_switch.begin();
-  power_led.begin();
-  record_led.begin();
-  other_led.begin();
+  test_switch.begin(up);
+  power_led.begin(NULL);
+  record_led.begin(NULL);
+  other_led.begin(NULL);
+  tty.begin(up);
   
 #ifdef HAVE_FOCUS_SHUTTER
-  focus.begin();
-  shutter_tap.begin();
+  focus.begin(NULL);
+  shutter_tap.begin(up,NULL);
 #endif
 
 #ifdef HAVE_RELAYS
-  power_relay.begin();
-  alt_relay.begin();
+  power_relay.begin(NULL);
+  alt_relay.begin(NULL);
 #endif
 
 #ifdef HAVE_RECORD_BUTTON
-  record_button.begin();
+  record_button.begin(up);
 #endif
 
 #ifdef HAVE_LANC
-  camera.begin();
+  camera.begin(NULL);
 #endif
 
 #ifdef HAVE_FIRE_CAMERA 
-  fire_camera.begin();
+  fire_camera.begin(up,NULL);
 #endif
-
-  //
-  // Connect objects
-  //
-
-  // Note that these listen to any emitters.  To restrict only to
-  // a single channel, they would have to be pointed at that channel.
-  power_led.listen(NULL);
-  other_led.listen(NULL);
-
-#ifdef HAVE_FOCUS_SHUTTER
-  shutter_tap.listen(NULL);
-  focus.listen(NULL);
-#endif
-  
-#ifdef HAVE_RELAYS
-  power_relay.listen(NULL);
-  alt_relay.listen(NULL);
-#endif
-  
-#ifdef HAVE_RECORD_BUTTON
-  record_led.listen(NULL);
-#endif
-  
-#ifdef HAVE_LANC
-  camera.listen(NULL);
-#endif
-  
-#ifdef HAVE_FIRE_CAMERA 
-  fire_camera.listen(NULL);
-#endif
-
-  conn.setLogger(&logger);
 
   //
   // Logger symbols
@@ -182,25 +150,10 @@ void setup(void)
   logger.begin();
   events.begin();
 
-  //
-  // Register updating objects
-  //
-
-  up.add(&test_switch);
-  up.add(&events);
-  up.add(&tty);
+  conn.setLogger(&logger);
   
-#ifdef HAVE_FOCUS_SHUTTER
-  up.add(&shutter_tap);
-#endif
-
-#ifdef HAVE_RECORD_BUTTON
-  up.add(&record_button);
-#endif
-
-#ifdef HAVE_FIRE_CAMERA 
-  up.add(&fire_camera);
-#endif
+  // Begin the main events after the logger is set up
+  events.begin(up);
 }
 
 void loop(void)

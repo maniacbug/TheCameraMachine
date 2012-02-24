@@ -79,7 +79,7 @@ void setup(void)
   
 #ifdef HAVE_FOCUS_SHUTTER
   focus.begin(NULL);
-  shutter_tap.begin(up);
+  shutter_tap.begin(up,NULL);
 #endif
 
 #ifdef HAVE_RELAYS

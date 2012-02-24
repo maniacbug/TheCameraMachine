@@ -10,6 +10,7 @@
 // C headers
 // Framework headers
 // Library headers
+#include <Updater.h>
 // Project headers
 // This component's header
 #include "PinTimer.h"
@@ -22,6 +23,13 @@ PinTimer::PinTimer(Connector& _conn,int _pin,uint8_t _signal_low,
   Tictocs::Timer(_interval)
 {
   disable();
+}
+/****************************************************************************/
+
+void PinTimer::begin(Updater& up,Connectable* who) 
+{ 
+  PinControl::begin(who);
+  up.add(this);
 }
 
 /****************************************************************************/

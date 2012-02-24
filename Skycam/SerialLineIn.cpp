@@ -17,6 +17,7 @@
 // Library includes
 #include <AnyRtc.h>
 #include <MemoryFree.h>
+#include <Updater.h>
 // Project includes
 #include "SerialLineIn.h"
 #include "objects.h"
@@ -42,6 +43,13 @@ void print_time(void)
 
 SerialLineIn::SerialLineIn(void): current(buf)
 {
+}
+
+/****************************************************************************/
+
+void SerialLineIn::begin(Updater& up)
+{
+  up.add(this);
 }
 
 /****************************************************************************/

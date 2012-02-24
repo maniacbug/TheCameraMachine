@@ -15,6 +15,8 @@
 #include <IUpdate.h>
 // Project includes
 
+class Updater;
+
 /**
  * Monitors serial input, compiles a line buffer, takes actions when the line
  * is full.
@@ -39,6 +41,7 @@ protected:
   bool dispatch(void);
 public:
   SerialLineIn(void);
+  void begin(Updater&);
   void update(void);
 };
 /****************************************************************************/

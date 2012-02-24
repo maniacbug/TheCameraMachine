@@ -16,6 +16,7 @@
 #endif
 // Library includes
 #include <AnyRtc.h>
+#include <Updater.h>
 // Project includes
 #include "RtcEvTable.h"
 #include "objects.h" // for logger
@@ -35,11 +36,22 @@ uint32_t eventtime(const RtcEvTable::evline& prog_event)
   memcpy_P(&event,&prog_event,sizeof(event));
   return DateTime(event[0],event[1],event[2],event[3],event[4],event[5]).unixtime();
 }
+
 /****************************************************************************/
+
+void RtcEvTable::begin(Updater& up)
+{
+  up.add(this);
+  begin();
+}
+
+/****************************************************************************/
+
 bool RtcEvTable::is_time_now(void) const
 {
   return is_valid() && RTC.now() >= whenNext();
 }
+
 /****************************************************************************/
 
 void RtcEvTable::update(void)
@@ -171,6 +183,14 @@ SignalEvTable::SignalEvTable(Connector& _conn,uint8_t _signal_start,const evline
 {
   // The initialized state of a signal ev table is the INVALID state
   invalidate();
+}
+
+/****************************************************************************/
+
+void SignalEvTable::begin(Updater& up,Connectable* _who)
+{
+  RtcEvTable::begin(up);
+  listen(_who);
 }
 
 /****************************************************************************/
