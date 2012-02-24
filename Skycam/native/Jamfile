@@ -1,0 +1,10 @@
+SubDir TOP ;
+
+#SubInclude TOP test ;
+
+LOCATE_SOURCE = out ;
+LOCATE_TARGET = out ;
+
+Main Shell : $(EXTRAS_DIR)/shellmain.cpp $(INTERNAL_MODULES) $(SKETCH_CLASS_MODULES) $(CORE_MODULES) $(SKETCH_MODULES) $(LIBRARY_MODULES) $(NATIVE_MODULES) ;
+LINKFLAGS on Shell = $(LINKFLAGS) -lreadline -lpthread ;
+

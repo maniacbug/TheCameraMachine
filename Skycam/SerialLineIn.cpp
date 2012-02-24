@@ -21,6 +21,7 @@
 // Project includes
 #include "SerialLineIn.h"
 #include "objects.h"
+#include "hardware.h"
 
 /****************************************************************************/
 

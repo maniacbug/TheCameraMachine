@@ -54,16 +54,33 @@ void setup(void)
 
 #if NATIVE
   pinSymbol(test_switch_pin,"test_switch");
-  pinSymbol(record_button_pin,"record_button");
   pinSymbol(other_led_pin,"other_led");
   pinSymbol(power_led_pin,"power_led");
   pinSymbol(record_led_pin,"record_led");
+  
+#ifdef HAVE_RELAYS
   pinSymbol(power_relay_pin,"power_relay");
   pinSymbol(alt_relay_pin,"alt_relay");
+#endif
+  
+#ifdef HAVE_LANC
   pinSymbol(lanc_rx_pin,"lanc_rx");
+  pinSymbol(lanc_tx_pin,"lanc_tx");
+#endif
+  
+#ifdef HAVE_FOCUS_SHUTTER
   pinSymbol(focus_pin,"focus");
   pinSymbol(shutter_pin,"shutter");
+#endif
+  
+#ifdef HAVE_PIEZO
   pinSymbol(piezo_pin,"piezo");
+#endif
+
+#ifdef HAVE_RECORD_BUTTON
+  pinSymbol(record_button_pin,"record_button");
+#endif
+
 #endif
 
   //

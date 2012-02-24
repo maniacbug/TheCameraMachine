@@ -31,6 +31,7 @@ const int lanc_tx_pin = 3;
 #define HAVE_LANC
 #define HAVE_RELAYS
 #define HAVE_RECORD_BUTTON
+#define HAVE_FIRE_CAMERA
 
 #endif // __HARDWARE_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

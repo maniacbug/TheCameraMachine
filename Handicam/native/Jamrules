@@ -1,0 +1,164 @@
+CXXTEST_DIR	= $(HOME)/Source/cxxtest ;
+CORE_DIR	= $(HOME)/Source/Arduino/hardware/native ;
+INTERNAL_DIR	= $(CORE_DIR)/internal ;
+EXTRAS_DIR	= $(CORE_DIR)/extras ;
+LIB_DIRS	= $(HOME)/Source/Arduino/libraries ;
+
+SKETCH_DIR	= $(PWD:D) ;
+NATIVE_DIR	= ../../native ;
+TEST_DIR	= $(PWD)/test ;
+PROJECT_LIBS 	= Tictocs AnyRtc ; 
+
+HDRS		+= $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) $(LIB_DIRS)/$(PROJECT_LIBS) ;
+DEFINES		+= NATIVE=1 VERSION_H ;
+
+CORE_MODULES	= [ GLOB $(CORE_DIR) : *.cpp ] ; 
+INTERNAL_MODULES = [ GLOB $(INTERNAL_DIR) : *.cpp ] ;
+TEST_MODULES	= [ GLOB $(TEST_DIR) : *Test.test *.cpp ] ;
+MOCK_MODULES	= $(EXTRAS_DIR)/readline.cpp $(EXTRAS_DIR)/mock_time.cpp ;
+SKETCH_CLASS_MODULES = [ GLOB $(SKETCH_DIR) : *.cpp ] ; 
+LIBRARY_MODULES	= [ GLOB $(LIB_DIRS)/$(PROJECT_LIBS) : *.cpp ] ;
+SKETCH_MODULES	= [ GLOB $(SKETCH_DIR) : *.ino *.pde ] ;
+NATIVE_MODULES	= [ GLOB $(NATIVE_DIR) : *.cpp ] ;
+
+CXXTEST_GEN	= $(CXXTEST_DIR)/bin/cxxtestgen ;
+LINK		= c++ ;
+C++		= c++ ;
+LOCATE_TARGET	= out ;
+LOCATE_SOURCE	= out ;
+OPTIM		= -O0 ;
+CCFLAGS		= -fprofile-arcs -ftest-coverage -g -fno-inline -Wall -Wextra ;
+C++FLAGS	= $(CCFLAGS) ; 
+LINKFLAGS	= -fprofile-arcs ;
+
+if ( $(OS) = MACOSX )
+{
+	HDRS 		+= /Developer/SDKs/MacOSX10.6.sdk/usr/include ;
+	DEFINES 	+= MAC=1 ;
+	LINKFLAGS	+= -lpthread ;
+}
+else
+{
+	LINKFLAGS	+= -Wl,--no-as-needed -lpthread ;
+	LINKFLAGS	+= -lrt ;
+	C++FLAGS	+= -std=c++0x ;
+}
+
+rule GitVersion
+{
+	Always $(<) ;
+	Depends all : $(<) ;
+}
+
+actions GitVersion
+{
+	echo "const char program_version[] = \"\\" > $(<)
+	git log -1 --pretty=format:%h >> $(<)
+	echo "\";" >> $(<)
+}
+
+GitVersion version.h ;
+
+
+rule TestSuite
+{
+  Depends $(<) : $(>) ;
+  MakeLocate $(<) : $(LOCATE_SOURCE) ;
+  Clean clean : $(<) ;
+}
+
+actions TestSuite
+{
+  $(CXXTEST_GEN) --part $(>) > $(<)
+}
+
+rule TestRoot
+{
+  MakeLocate $(<) : $(LOCATE_SOURCE) ;
+}
+
+actions TestRoot
+{
+  $(CXXTEST_GEN) --root --error-printer > $(<)
+}
+
+rule C++TestSuite
+{
+  local _CPP = $(>:B).cpp ;
+  TestSuite $(_CPP) : $(>) ;
+  C++ $(<) : $(_CPP) ;
+}
+
+rule RunTest
+{
+  Depends $(<) : $(>) ;
+  Clean clean : $(<) ;
+  MakeLocate $(<) : $(LOCATE_TARGET) ;
+  Depends all : $(<) ;
+}
+
+actions RunTest
+{
+  $(RM) $(LOCATE_TARGET)/*.gcda
+  $(>) | tee $(<)
+}
+
+rule Coverage 
+{
+  Depends $(<) : $(>) ;
+  Depends $(<) : result ;
+  MakeLocate $(<) : $(LOCATE_TARGET) ;
+  Clean clean : $(<) ;
+  Clean clean : $(2:D=).gcov ;
+}
+
+actions ignore Coverage 
+{
+  gcov $(>) -o $(LOCATE_TARGET)/ > $(<)
+  $(MV) *.gcov $(LOCATE_TARGET)/
+  grep "###" $(LOCATE_TARGET)/$(>:D=).gcov
+}
+rule Pde
+{
+  Depends $(<) : $(>) ;
+  MakeLocate $(<) : $(LOCATE_SOURCE) ;
+  Clean clean : $(<) ;
+}
+
+actions Pde
+{
+  echo "#include <WProgram.h>" > $(<) 
+  echo "#line 1 \"$(>)\"" >> $(<)
+  cat $(>) >> $(<) 
+}
+
+rule C++Pde
+{
+  local _CPP = $(>:B).cpp ;
+  Pde $(_CPP) : $(>) ;
+  C++ $(<) : $(_CPP) ;
+}
+
+rule UserObject
+{
+  switch $(>:S)
+  {
+    case .pde : C++Pde $(<) : $(>) ;
+    case .test : C++TestSuite $(<) : $(>) ;
+  }
+}
+rule Objects
+{
+        local _i ;
+
+        for _i in [ FGristFiles $(<) ]
+        {
+                Object $(_i:B)$(SUFOBJ) : $(_i) ;
+                Depends obj : $(_i:B)$(SUFOBJ) ;
+        }
+}
+rule Main
+{
+        MainFromObjects $(<) : $(>:B)$(SUFOBJ) ;
+        Objects $(>) ;
+}
