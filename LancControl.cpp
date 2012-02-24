@@ -38,6 +38,14 @@ void LancControl::begin(void)
 
 /****************************************************************************/
 
+void LancControl::begin(Connectable* _who)
+{
+  begin();
+  listen(_who);
+}
+
+/****************************************************************************/
+
 void LancControl::listen(Connectable* _who)
 {
   Connectable::listen(_who,signal_start_record);
