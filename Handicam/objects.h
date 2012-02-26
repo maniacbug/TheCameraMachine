@@ -41,6 +41,8 @@ extern PinTimer shutter_tap;
 extern EepromLogger logger;
 extern RtcEvTable events;
 extern SignalEvTable fire_camera;
+extern SignalEvTable start_record;
+extern SignalEvTable stop_record;
 extern SerialLineIn tty;
 extern LancControl camera;
 
