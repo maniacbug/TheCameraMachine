@@ -45,8 +45,8 @@ int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
 const RtcEvTable::evline events_fire_camera[] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
   {  0, 0, 0, 0, 0, 0, 0,signal_focus_on },
-  {  0, 0, 0, 0, 0, 2, 0,signal_shutter_tap },
-  {  0, 0, 0, 0, 0, 3, 0,signal_focus_off },
+  {  0, 0, 0, 0, 0, 3, 0,signal_shutter_tap },
+  {  0, 0, 0, 0, 0, 4, 0,signal_focus_off },
 };
 int num_events_fire_camera = sizeof(events_fire_camera)/sizeof(RtcEvTable::evline);
 
