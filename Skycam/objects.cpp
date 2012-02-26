@@ -26,7 +26,7 @@
 // Common objects
 Updater up;
 Connector conn;
-EmitButton test_switch(conn,test_switch_pin,signal_power_on,signal_power_off);
+EmitButton test_switch(conn,test_switch_pin,signal_start_record,signal_stop_record);
 PinControl power_led(conn,power_led_pin,signal_power_off,signal_power_on);
 PinControl record_led(conn,record_led_pin,signal_stop_record,signal_start_record);
 PinControl other_led(conn,other_led_pin,signal_other_led_off,signal_other_led_on);
@@ -37,6 +37,7 @@ SerialLineIn tty;
 // Specialized objects for SKYCAM
 PinControl focus(conn,focus_pin,signal_focus_off,signal_focus_on);
 PinTimer shutter_tap(conn,shutter_pin,0,signal_shutter_tap,500);
-SignalEvTable fire_camera(conn,signal_fire_camera,events_fire_camera,num_events_fire_camera);
+SignalEvTable start_record(conn,signal_start_record,events_fire_camera,num_events_fire_camera);
+SignalEvTable stop_record(conn,signal_stop_record,events_fire_camera,num_events_fire_camera);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

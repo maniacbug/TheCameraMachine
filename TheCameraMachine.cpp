@@ -81,7 +81,7 @@ void setup(void)
   pinSymbol(record_button_pin,"record_button");
 #endif
 
-#endif
+#endif // if NATIVE
 
   //
   // Begin objects
@@ -114,6 +114,11 @@ void setup(void)
 
 #ifdef HAVE_FIRE_CAMERA 
   fire_camera.begin(up,NULL);
+#endif
+
+#ifdef HAVE_START_STOP_RECORD_SEQ
+  start_record.begin(up,NULL);
+  stop_record.begin(up,NULL);
 #endif
 
   //
@@ -161,6 +166,13 @@ void setup(void)
 #ifdef HAVE_FIRE_CAMERA 
   logger.setSymbol(&fire_camera, PSTR("fire_camera"));
   logger.setSymbol(fire_camera.channel(0), PSTR("fire_camera ch#0"));
+#endif
+
+#ifdef HAVE_START_STOP_RECORD_SEQ
+  logger.setSymbol(&start_record, PSTR("start_record"));
+  logger.setSymbol(start_record.channel(0), PSTR("start_record ch#0"));
+  logger.setSymbol(&stop_record, PSTR("stop_record"));
+  logger.setSymbol(stop_record.channel(0), PSTR("stop_record ch#0"));
 #endif
   
   // Begin the logger after all the symbols are set.
