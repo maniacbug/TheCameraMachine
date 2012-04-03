@@ -158,6 +158,52 @@ public:
     
     TS_ASSERT(pEepromStream->didOverflow());
   }
+  void testLimitedRange(void)
+  {
+    EepromStream limited(100,924);
+    example test_value = { 0xAA, 0xBBCC, 0xDDEEFF11 };
+    limited.write(test_value);
+    
+    TS_ASSERT_EQUALS(theEeprom.readByte(0),0);
+    TS_ASSERT_EQUALS(theEeprom.readByte(100),0xAA);
+  }
+  void testLimitedRangeWrapAround(void)
+  {
+    EepromStream limited(100,924);
+
+    limited.seek(920);
+    example test_value = { 0xAA, 0xBBCC, 0xDDEEFF11 };
+    example result_value = { 0,0,0 };
+
+    limited.write(test_value);
+    limited.seek(920);
+    limited.read(result_value);
+
+    TS_ASSERT_EQUALS(test_value.c,result_value.c);
+  }
+  void testLimitedRangeOverflow(void)
+  {
+    EepromStream limited(100,924);
+
+    limited.seek(920);
+    example test_value = { 0xAA, 0xBBCC, 0xDDEEFF11 };
+    limited.write(test_value);
+    
+    TS_ASSERT(limited.didOverflow());
+  }
+  void testLimitedRangeWrapAroundDoesntTouchFirst100(void)
+  {
+    EepromStream limited(/*starts at*/100,/*length*/924);
+
+    limited.seek(920);
+    uint8_t test_array[200];
+    memset(test_array,0xAA,200);
+
+    limited.write(test_array);
+
+    TS_ASSERT_EQUALS(theEeprom.readByte(0),0);
+  }
+  
   
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
