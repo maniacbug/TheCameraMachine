@@ -4,12 +4,12 @@ INTERNAL_DIR	= $(CORE_DIR)/internal ;
 EXTRAS_DIR	= $(CORE_DIR)/extras ;
 LIB_DIRS	= $(HOME)/Source/Arduino/libraries ;
 
-SKETCH_DIR	= $(PWD:D)/Handicam ;
+SKETCH_DIR	= $(PWD:D) ;
 NATIVE_DIR	= $(PWD) ;
 TEST_DIR	= $(PWD)/test ;
 PROJECT_LIBS 	= Tictocs AnyRtc ; 
 
-HDRS		+= $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) $(LIB_DIRS)/$(PROJECT_LIBS) ;
+HDRS		+= $(SKETCH_DIR)/Handicam $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) $(LIB_DIRS)/$(PROJECT_LIBS) ;
 DEFINES		+= NATIVE=1 VERSION_H ;
 
 CORE_MODULES	= [ GLOB $(CORE_DIR) : *.cpp ] ; 
@@ -18,7 +18,7 @@ TEST_MODULES	= [ GLOB $(TEST_DIR) : *Test.test *.cpp ] ;
 MOCK_MODULES	= $(EXTRAS_DIR)/readline.cpp $(EXTRAS_DIR)/mock_time.cpp ;
 SKETCH_CLASS_MODULES = [ GLOB $(SKETCH_DIR) : *.cpp ] ; 
 LIBRARY_MODULES	= [ GLOB $(LIB_DIRS)/$(PROJECT_LIBS) : *.cpp ] ;
-SKETCH_MODULES	= [ GLOB $(SKETCH_DIR) : *.ino *.pde ] ;
+SKETCH_MODULES	= [ GLOB $(SKETCH_DIR)/Handicam : *.ino *.pde objects.cpp ] ;
 NATIVE_MODULES	= [ GLOB $(PWD) : *.cpp ] ;
 
 CXXTEST_GEN	= $(CXXTEST_DIR)/bin/cxxtestgen ;

@@ -4,6 +4,9 @@
 
 // C includes
 
+// Framework includes
+#include <Logger.h>
+
 // Library includes
 #include <cxxtest/TestSuite.h>
 #include <Connector.h>
@@ -13,6 +16,9 @@
 #include <LancControl.h>
 
 using namespace std;
+
+extern Logger theLogger;
+extern ostream& operator<<(ostream& os, const Logger& log);
 
 class LancControlTestSuite: public CxxTest::TestSuite
 {
@@ -33,6 +39,7 @@ class LancControlTestSuite: public CxxTest::TestSuite
 public:
   void setUp()
   {
+    theLogger.clear();
     pconn = new Connector;
     plc = new LancControl(*pconn,command_pin,data_pin);
     plc->begin();
@@ -68,6 +75,22 @@ public:
     Sender(*pconn).send(signal_stop_record);
     
     TS_ASSERT(!plc->isRecording());
+  }
+  void testStartRecordSerial( void )
+  {
+    // Make sure the serial data actually comes out
+    Sender(*pconn).send(signal_start_record);
+
+    TS_ASSERT_EQUALS(theLogger.lines_contain("SERL"),1);
+
+    cerr << theLogger;
+
+  }
+  void testStartRecordDouble( void )
+  {
+    // This is the test to ensure that this camera can put out a
+    // double pulse
+    // hmmm, cannot even test this without mocking the software serial
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
