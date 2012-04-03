@@ -33,6 +33,7 @@ class LancControl: public Connectable
 private:
   bool is_recording;
   SoftwareSerial lanc_serial;
+  int num_record_pulses;
 protected:
   virtual void onNotify(const Connectable* ,uint8_t signal );
 public:
@@ -41,6 +42,7 @@ public:
   void begin(Connectable* _who); // begin+listen
   void listen(Connectable* _who);
   bool isRecording(void) const;
+  void setRecordPulses(unsigned);
 };
 
 #endif // __LANCCONTROL_H__

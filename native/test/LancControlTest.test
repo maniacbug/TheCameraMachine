@@ -81,16 +81,17 @@ public:
     // Make sure the serial data actually comes out
     Sender(*pconn).send(signal_start_record);
 
-    TS_ASSERT_EQUALS(theLogger.lines_contain("SERL"),1);
-
-    cerr << theLogger;
-
+    TS_ASSERT_EQUALS(theLogger.lines_contain("103a"),1);
   }
   void testStartRecordDouble( void )
   {
     // This is the test to ensure that this camera can put out a
     // double pulse
-    // hmmm, cannot even test this without mocking the software serial
+
+    plc->setRecordPulses(5);
+
+    Sender(*pconn).send(signal_start_record);
+    TS_ASSERT_EQUALS(theLogger.lines_contain("103a"),5);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

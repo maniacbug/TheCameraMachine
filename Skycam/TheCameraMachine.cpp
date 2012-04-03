@@ -110,6 +110,11 @@ void setup(void)
 
 #ifdef HAVE_LANC
   camera.begin(NULL);
+
+  // Un-comment this to try multiple record pulses if needed for a certain
+  // camera
+  //camera.setRecordPulses(2);
+
 #endif
 
 #ifdef HAVE_FIRE_CAMERA 

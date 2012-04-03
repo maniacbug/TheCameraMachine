@@ -22,7 +22,8 @@
 /****************************************************************************/
 
 LancControl::LancControl(Connector& _conn, int _rx_pin, int _tx_pin):
-  Connectable(_conn), is_recording(false), lanc_serial(_rx_pin,_tx_pin) 
+  Connectable(_conn), is_recording(false), lanc_serial(_rx_pin,_tx_pin),
+  num_record_pulses(1)
 {
 }
 
@@ -67,6 +68,7 @@ bool LancControl::isRecording(void) const
 void LancControl::onNotify(const Connectable* ,uint8_t signal )
 {
   int i;
+  unsigned pulses;
 
   switch (signal)
   {
@@ -93,17 +95,32 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
     is_recording = true;
     printf_P(PSTR("LANC Recording\n\r"));
 
-    lanc_serial.print("103a\r\n");
-    delay(100);
-    lanc_serial.write(32);
+    pulses = num_record_pulses;
+    while (pulses--)
+    {
+      lanc_serial.print("103a\r\n");
+      delay(100);
+      lanc_serial.write(32);
+
+      if (pulses)
+	delay(200);
+    }
 
     break;
   case signal_stop_record:
     is_recording = false;
     printf_P(PSTR("LANC Stopping\n\r"));
-    lanc_serial.print("1033\r\n");
-    delay(100);
-    lanc_serial.write(32);
+    
+    pulses = num_record_pulses;
+    while (pulses--)
+    {
+      lanc_serial.print("1033\r\n");
+      delay(100);
+      lanc_serial.write(32);
+
+      if (pulses)
+	delay(200);
+    }
     
     break;
   case signal_toggle_record:
@@ -118,6 +135,12 @@ void LancControl::onNotify(const Connectable* ,uint8_t signal )
     }
     break;
   }
+}
+/****************************************************************************/
+
+void LancControl::setRecordPulses(unsigned num)
+{
+  num_record_pulses = num;
 }
 
 /****************************************************************************/
