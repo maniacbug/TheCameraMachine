@@ -4,7 +4,7 @@ INTERNAL_DIR	= $(CORE_DIR)/internal ;
 EXTRAS_DIR	= $(CORE_DIR)/extras ;
 LIB_DIRS	= $(HOME)/Source/Arduino/libraries ;
 
-SKETCH_DIR	= $(PWD:D) ;
+SKETCH_DIR	= $(PWD:D)/Handicam ;
 NATIVE_DIR	= $(PWD) ;
 TEST_DIR	= $(PWD)/test ;
 PROJECT_LIBS 	= Tictocs AnyRtc ; 
