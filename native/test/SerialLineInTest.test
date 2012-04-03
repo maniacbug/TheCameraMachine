@@ -94,5 +94,12 @@ public:
   {
     theSerialBuffer.setInput("Opower_button signal_power_on\n");
   }
+  void todo_testCameraConfig( void )
+  {
+    // Set camera profile 1
+    theSerialBuffer.setInput("C1\n");
+
+    // And then test the difference
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
