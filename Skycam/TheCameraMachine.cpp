@@ -143,6 +143,8 @@ void setup(void)
   logger.setSymbol(signal_focus_on, PSTR("focus_on"));
   logger.setSymbol(signal_focus_off, PSTR("focus_off"));
   logger.setSymbol(signal_shutter_tap, PSTR("shutter_tap"));
+  logger.setSymbol(signal_power_relay_on, PSTR("power_relay_on"));
+  logger.setSymbol(signal_power_relay_off, PSTR("power_relay_off"));
 
   logger.setSymbol(&test_switch, PSTR("test_switch"));
   logger.setSymbol(&power_led, PSTR("power_led"));
