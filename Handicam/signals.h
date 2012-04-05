@@ -11,5 +11,7 @@ const uint8_t signal_fire_camera = 10;
 const uint8_t signal_focus_on = 11;
 const uint8_t signal_focus_off = 12;
 const uint8_t signal_shutter_tap = 13;
+const uint8_t signal_power_relay_on = 14;
+const uint8_t signal_power_relay_off = 15;
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

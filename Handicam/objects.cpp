@@ -36,7 +36,7 @@ SerialLineIn tty;
 
 // Specialized objects
 EmitButton record_button(conn,record_button_pin,signal_toggle_record);
-PinControl power_relay(conn,power_relay_pin,signal_power_off,signal_power_on);
+PinControl power_relay(conn,power_relay_pin,signal_power_relay_off,signal_power_relay_on);
 PinControl alt_relay(conn,alt_relay_pin,signal_alt_relay_off,signal_alt_relay_on);
 LancControl camera(conn,lanc_rx_pin,lanc_tx_pin);
 SignalEvTable fire_camera(conn,signal_fire_camera,events_fire_camera,num_events_fire_camera);
