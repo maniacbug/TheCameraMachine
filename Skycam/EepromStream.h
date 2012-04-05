@@ -29,8 +29,9 @@
 class EepromStream
 {
 private:
-  unsigned current_address;
-  static const unsigned end_address = 1024; // Atmega328p
+  unsigned start_address;
+  unsigned current_address; // As an offset from start_address
+  unsigned end_address; // As an offset from start_address
   bool overflow;
 protected:
   // Handle wrapping the address around the end
@@ -45,14 +46,17 @@ protected:
     return result;
   }
 public:
-  EepromStream(void): current_address(0), overflow(false) {}
+  EepromStream(unsigned starts_at = 0, unsigned length = 1024): 
+    start_address(starts_at), current_address(0), end_address(length), 
+    overflow(false) 
+  {}
   template <class T> void write(const T& object) 
   {
     overflow = false;
     int i = sizeof(T);
     const uint8_t* current = reinterpret_cast<const uint8_t*>(&object);
     while (i--)
-      EEPROM.write(next(current_address),*current++);
+      EEPROM.write(start_address + next(current_address),*current++);
   }
   template <class T> void read(T& object)
   {
@@ -60,7 +64,7 @@ public:
     int i = sizeof(T);
     uint8_t* current = reinterpret_cast<uint8_t*>(&object);
     while (i--)
-      *current++ = EEPROM.read(next(current_address));
+      *current++ = EEPROM.read(start_address + next(current_address));
   }
   template <class T> void peek(T& object)
   {
@@ -69,7 +73,7 @@ public:
     int i = sizeof(T);
     uint8_t* current = reinterpret_cast<uint8_t*>(&object);
     while (i--)
-      *current++ = EEPROM.read(next(address));
+      *current++ = EEPROM.read(start_address + next(address));
   }
   void seek( unsigned to )
   {
