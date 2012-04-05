@@ -39,5 +39,7 @@ PinControl focus(conn,focus_pin,signal_focus_off,signal_focus_on);
 PinTimer shutter_tap(conn,shutter_pin,0,signal_shutter_tap,500);
 SignalEvTable start_record(conn,signal_start_record,events_fire_camera,num_events_fire_camera);
 SignalEvTable stop_record(conn,signal_stop_record,events_fire_camera,num_events_fire_camera);
+PinControl power_relay(conn,power_relay_pin,signal_power_off,signal_power_on);
+PinControl alt_relay(conn,alt_relay_pin,signal_alt_relay_off,signal_alt_relay_on);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
