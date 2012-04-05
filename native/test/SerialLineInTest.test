@@ -94,10 +94,10 @@ public:
   {
     theSerialBuffer.setInput("Opower_button signal_power_on\n");
   }
-  void todo_testCameraConfig( void )
+  void todo_testConfig( void )
   {
-    // Set camera profile 1
-    theSerialBuffer.setInput("C1\n");
+    // Set configuration keys 
+    theSerialBuffer.setInput("Ckey=value\n");
 
     // And then test the difference
   }
