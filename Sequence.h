@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+ Copyright (C) 2012 J. Coliz <maniacbug@ymail.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,18 +33,48 @@ public:
    */
   struct Entry
   {
-    uint32_t delayms;
-    uint8_t signal;
+    uint32_t delayms; /**< MS to wait before emitting */
+    uint8_t signal; /**< Signal to emit */
   };
 private:
-  const Entry* entries;
-  const Entry* current;
+  const Entry* entries; /**< Current list of static entries, in flash */
+  const Entry* current; /**< Current entry we're waiting for */
 protected:
+  /**
+   * Event triggered when timer fires
+   */
   virtual void onFired(void);
+
+  /**
+   * Whether this sequence has a valid current entry
+   *
+   * @return Whether the sequence has a valid current entry 
+   */
   bool isValid(void) const;
+
+  /**
+   * Reset the interval and restart the timer, using the interval for the
+   * current entry.
+   */
+  void resetInterval(void);
 public:
+  /**
+   * Default constructor.  
+   * 
+   * @warning Adds no entries, so it will start in an invalid
+   * (and inoperable state).  To use it, add entries later.  (Although you
+   * can't now, so this constructor is kind of useless.)
+   *
+   * @param conn Connector used to emit our signals
+   */
   Sequence(Connector& conn);
-  Sequence(Connector& conn,const Entry*); // in progmem
+  /**
+   * Fully-qualified constructor
+   *
+   * @param conn Connector used to emit our signals
+   * @param entries Array of entries, in flash memory.  Terminated with a {0,0}.
+   */
+  Sequence(Connector& conn,const Entry*); 
 };
 
 #endif // __SEQUENCE_H__
