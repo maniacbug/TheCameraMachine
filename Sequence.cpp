@@ -15,5 +15,32 @@
 #include <Sequence.h>
 
 /****************************************************************************/
+Sequence::Sequence(Connector& conn,const Entry* _entries): Connectable(conn), Tictocs::Timer(0), entries(_entries), current(_entries)
+{
+  disable();
+
+  if ( current && current->signal )
+    setInterval(current->delayms);
+}
+/****************************************************************************/
+Sequence::Sequence(Connector& conn): Connectable(conn), Tictocs::Timer(0), entries(NULL), current(NULL)
+{
+  disable();
+}
+/****************************************************************************/
+void Sequence::onFired(void)
+{
+  disable();
+  if ( current && current->signal )
+  {
+    emit( current->signal );
+
+    ++current;
+
+    if ( current && current->signal )
+      setInterval(current->delayms);
+  }
+}
+/****************************************************************************/
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

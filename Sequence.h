@@ -25,7 +25,7 @@
  * dormant until that.
  */
 
-class Sequence: public Tictocs::Timer 
+class Sequence: public Connectable, public Tictocs::Timer 
 {
 public:
   /**
@@ -37,18 +37,13 @@ public:
     uint8_t signal;
   };
 private:
+  const Entry* entries;
+  const Entry* current;
 protected:
+  virtual void onFired(void);
 public:
-  Sequence(Entry*): Tictocs::Timer(0)
-  {
-    disable();
-
-    // TODO: Do something with the entries
-  }
-  Sequence(void): Tictocs::Timer(0)
-  {
-    disable();
-  }
+  Sequence(Connector& conn);
+  Sequence(Connector& conn,const Entry*); // in progmem
 };
 
 #endif // __SEQUENCE_H__
