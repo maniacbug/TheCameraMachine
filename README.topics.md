@@ -1,3 +1,11 @@
+## topic_new_sequences
+
+Taking another run at the design of sequences, after finishing a prototype of the LCD UI needed to edit them at runtime.
+
+The basic idea is that sequences are NOT run by the RTC, but are instead run only by the millis timer.  A sequences is a connectable timer that contains an array of delay/signal pairs.  The timer stays active while there is still an active delay, and when the timer expires, it disables.
+
+Every sequence is active on the update stack.  Sequences listen to their launch signal to begin.
+
 ## topic_subdirs
 
 To make mulitple configurations easier, I am copying files into individual directories.
