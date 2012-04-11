@@ -13,20 +13,26 @@
 // C headers
 // Framework headers
 // Library headers
+#include <Updater.h>
 #include <cxxtest/TestSuite.h>
 // Project headers
 // This component's header
 #include <Sequence.h>
 
 using namespace std;
+extern "C" void mock_time_reset(void);
 
 class SequenceTestSuite: public CxxTest::TestSuite
 {
   Sequence* pSequence ;
+  Updater* pUpdater;
 public:
   void setUp()
   {
+    mock_time_reset();
     pSequence = new Sequence();
+    pUpdater = new Updater();
+    pSequence->begin(*pUpdater);
   }
   
   void tearDown()
@@ -37,6 +43,11 @@ public:
   void testEmpty( void )
   {
     TS_ASSERT(pSequence);
+  }
+  void testNotFired( void )
+  {
+    delay(20000);
+    TS_ASSERT_EQUALS(pSequence->wasFired(),false);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

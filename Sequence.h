@@ -13,17 +13,22 @@
 // C headers
 // Framework headers
 // Library headers
+#include <TictocTimer.h>
 // Project headers
 
 /**
  * Example for how classes should be declared
  */
 
-class Sequence
+class Sequence: public Tictocs::Timer 
 {
 private:
 protected:
 public:
+  Sequence(void): Tictocs::Timer(0)
+  {
+    disable();
+  }
 };
 
 #endif // __SEQUENCE_H__
