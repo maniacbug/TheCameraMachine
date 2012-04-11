@@ -41,6 +41,7 @@ private:
   const Entry* current;
 protected:
   virtual void onFired(void);
+  bool isValid(void) const;
 public:
   Sequence(Connector& conn);
   Sequence(Connector& conn,const Entry*); // in progmem

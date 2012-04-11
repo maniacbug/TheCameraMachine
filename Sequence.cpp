@@ -19,7 +19,7 @@ Sequence::Sequence(Connector& conn,const Entry* _entries): Connectable(conn), Ti
 {
   disable();
 
-  if ( current && current->signal )
+  if ( isValid() ) 
     setInterval(current->delayms);
 }
 /****************************************************************************/
@@ -31,15 +31,20 @@ Sequence::Sequence(Connector& conn): Connectable(conn), Tictocs::Timer(0), entri
 void Sequence::onFired(void)
 {
   disable();
-  if ( current && current->signal )
+  if ( isValid() ) 
   {
     emit( current->signal );
 
     ++current;
 
-    if ( current && current->signal )
+    if ( isValid() ) 
       setInterval(current->delayms);
   }
+}
+/****************************************************************************/
+bool Sequence::isValid(void) const
+{
+  return current && current->signal;
 }
 /****************************************************************************/
 
