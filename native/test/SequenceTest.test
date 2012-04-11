@@ -73,6 +73,7 @@ public:
     pSequenceStatic->begin(*pUpdater);
     plistener = new listener(*pConnector);
     plistener->listen(NULL,1);
+    plistener->listen(NULL,2);
   }
   
   void tearDown()
@@ -98,6 +99,24 @@ public:
     pUpdater->update();
     // Entry #0 should fire immediately because it has a zero delay
     TS_ASSERT_EQUALS(plistener->fired[1],1);
+  }
+  void testStaticWasFiredNotTwice( void )
+  {
+    pUpdater->update();
+    delay(900);
+    pUpdater->update();
+    
+    TS_ASSERT_EQUALS(plistener->fired[1],1);
+    TS_ASSERT_EQUALS(plistener->fired[2],0);
+  }
+  void testStaticWasFiredTwice( void )
+  {
+    pUpdater->update();
+    delay(1500);
+    pUpdater->update();
+    
+    TS_ASSERT_EQUALS(plistener->fired[1],1);
+    TS_ASSERT_EQUALS(plistener->fired[2],1);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
