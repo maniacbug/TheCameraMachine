@@ -22,32 +22,53 @@
 using namespace std;
 extern "C" void mock_time_reset(void);
 
+/**
+ * Static sequence statics
+ */
+
+namespace ss
+{
+  Sequence::Entry entries[] = {
+    { 0L, 1 },
+    { 1000L, 2 },
+    { 1000L, 3 },
+    { 0L, 4 },
+    { 0L, 0 },
+  };
+
+} //namespace ss
+
 class SequenceTestSuite: public CxxTest::TestSuite
 {
-  Sequence* pSequence ;
+  Sequence* pSequenceEmpty;
+  Sequence* pSequenceStatic;
   Updater* pUpdater;
 public:
   void setUp()
   {
     mock_time_reset();
-    pSequence = new Sequence();
+    pSequenceEmpty = new Sequence();
+    pSequenceStatic = new Sequence(ss::entries);
     pUpdater = new Updater();
-    pSequence->begin(*pUpdater);
+    pSequenceEmpty->begin(*pUpdater);
+    pSequenceStatic->begin(*pUpdater);
   }
   
   void tearDown()
   {
-    delete pSequence;
+    delete pUpdater;
+    delete pSequenceStatic;
+    delete pSequenceEmpty;
   }
 
   void testEmpty( void )
   {
-    TS_ASSERT(pSequence);
+    TS_ASSERT(pSequenceEmpty);
   }
   void testNotFired( void )
   {
     delay(20000);
-    TS_ASSERT_EQUALS(pSequence->wasFired(),false);
+    TS_ASSERT_EQUALS(pSequenceEmpty->wasFired(),false);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

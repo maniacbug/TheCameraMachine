@@ -17,14 +17,34 @@
 // Project headers
 
 /**
- * Example for how classes should be declared
+ * A sequence of signals which will be fired according to a timeline.
+ *
+ * It is a connectable timer that contains an array of delay/signal pairs.
+ * The basic idea is to wait the delay for each, and then fire the signal.
+ * Also, the sequence wakes up upon hearing its own wake-up signal.  It's
+ * dormant until that.
  */
 
 class Sequence: public Tictocs::Timer 
 {
+public:
+  /**
+   * Static structure which can be used to construct a sequence
+   */
+  struct Entry
+  {
+    uint32_t delayms;
+    uint8_t signal;
+  };
 private:
 protected:
 public:
+  Sequence(Entry*): Tictocs::Timer(0)
+  {
+    disable();
+
+    // TODO: Do something with the entries
+  }
   Sequence(void): Tictocs::Timer(0)
   {
     disable();
