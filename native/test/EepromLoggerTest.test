@@ -95,7 +95,6 @@ public:
     theLogger.clear();
     pEepromLogger->play();
     
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("BEGIN"), 1 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("END"), 1 );
   }
@@ -105,7 +104,6 @@ public:
     
     pEepromLogger->play();
 
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("EMIT test_sender"), 2 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("test_signal"), 2 );
   }
@@ -115,7 +113,6 @@ public:
     
     pEepromLogger->play();
 
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("NOTF test_sender"), 2 );
   }
   void testMultipleRuns( void )
@@ -133,7 +130,6 @@ public:
     theLogger.clear();
     pEepromLogger->play();
  
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("BEGIN"), 2 );
   }
   void testOverflow( void )
@@ -145,7 +141,6 @@ public:
     theLogger.clear();
     pEepromLogger->play();
     
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("RESTARTED"), 1 );
   }
   void testMarkTime( void )
@@ -154,7 +149,6 @@ public:
     pEepromLogger->test_log_emit( pSender, test_signal );
     theLogger.clear();
     pEepromLogger->play();
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("MARK TIME"), 1 );
   }
   void testSameTime( void )
@@ -165,7 +159,6 @@ public:
     pEepromLogger->test_log_emit( pSender, test_signal );
     theLogger.clear();
     pEepromLogger->play();
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("TIME"), 1 );
   }
   void testDifferentTime( void )
@@ -182,7 +175,6 @@ public:
     theLogger.clear();
     pEepromLogger->play();
     
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("TIME"), 3 );
   }
   void testMultipleBegins( void )
@@ -190,7 +182,6 @@ public:
     pEepromLogger->begin();
     pEepromLogger->play();
     
-    //cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("BEGIN"), 1 );
   }
   void testUnknownCommand( void )
@@ -201,7 +192,6 @@ public:
     theEeprom.writeByte(0,0xF);
     
     pEepromLogger->play();
-    cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("Unknown command"), 1 );
   }
 };
