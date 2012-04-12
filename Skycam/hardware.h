@@ -29,7 +29,6 @@ const int piezo_pin = A1;
 
 #define BOARD_SKYCAM
 #define HAVE_FOCUS_SHUTTER
-#define HAVE_START_STOP_RECORD_SEQ
 #define HAVE_RELAYS
 
 #endif // __HARDWARE_H__

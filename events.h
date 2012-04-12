@@ -11,6 +11,7 @@
 
 // Project includes
 #include "RtcEvTable.h"
+#include "Sequence.h"
 
 /**
  * @file events.h
@@ -24,6 +25,8 @@ extern const RtcEvTable::evline events_fire_camera[];
 extern int num_events_fire_camera;
 extern const RtcEvTable::evline events_skycam_gh2[];
 extern int num_events_skycam_gh2;
+extern const Sequence::Entry seq_shutter_tap_entries[];
+extern const Sequence::Entry seq_fire_camera_entries[];
 #endif // __EVENTS_H__
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

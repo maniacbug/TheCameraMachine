@@ -19,6 +19,7 @@
 #include "EepromLogger.h"
 #include "LancControl.h"
 #include "PinTimer.h"
+#include "Sequence.h"
 
 /**
  * @file objects.h
@@ -37,6 +38,7 @@ extern PinControl power_led;
 extern PinControl record_led;
 extern PinControl other_led;
 extern PinControl focus;
+extern PinControl shutter;
 extern PinTimer shutter_tap;
 extern EepromLogger logger;
 extern RtcEvTable events;
@@ -45,6 +47,8 @@ extern SignalEvTable start_record;
 extern SignalEvTable stop_record;
 extern SerialLineIn tty;
 extern LancControl camera;
+extern Sequence seq_shutter_tap;
+extern Sequence seq_fire_camera;
 
 #endif // __OBJECTS_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

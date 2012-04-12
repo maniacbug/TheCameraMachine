@@ -27,29 +27,24 @@
 
 const RtcEvTable::evline events_table[] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
-  { 12, 2,26,13, 0, 0, 0,signal_fire_camera },
-  { 12, 2,26,14, 0, 0, 0,signal_fire_camera },
-  { 12, 2,26,15, 0, 0, 0,signal_fire_camera },
-  { 12, 2,26,16, 0, 0, 0,signal_fire_camera },
-  { 12, 2,26,17, 0, 0, 0,signal_fire_camera },
-  { 12, 2,26,18, 0, 0, 0,signal_fire_camera },
-  { 12, 2,26,19, 0, 0, 0,signal_fire_camera },
-  { 12, 2,26,20, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,13, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,14, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,15, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,16, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,17, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,18, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,19, 0, 0, 0,signal_fire_camera },
+  { 12, 4,26,20, 0, 0, 0,signal_fire_camera },
   
 };
 int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
 
-//
-// FIRE CAMERA EVENTS for signal_fire_camera
-//
-
-const RtcEvTable::evline events_fire_camera[] PROGMEM = {
-  //YY,MM,DD HH MM SS,CH, signal
-  {  0, 0, 0, 0, 0, 0, 0,signal_power_on },
-  {  0, 0, 0, 0, 0,10, 0,signal_start_record },
-  {  0, 0, 0, 0, 1,10, 0,signal_stop_record },
-  {  0, 0, 0, 0, 1,20, 0,signal_power_off  },
+const Sequence::Entry seq_fire_camera_entries[] PROGMEM = {
+  // wait ms, then do this
+  { 0	    , signal_power_on },
+  { 10000   , signal_start_record },
+  { 60000   , signal_stop_record },
+  { 10000   , signal_power_off  },
+  { 0, 0 }, // always terminate with a {0,0}
 };
-int num_events_fire_camera = sizeof(events_fire_camera)/sizeof(RtcEvTable::evline);
-
 // vim:cin:ai:sts=2 sw=2 ft=cpp

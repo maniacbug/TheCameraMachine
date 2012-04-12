@@ -35,13 +35,42 @@ class Updater;
 class SerialLineIn: public IUpdate
 {
 private:
-  char buf[32];
-  char* current;
+  char buf[32]; /**< Input buffer where we accumulate incoming text */
+  char* current; /**< Position where next character will go. */
 protected:
+  /**
+   * Dispatch the command given from serial to a specific command.
+   *
+   * Currently, it just DOES the command in this method.
+   *
+   * @retval true The command was handled
+   * @retval false The command was unknown to this dispatcher, and ignored.
+   */
   bool dispatch(void);
 public:
+  /**
+   * Default constructor
+   *
+   * Just sets up internal state
+   */
   SerialLineIn(void);
-  void begin(Updater&);
+
+  /**
+   * Begin operation
+   *
+   * Prepares for operation.  Adds self to the given updater.
+   *
+   * @param up Updater to add ourselves to
+   */
+  void begin(Updater& up);
+
+  /**
+   * Task update
+   *
+   * Call regularly to ensure correct operation.
+   *
+   * This is called only by the Updater and by unit tests
+   */
   void update(void);
 };
 /****************************************************************************/

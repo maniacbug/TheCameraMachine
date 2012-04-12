@@ -18,6 +18,7 @@
 #include "RtcEvTable.h"
 #include "signals.h"
 #include "events.h"
+#include "Sequence.h"
 
 //
 // MAIN EVENT TABLE for skycam 
@@ -25,29 +26,29 @@
 
 const RtcEvTable::evline events_table[] PROGMEM = {
   //YY,MM,DD HH MM SS,CH, signal
-  { 12, 2,26,15, 0, 0, 0,signal_start_record },
-  { 12, 2,26,15,15, 0, 0,signal_stop_record },
-  { 12, 2,26,16, 0, 0, 0,signal_start_record },
-  { 12, 2,26,16,15, 0, 0,signal_stop_record },
-  { 12, 2,26,17, 0, 0, 0,signal_start_record },
-  { 12, 2,26,17,15, 0, 0,signal_stop_record },
-  { 12, 2,26,18, 0, 0, 0,signal_start_record },
-  { 12, 2,26,18,15, 0, 0,signal_stop_record },
+  { 12, 4,26,15, 0, 0, 0,signal_shutter_tap },
+  { 12, 4,26,15,15, 0, 0,signal_shutter_tap },
+  { 12, 4,26,16, 0, 0, 0,signal_shutter_tap },
+  { 12, 4,26,16,15, 0, 0,signal_shutter_tap },
+  { 12, 4,26,17, 0, 0, 0,signal_shutter_tap },
+  { 12, 4,26,17,15, 0, 0,signal_shutter_tap },
+  { 12, 4,26,18, 0, 0, 0,signal_shutter_tap },
+  { 12, 4,26,18,15, 0, 0,signal_shutter_tap },
   
 };
 int num_events = sizeof(events_table)/sizeof(RtcEvTable::evline);
 
 //
-// FIRE CAMERA EVENTS for signal_start_record OR
-// signal_stop_record (skycam GH-2)
+// SEQUENCE shutter_tap 
 //
 
-const RtcEvTable::evline events_fire_camera[] PROGMEM = {
-  //YY,MM,DD HH MM SS,CH, signal
-  {  0, 0, 0, 0, 0, 0, 0,signal_focus_on },
-  {  0, 0, 0, 0, 0, 3, 0,signal_shutter_tap },
-  {  0, 0, 0, 0, 0, 4, 0,signal_focus_off },
+const Sequence::Entry seq_shutter_tap_entries[] PROGMEM = {
+  // wait ms, then do this
+  { 0	    , signal_focus_on },
+  { 1000    , signal_shutter_on },
+  { 500	    , signal_shutter_off },
+  { 0	    , signal_focus_off },
+  { 0, 0 }, // always terminate with a {0,0}
 };
-int num_events_fire_camera = sizeof(events_fire_camera)/sizeof(RtcEvTable::evline);
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

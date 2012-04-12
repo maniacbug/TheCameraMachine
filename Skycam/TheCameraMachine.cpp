@@ -96,7 +96,8 @@ void setup(void)
   
 #ifdef HAVE_FOCUS_SHUTTER
   focus.begin(NULL);
-  shutter_tap.begin(up,NULL);
+  shutter.begin(NULL);
+  seq_shutter_tap.begin(up);
 #endif
 
 #ifdef HAVE_RELAYS
@@ -110,20 +111,7 @@ void setup(void)
 
 #ifdef HAVE_LANC
   camera.begin(NULL);
-
-  // Un-comment this to try multiple record pulses if needed for a certain
-  // camera
-  //camera.setRecordPulses(2);
-
-#endif
-
-#ifdef HAVE_FIRE_CAMERA 
-  fire_camera.begin(up,NULL);
-#endif
-
-#ifdef HAVE_START_STOP_RECORD_SEQ
-  start_record.begin(up,NULL);
-  stop_record.begin(up,NULL);
+  seq_fire_camera.begin(up);
 #endif
 
   //
@@ -145,6 +133,8 @@ void setup(void)
   logger.setSymbol(signal_shutter_tap, PSTR("shutter_tap"));
   logger.setSymbol(signal_power_relay_on, PSTR("power_relay_on"));
   logger.setSymbol(signal_power_relay_off, PSTR("power_relay_off"));
+  logger.setSymbol(signal_shutter_on, PSTR("shutter_on"));
+  logger.setSymbol(signal_shutter_off, PSTR("shutter_off"));
 
   logger.setSymbol(&test_switch, PSTR("test_switch"));
   logger.setSymbol(&power_led, PSTR("power_led"));
@@ -154,7 +144,8 @@ void setup(void)
   
 #ifdef HAVE_FOCUS_SHUTTER
   logger.setSymbol(&focus, PSTR("focus"));
-  logger.setSymbol(&shutter_tap, PSTR("shutter_tap"));
+  logger.setSymbol(&shutter, PSTR("shutter"));
+  logger.setSymbol(&seq_shutter_tap, PSTR("seq_shutter_tap"));
 #endif
 
 #ifdef HAVE_RELAYS
@@ -168,18 +159,7 @@ void setup(void)
   
 #ifdef HAVE_LANC
   logger.setSymbol(&camera, PSTR("camera"));
-#endif
-  
-#ifdef HAVE_FIRE_CAMERA 
-  logger.setSymbol(&fire_camera, PSTR("fire_camera"));
-  logger.setSymbol(fire_camera.channel(0), PSTR("fire_camera ch#0"));
-#endif
-
-#ifdef HAVE_START_STOP_RECORD_SEQ
-  logger.setSymbol(&start_record, PSTR("start_record"));
-  logger.setSymbol(start_record.channel(0), PSTR("start_record ch#0"));
-  logger.setSymbol(&stop_record, PSTR("stop_record"));
-  logger.setSymbol(stop_record.channel(0), PSTR("stop_record ch#0"));
+  logger.setSymbol(&seq_fire_camera, PSTR("seq_fire_camera"));
 #endif
   
   // Begin the logger after all the symbols are set.
