@@ -16,17 +16,10 @@
 
 /****************************************************************************/
 
-Sequence::Sequence(Connector& conn,const Entry* _entries): Connectable(conn), Tictocs::Timer(0), entries(_entries), current(_entries)
+Sequence::Sequence(Connector& conn,const Entry* _entries,uint8_t _signal_launch): Connectable(conn), Tictocs::Timer(0), entries(_entries), current(_entries), signal_launch(_signal_launch)
 {
   disable();
   resetInterval();
-}
-
-/****************************************************************************/
-
-Sequence::Sequence(Connector& conn): Connectable(conn), Tictocs::Timer(0), entries(NULL), current(NULL)
-{
-  disable();
 }
 
 /****************************************************************************/
@@ -57,6 +50,12 @@ void Sequence::resetInterval(void)
     setInterval(current->delayms);
 }
 
+/****************************************************************************/
+void Sequence::begin(Updater& updater,Connectable* whom)
+{
+  Tictocs::Timer::begin(updater);
+  listen(whom,signal_launch);
+}
 /****************************************************************************/
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp

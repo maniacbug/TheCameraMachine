@@ -39,6 +39,7 @@ public:
 private:
   const Entry* entries; /**< Current list of static entries, in flash */
   const Entry* current; /**< Current entry we're waiting for */
+  uint8_t signal_launch; /**< Signal we listen for */
 protected:
   /**
    * Event triggered when timer fires
@@ -59,22 +60,24 @@ protected:
   void resetInterval(void);
 public:
   /**
-   * Default constructor.  
-   * 
-   * @warning Adds no entries, so it will start in an invalid
-   * (and inoperable state).  To use it, add entries later.  (Although you
-   * can't now, so this constructor is kind of useless.)
-   *
-   * @param conn Connector used to emit our signals
-   */
-  Sequence(Connector& conn);
-  /**
    * Fully-qualified constructor
    *
    * @param conn Connector used to emit our signals
    * @param entries Array of entries, in flash memory.  Terminated with a {0,0}.
+   * @param _signal_launch Signal which will start the sequence 
    */
-  Sequence(Connector& conn,const Entry*); 
+  Sequence(Connector& conn,const Entry*,uint8_t _signal_launch); 
+
+  /**
+   * Begin operation
+   *
+   * Call this before the sequence will fully function
+   *
+   * @param updater Updater which will give this a time slice
+   * @param whom Object to listen to, or NULL for listen to all
+   */
+  void begin(Updater& updater,Connectable* whom = NULL);
+
 };
 
 #endif // __SEQUENCE_H__
