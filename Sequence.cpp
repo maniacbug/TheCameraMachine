@@ -19,7 +19,6 @@
 Sequence::Sequence(Connector& conn,const Entry* _entries,uint8_t _signal_launch): Connectable(conn), Tictocs::Timer(0), entries(_entries), current(_entries), signal_launch(_signal_launch)
 {
   disable();
-  resetInterval();
 }
 
 /****************************************************************************/
@@ -31,6 +30,18 @@ void Sequence::onFired(void)
   {
     emit( current->signal );
     ++current;
+    resetInterval();
+  }
+}
+
+/****************************************************************************/
+
+void Sequence::onNotify(const Connectable* /*who*/, uint8_t signal)
+{
+  if ( signal == signal_launch )
+  {
+    // Restart!
+    current = entries;
     resetInterval();
   }
 }

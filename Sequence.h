@@ -45,6 +45,14 @@ protected:
    * Event triggered when timer fires
    */
   virtual void onFired(void);
+  
+  /**
+   * Event triggered when receiving a signal we're listening for
+   *
+   * @param who Object which emitted the signal
+   * @param signal Signal which was emitted
+   */
+  virtual void onNotify(const Connectable* who, uint8_t signal);
 
   /**
    * Whether this sequence has a valid current entry
